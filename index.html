@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Susana López de Valencia - Portales de Gestión</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .container {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            max-width: 600px;
+            width: 100%;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            color: #2563eb;
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .developer {
+            color: #6b7280;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .subtitle {
+            color: #4b5563;
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .portal-buttons {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .portal-btn {
+            display: block;
+            padding: 1.5rem 2rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .portal-btn:hover::before {
+            left: 100%;
+        }
+
+        .portal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .portal-btn.user {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        }
+
+        .portal-btn.admin {
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+
+        .portal-btn small {
+            display: block;
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-top: 0.25rem;
+            font-weight: normal;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-desc {
+            font-size: 0.8rem;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        .system-info {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-top: 2rem;
+            border-left: 4px solid #2563eb;
+        }
+
+        .system-info h3 {
+            color: #1e40af;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .system-info p {
+            color: #1e40af;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .portal-btn {
+                padding: 1.25rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🏥</div>
+        <h1>Hospital Susana López de Valencia E.S.E.</h1>
+        <p class="developer">Desarrollado por Ing. Paul Eduardo Muñoz R.</p>
+        <p class="subtitle">Sistema Integrado de Gestión de Solicitudes de Mantenimiento</p>
+        
+        <div class="portal-buttons">
+            <a href="portal-solicitudes.html" class="portal-btn user">
+                📝 Portal de Solicitudes
+                <small>Para personal del hospital - Crear y seguir solicitudes</small>
+            </a>
+            
+            <a href="portal-gestion.html" class="portal-btn admin">
+                ⚙️ Portal de Gestión
+                <small>Para administradores - Gestionar solicitudes y técnicos</small>
+            </a>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🔐</div>
+                <div class="feature-title">Acceso Seguro</div>
+                <div class="feature-desc">Sistema de códigos de 4 dígitos</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Tiempo Real</div>
+                <div class="feature-desc">Sincronización automática</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <div class="feature-title">Responsive</div>
+                <div class="feature-desc">Funciona en móviles</div>
+            </div>
+        </div>
+
+        <div class="system-info">
+            <h3>💡 Información del Sistema</h3>
+            <p>
+                <strong>Portal de Solicitudes:</strong> Permite al personal del hospital crear solicitudes de mantenimiento con autenticación por email y código.<br>
+                <strong>Portal de Gestión:</strong> Interface administrativa para asignar técnicos, gestionar solicitudes y generar reportes.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Animación adicional para los botones
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.portal-btn');
+            buttons.forEach((btn, index) => {
+                setTimeout(() => {
+                    btn.style.opacity = '0';
+                    btn.style.transform = 'translateY(20px)';
+                    btn.style.transition = 'all 0.6s ease';
+                    
+                    setTimeout(() => {
+                        btn.style.opacity = '1';
+                        btn.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        });
+
+        // Información adicional para desarrolladores
+        console.log('🏥 Hospital Susana López de Valencia - Sistema de Gestión');
+        console.log('👨‍💻 Desarrollado por: Ing. Paul Eduardo Muñoz R.');
+        console.log('🚀 Versión de Despliegue: Básica (Archivos Estáticos)');
+        console.log('📅 Fecha de Despliegue:', new Date().toLocaleDateString('es-CO'));
+    </script>
+</body>
+</html>

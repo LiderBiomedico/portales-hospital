@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Susana López de Valencia S.A.S. - Página de Solicitudes de Mantenimiento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f9fafb;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo svg {
+            width: 2.5rem;
+            height: 2.5rem;
+            color: #2563eb;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .hospital-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1f2937;
+            line-height: 1.3;
+            display: block;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: #6b7280;
+            font-weight: 500;
+            display: block;
+            margin-top: 0.1rem;
+        }
+
+        .nav-desktop {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-desktop button {
+            padding: 0.5rem 0.75rem;
+            border: none;
+            background: none;
+            color: #6b7280;
+            cursor: pointer;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-desktop button.active {
+            color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        .nav-desktop button:hover {
+            color: #374151;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -0.25rem;
+            right: -0.25rem;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 0.75rem;
+            height: 0.75rem;
+            font-size: 0.625rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-nav {
+            display: none;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 1rem;
+        }
+
+        .mobile-nav button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            border-radius: 0.375rem;
+        }
+
+        .mobile-nav button:hover {
+            background: #f9fafb;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 1.5rem 1rem;
+        }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        .metric-icon {
+            width: 2rem;
+            height: 2rem;
+            margin-right: 1rem;
+        }
+
+        .metric-content h3 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .metric-content p {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .status-recibida {
+            background: #dbeafe;
+            color: #1e40af;
+            border-color: #bfdbfe;
+        }
+
+        .status-asignada {
+            background: #fef3c7;
+            color: #d97706;
+            border-color: #fde68a;
+        }
+
+        .status-en-proceso {
+            background: #fed7aa;
+            color: #ea580c;
+            border-color: #fdba74;
+        }
+
+        .status-completada {
+            background: #dcfce7;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+
+        .status-vencida {
+            background: #fee2e2;
+            color: #dc2626;
+            border-color: #fecaca;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            border-color: #f87171;
+            color: #b91c1c;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border-color: #34d399;
+            color: #065f46;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border-color: #60a5fa;
+            color: #1e40af;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-desktop {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-nav.active {
+                display: block;
+            }
+
+            .user-info .user-details {
+                display: none;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hospital-name {
+                font-size: 0.9rem;
+                line-height: 1.2;
+            }
+
+            .subtitle {
+                font-size: 0.7rem;
+            }
+
+            .logo svg {
+                width: 2rem;
+                height: 2rem;
+                margin-right: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hospital-name {
+                font-size: 0.8rem;
+            }
+            
+            .subtitle {
+                font-size: 0.65rem;
+            }
+        }
+
+        /* Hide elements */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Icons */
+        .icon {
+            width: 1rem;
+            height: 1rem;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .urgencia-critica { color: #dc2626; }
+        .urgencia-alta { color: #ea580c; }
+        .urgencia-media { color: #d97706; }
+        .urgencia-baja { color: #16a34a; }
+
+        /* Connection indicator */
+        .connection-indicator {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 20rem;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #16a34a;
+        }
+
+        .connection-details {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content container">
+            <div class="logo">
+                <div style="display: flex; align-items: center;">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a1 1 0 01-1-1V9a1 1 0 011-1h1a2 2 0 100-4H4a1 1 0 01-1-1V4a1 1 0 011-1h3a1 1 0 001-1z"></path>
+                    </svg>
+                    <div>
+                        <span class="hospital-name">Hospital Susana López de Valencia S.A.S.</span>
+                        <span class="subtitle">Página de Solicitudes de Mantenimiento</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="nav-desktop">
+                <button onclick="showView('dashboard')" class="nav-btn active" data-view="dashboard">
+                    📊 Dashboard
+                </button>
+                <button onclick="showView('nueva-solicitud')" class="nav-btn" data-view="nueva-solicitud">
+                    ➕ Nueva Solicitud
+                </button>
+                <button onclick="showView('mis-solicitudes')" class="nav-btn" data-view="mis-solicitudes">
+                    📋 Mis Solicitudes (<span id="mis-solicitudes-count">0</span>)
+                </button>
+            </nav>
+
+            <div class="user-info">
+                <div class="notification-icon" onclick="toggleNotifications()">
+                    🔔
+                    <span class="notification-badge" id="notification-badge">0</span>
+                </div>
+                <div class="user-details">
+                    <div style="font-size: 0.875rem;">
+                        <div style="font-weight: 500; color: #1f2937;">Ing. María García</div>
+                        <div style="color: #6b7280;">UCI NEONATAL</div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    ☰
+                </button>
+            </div>
+        </div>
+
+        <nav class="mobile-nav" id="mobile-nav">
+            <button onclick="showView('dashboard'); toggleMobileMenu();">📊 Dashboard</button>
+            <button onclick="showView('nueva-solicitud'); toggleMobileMenu();">➕ Nueva Solicitud</button>
+            <button onclick="showView('mis-solicitudes'); toggleMobileMenu();">📋 Mis Solicitudes</button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content container">
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="view">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h1 class="page-title">Dashboard - Solicitudes de Mantenimiento</h1>
+                <div style="font-size: 0.875rem; color: #6b7280;">
+                    Actualizado: <span id="last-update"></span>
+                </div>
+            </div>
+
+            <!-- Métricas -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">📋</div>
+                    <div class="metric-content">
+                        <h3>Total Solicitudes</h3>
+                        <p id="metric-total">0</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">✅</div>
+                    <div class="metric-content">
+                        <h3>Completadas</h3>
+                        <p id="metric-completadas" style="color: #16a34a;">0</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">⏳</div>
+                    <div class="metric-content">
+                        <h3>En Proceso</h3>
+                        <p id="metric-proceso" style="color: #ea580c;">0</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon">⚠️</div>
+                    <div class="metric-content">
+                        <h3>Vencidas</h3>
+                        <p id="metric-vencidas" style="color: #dc2626;">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertas -->
+            <div id="dashboard-alerts"></div>
+
+            <!-- Solicitudes Recientes -->
+            <div class="card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Mis Solicitudes Recientes</h3>
+                <div id="recent-solicitudes"></div>
+            </div>
+        </div>
+
+        <!-- Nueva Solicitud View -->
+        <div id="nueva-solicitud-view" class="view hidden">
+            <h1 class="page-title">Nueva Solicitud de Mantenimiento</h1>
+            
+            <div class="card" style="max-width: 768px; margin: 0 auto;">
+                <p style="color: #6b7280; margin-bottom: 1.5rem;">Complete la información para generar su solicitud automáticamente</p>
+                
+                <!-- Información Automática -->
+                <div class="alert alert-info">
+                    <h3 style="font-weight: 600; margin-bottom: 0.5rem;">📋 Información Automática</h3>
+                    <div class="form-grid">
+                        <div><strong>Número:</strong> <span id="next-number">2025-0001</span></div>
+                        <div><strong>Fecha:</strong> <span id="current-date"></span></div>
+                        <div><strong>Solicitante:</strong> Ing. María García - Hospital Susana López de Valencia</div>
+                    </div>
+                </div>
+
+                <!-- Formulario -->
+                <form id="solicitud-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">👤 Servicio Hospitalario *</label>
+                            <select class="form-select" id="servicio" required>
+                                <option value="UCI NEONATAL">UCI NEONATAL</option>
+                                <option value="CONSULTA EXTERNA">CONSULTA EXTERNA</option>
+                                <option value="TRANSPORTE ASISTENCIAL">TRANSPORTE ASISTENCIAL</option>
+                                <option value="FISIOTERAPIA">FISIOTERAPIA</option>
+                                <option value="SALA PARTOS">SALA PARTOS</option>
+                                <option value="URGENCIAS PEDIATRIA">URGENCIAS PEDIATRIA</option>
+                                <option value="TRAMOS 4 Y 5">TRAMOS 4 Y 5</option>
+                                <option value="TRAMOS 2 Y 3">TRAMOS 2 Y 3</option>
+                                <option value="TRAMO 1">TRAMO 1</option>
+                                <option value="VACUNACIÓN">VACUNACIÓN</option>
+                                <option value="FARMACIA CENTRAL">FARMACIA CENTRAL</option>
+                                <option value="LABORATORIO CLINICO">LABORATORIO CLINICO</option>
+                                <option value="URG ADULTOS">URG ADULTOS</option>
+                                <option value="URG GINECOLOGÍA">URG GINECOLOGÍA</option>
+                                <option value="CIRUGÍA ADULTOS">CIRUGÍA ADULTOS</option>
+                                <option value="CIRUGÍA PEDIATRICA">CIRUGÍA PEDIATRICA</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">🔧 Especialidad Requerida *</label>
+                            <select class="form-select" id="especialidad" required onchange="updateAsignacion()">
+                                <option value="">Seleccione especialidad</option>
+                                <option value="MANTENIMIENTO PREVENTIVO">MANTENIMIENTO PREVENTIVO</option>
+                                <option value="MANTENIMIENTO CORRECTIVO">MANTENIMIENTO CORRECTIVO</option>
+                                <option value="CALIBRACIÓN">CALIBRACIÓN</option>
+                                <option value="REPARACIÓN URGENTE">REPARACIÓN URGENTE</option>
+                                <option value="INSTALACIÓN">INSTALACIÓN</option>
+                                <option value="CAPACITACIÓN">CAPACITACIÓN</option>
+                                <option value="VERIFICACIÓN">VERIFICACIÓN</option>
+                                <option value="INSPECCIÓN TÉCNICA">INSPECCIÓN TÉCNICA</option>
+                                <option value="ACTUALIZACIÓN SISTEMAS">ACTUALIZACIÓN SISTEMAS</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">⚠️ Nivel de Urgencia *</label>
+                            <select class="form-select" id="urgencia" onchange="updateAsignacion()">
+                                <option value="BAJA">🟢 Baja - Programable</option>
+                                <option value="MEDIA" selected>🟡 Media - Normal</option>
+                                <option value="ALTA">🟠 Alta - Prioritaria</option>
+                                <option value="CRÍTICA">🔴 Crítica - Inmediata</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📞 Contacto Adicional</label>
+                            <input type="tel" class="form-input" id="contacto" value="+57 300 123 4567" placeholder="+57 300 123 4567">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">💻 Equipo Afectado *</label>
+                        <input type="text" class="form-input" id="equipo" required                     placeholder="Ej: Ventilador Hamilton C3 - Serie: HC3-2024-001, Generador Emergencia - GE2024-456">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📍 Ubicación Específica *</label>
+                        <input type="text" class="form-input" id="ubicacion" required                     placeholder="Ej: UCI Neo - Cama 3, Urgencias - Box 2, Sótano - Sala Máquinas">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📝 Detalle del Problema *</label>
+                        <textarea class="form-textarea" id="detalle" required rows="4"                     placeholder="Describa detalladamente el problema: síntomas, alarmas, errores observados, impacto en la operación..."></textarea>
+                    </div>
+
+                    <!-- Preview Asignación -->
+                    <div id="asignacion-preview" class="alert alert-success hidden">
+                        <h3 style="font-weight: 600; margin-bottom: 0.5rem;">🤖 Asignación Automática</h3>
+                        <p><strong>Técnico asignado:</strong> <span id="tecnico-asignado"></span></p>
+                        <p><strong>Tiempo estimado respuesta:</strong> <span id="tiempo-estimado"></span></p>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">
+                            📤 Crear Solicitud Automática
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                            🗑️ Limpiar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Mis Solicitudes View -->
+        <div id="mis-solicitudes-view" class="view hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h1 class="page-title">Mis Solicitudes</h1>
+                <div style="font-size: 0.875rem; color: #6b7280;">
+                    Total: <span id="total-solicitudes">0</span> solicitudes
+                </div>
+            </div>
+
+            <div id="solicitudes-container"></div>
+        </div>
+    </main>
+
+    <!-- Connection Indicator -->
+    <div class="connection-indicator">
+        <div class="connection-status">
+            <span>📶 🔗 🔋</span>
+            <span>Sistema Online</span>
+        </div>
+        <div class="connection-details">Sistema Hospital Susana López de Valencia - Online</div>
+    </div>
+
+    <script>
+        // Datos globales
+        let currentUser = {
+            name: 'Ing. María García',
+            service: 'UCI NEONATAL',
+            role: 'Supervisor de Área',
+            phone: '+57 300 123 4567'
+        };
+
+        let solicitudes = [];
+        let notifications = [];
+        let currentView = 'dashboard';
+
+        // Asignaciones automáticas
+        const asignaciones = {
+            'REPARACIÓN URGENTE': 'Juan Pérez - Emergencias',
+            'MANTENIMIENTO PREVENTIVO': 'María García - Preventivo', 
+            'MANTENIMIENTO CORRECTIVO': 'Ana Rodríguez - Correctivo',
+            'CALIBRACIÓN': 'Carlos Mendoza - Calibración',
+            'INSTALACIÓN': 'Pedro López - Instalaciones',
+            'CAPACITACIÓN': 'Laura Martínez - Capacitación',
+            'VERIFICACIÓN': 'Roberto Silva - Verificación',
+            'INSPECCIÓN TÉCNICA': 'Diego Torres - Inspecciones',
+            'ACTUALIZACIÓN SISTEMAS': 'Carmen López - Sistemas'
+        };
+
+        const tiemposRespuesta = {
+            'CRÍTICA': '30 minutos',
+            'ALTA': '2 horas',
+            'MEDIA': '4 horas', 
+            'BAJA': '24 horas'
+        };
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+            updateCurrentDate();
+            updateNextNumber();
+            updateMetrics();
+            updateViews();
+            
+            // Actualizar fecha cada minuto
+            setInterval(updateCurrentDate, 60000);
+        });
+
+        function initializeData() {
+            // Cargar datos del localStorage si existen
+            const savedSolicitudes = localStorage.getItem('solicitudes');
+            if (savedSolicitudes) {
+                solicitudes = JSON.parse(savedSolicitudes);
+            } else {
+                // Datos iniciales de ejemplo
+                solicitudes = [
+                    {
+                        numero: '2025-0089',
+                        fecha: '2025-06-19 08:30:15',
+                        mes: 'JUNIO',
+                        detalle: 'Ventilador mecánico Hamilton C3 presenta alarma de baja presión constante. Equipo crítico para paciente en ventilación invasiva.',
+                        servicio: 'UCI NEONATAL',
+                        quienSolicita: 'Ing. María García',
+                        especialidad: 'REPARACIÓN URGENTE',
+                        asignadoA: 'Juan Pérez - Respiratorio',
+                        respuesta: 'Sensor de presión reemplazado. Calibración realizada. Equipo operativo.',
+                        estado: 'COMPLETADA',
+                        urgencia: 'CRÍTICA',
+                        equipoAfectado: 'Ventilador Hamilton C3 - Serie: HC3-2024-001',
+                        ubicacionEspecifica: 'UCI Neo - Cama 3',
+                        tiempoRespuesta: '1.2 horas',
+                        satisfaccion: 5
+                    },
+                    {
+                        numero: '2025-0090',
+                        fecha: '2025-06-19 10:15:42',
+                        mes: 'JUNIO',
+                        detalle: 'Monitor de signos vitales Philips IntelliVue presenta pantalla intermitente y perdida de señal ECG ocasional.',
+                        servicio: 'URGENCIAS PEDIATRIA',
+                        quienSolicita: 'Enf. Carmen Jiménez',
+                        especialidad: 'MANTENIMIENTO CORRECTIVO',
+                        asignadoA: 'Ana Rodríguez - Monitoreo',
+                        respuesta: 'Diagnóstico en proceso. Esperando repuesto - cable ECG principal.',
+                        estado: 'EN PROCESO',
+                        urgencia: 'ALTA',
+                        equipoAfectado: 'Monitor Philips IntelliVue - Serie: PH-2023-089',
+                        ubicacionEspecifica: 'Urgencias Ped - Box 2',
+                        tiempoRespuesta: '0.8 horas'
+                    },
+                    {
+                        numero: '2025-0091',
+                        fecha: '2025-06-19 14:20:18', 
+                        mes: 'JUNIO',
+                        detalle: 'Mantenimiento preventivo programado para equipo de rayos X digital. Calibración y verificación de dosis según cronograma.',
+                        servicio: 'CONSULTA EXTERNA',
+                        quienSolicita: 'Téc. Roberto Silva',
+                        especialidad: 'MANTENIMIENTO PREVENTIVO',
+                        asignadoA: 'María García - Imagenología',
+                        respuesta: '',
+                        estado: 'ASIGNADA',
+                        urgencia: 'MEDIA',
+                        equipoAfectado: 'Rayos X Digital Siemens - Serie: SX-2022-456',
+                        ubicacionEspecifica: 'Consulta Ext - Sala Rayos X 1',
+                        tiempoRespuesta: ''
+                    },
+                    {
+                        numero: '2025-0088',
+                        fecha: '2025-06-18 16:45:30',
+                        mes: 'JUNIO',
+                        detalle: 'Sistema de aire acondicionado central presenta falla en compresor principal. Temperatura quirófanos fuera de rango operativo.',
+                        servicio: 'SALA PARTOS',
+                        quienSolicita: 'Ing. Patricia Morales',
+                        especialidad: 'REPARACIÓN URGENTE',
+                        asignadoA: 'Pedro López - Sistemas HVAC',
+                        respuesta: '',
+                        estado: 'VENCIDA',
+                        urgencia: 'ALTA',
+                        equipoAfectado: 'Sistema HVAC Central - Unidad: HVAC-2022-001',
+                        ubicacionEspecifica: 'Azotea - Cuarto Máquinas',
+                        tiempoRespuesta: '26.3 horas'
+                    }
+                ];
+                saveSolicitudes();
+            }
+
+            // Inicializar notificaciones
+            notifications = [
+                {
+                    id: 1,
+                    tipo: 'urgente',
+                    mensaje: 'Solicitud vencida - Requiere escalamiento',
+                    tiempo: '5 min ago',
+                    leida: false
+                },
+                {
+                    id: 2,
+                    tipo: 'completada',
+                    mensaje: 'Solicitud completada exitosamente',
+                    tiempo: '2 horas ago',
+                    leida: false
+                }
+            ];
+        }
+
+        function saveSolicitudes() {
+            localStorage.setItem('solicitudes', JSON.stringify(solicitudes));
+        }
+
+        function updateCurrentDate() {
+            const now = new Date();
+            document.getElementById('current-date').textContent = now.toLocaleString('es-CO');
+            document.getElementById('last-update').textContent = now.toLocaleString('es-CO');
+        }
+
+        function updateNextNumber() {
+            const nextNum = Math.max(...solicitudes.map(s => parseInt(s.numero.split('-')[1])), 0) + 1;
+            document.getElementById('next-number').textContent = `2025-${String(nextNum).padStart(4, '0')}`;
+        }
+
+        function updateMetrics() {
+            const total = solicitudes.length;
+            const completadas = solicitudes.filter(s => s.estado === 'COMPLETADA').length;
+            const enProceso = solicitudes.filter(s => s.estado === 'EN PROCESO').length;
+            const vencidas = solicitudes.filter(s => s.estado === 'VENCIDA').length;
+            const misSolicitudes = solicitudes.filter(s => s.quienSolicita === currentUser.name).length;
+
+            document.getElementById('metric-total').textContent = total;
+            document.getElementById('metric-completadas').textContent = completadas;
+            document.getElementById('metric-proceso').textContent = enProceso;
+            document.getElementById('metric-vencidas').textContent = vencidas;
+            document.getElementById('mis-solicitudes-count').textContent = misSolicitudes;
+            document.getElementById('total-solicitudes').textContent = misSolicitudes;
+
+            // Actualizar badge de notificaciones
+            const unreadNotifications = notifications.filter(n => !n.leida).length;
+            document.getElementById('notification-badge').textContent = unreadNotifications;
+            document.getElementById('notification-badge').style.display = unreadNotifications > 0 ? 'flex' : 'none';
+
+            // Mostrar alertas de solicitudes vencidas
+            updateDashboardAlerts(vencidas);
+        }
+
+        function updateDashboardAlerts(vencidas) {
+            const alertsContainer = document.getElementById('dashboard-alerts');
+            if (vencidas > 0) {
+                alertsContainer.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>⚠️ Atención: ${vencidas} solicitud(es) vencida(s)</strong>
+                        <div style="margin-top: 0.5rem;">Requieren escalamiento inmediato. Revisar en "Mis Solicitudes".</div>
+                    </div>
+                `;
+            } else {
+                alertsContainer.innerHTML = '';
+            }
+        }
+
+        function updateViews() {
+            updateRecentSolicitudes();
+            updateMisSolicitudes();
+        }
+
+        function updateRecentSolicitudes() {
+            const misSolicitudes = solicitudes
+                .filter(s => s.quienSolicita === currentUser.name)
+                .slice(0, 3);
+            
+            const container = document.getElementById('recent-solicitudes');
+            
+            if (misSolicitudes.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="font-weight: 600; color: #1f2937;">No hay solicitudes</h3>
+                        <p style="margin-top: 0.5rem;">Comienza creando tu primera solicitud.</p>
+                        <button onclick="showView('nueva-solicitud')" class="btn btn-primary" style="margin-top: 1rem;">
+                            ➕ Nueva Solicitud
+                        </button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = misSolicitudes.map(solicitud => `
+                    <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 1rem;">
+                            <div style="flex: 1; min-width: 200px;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <span style="font-weight: 600;">${solicitud.numero}</span>
+                                    <span class="status-badge status-${solicitud.estado.toLowerCase().replace(' ', '-')}">${solicitud.estado}</span>
+                                    <span class="urgencia-${solicitud.urgencia.toLowerCase()}" style="font-size: 0.75rem; font-weight: 600;">${solicitud.urgencia}</span>
+                                </div>
+                                <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 0.25rem;">${solicitud.equipoAfectado}</p>
+                                <p style="color: #9ca3af; font-size: 0.75rem;">${solicitud.fecha}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateMisSolicitudes() {
+            const misSolicitudes = solicitudes.filter(s => s.quienSolicita === currentUser.name);
+            const container = document.getElementById('solicitudes-container');
+            
+            if (misSolicitudes.length === 0) {
+                container.innerHTML = `
+                    <div class="card" style="text-align: center; padding: 3rem;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="font-weight: 600; color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes</h3>
+                        <p style="color: #6b7280; margin-bottom: 2rem;">Comienza creando tu primera solicitud.</p>
+                        <button onclick="showView('nueva-solicitud')" class="btn btn-primary">
+                            ➕ Nueva Solicitud
+                        </button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="card">
+                        ${misSolicitudes.map(solicitud => `
+                            <div style="padding: 1.5rem; border-bottom: 1px solid #e5e7eb;">
+                                <div style="margin-bottom: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+                                        <h3 style="font-size: 1.125rem; font-weight: 600; color: #1f2937;">Solicitud ${solicitud.numero}</h3>
+                                        <span class="status-badge status-${solicitud.estado.toLowerCase().replace(' ', '-')}">${solicitud.estado}</span>
+                                        <span class="urgencia-${solicitud.urgencia.toLowerCase()}" style="font-weight: 600;">${solicitud.urgencia}</span>
+                                    </div>
+                                    
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1rem; font-size: 0.875rem; color: #6b7280;">
+                                        <div><strong>Equipo:</strong> ${solicitud.equipoAfectado}</div>
+                                        <div><strong>Ubicación:</strong> ${solicitud.ubicacionEspecifica}</div>
+                                        <div><strong>Especialidad:</strong> ${solicitud.especialidad}</div>
+                                        <div><strong>Asignado a:</strong> ${solicitud.asignadoA}</div>
+                                    </div>
+                                    
+                                    <p style="font-size: 0.875rem; color: #374151; margin-bottom: 1rem;">${solicitud.detalle}</p>
+                                    
+                                    ${solicitud.respuesta ? `
+                                        <div style="background: #f0fdf4; padding: 0.75rem; border-radius: 0.375rem; border-left: 4px solid #22c55e; margin-bottom: 1rem;">
+                                            <p style="font-size: 0.875rem; color: #15803d;"><strong>Respuesta:</strong> ${solicitud.respuesta}</p>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #9ca3af;">
+                                        <span>Creada: ${solicitud.fecha}</span>
+                                        ${solicitud.tiempoRespuesta ? `<span>Tiempo respuesta: ${solicitud.tiempoRespuesta}</span>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        function showView(viewName) {
+            // Ocultar todas las vistas
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.add('hidden');
+            });
+            
+            // Mostrar vista seleccionada
+            document.getElementById(viewName + '-view').classList.remove('hidden');
+            
+            // Actualizar navegación
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-view="${viewName}"]`).classList.add('active');
+            
+            currentView = viewName;
+            
+            // Actualizar datos de la vista
+            if (viewName === 'dashboard') {
+                updateViews();
+            } else if (viewName === 'mis-solicitudes') {
+                updateMisSolicitudes();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-nav');
+            menu.classList.toggle('active');
+        }
+
+        function toggleNotifications() {
+            alert('🔔 Notificaciones:\n\n' + 
+                  notifications.map(n => `• ${n.mensaje} (${n.tiempo})`).join('\n'));
+        }
+
+        function updateAsignacion() {
+            const especialidad = document.getElementById('especialidad').value;
+            const urgencia = document.getElementById('urgencia').value;
+            const preview = document.getElementById('asignacion-preview');
+            
+            if (especialidad) {
+                const tecnico = asignaciones[especialidad] || 'Equipo Ingeniería - General';
+                const tiempo = tiemposRespuesta[urgencia] || '4 horas';
+                
+                document.getElementById('tecnico-asignado').textContent = tecnico;
+                document.getElementById('tiempo-estimado').textContent = tiempo;
+                preview.classList.remove('hidden');
+            } else {
+                preview.classList.add('hidden');
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('solicitud-form').reset();
+            document.getElementById('servicio').value = currentUser.service;
+            document.getElementById('contacto').value = currentUser.phone;
+            document.getElementById('asignacion-preview').classList.add('hidden');
+        }
+
+        // Manejo del formulario
+        document.getElementById('solicitud-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const especialidad = document.getElementById('especialidad').value;
+            const urgencia = document.getElementById('urgencia').value;
+            
+            if (!document.getElementById('detalle').value || !especialidad || !document.getElementById('equipo').value) {
+                alert('Por favor complete todos los campos obligatorios marcados con *');
+                return;
+            }
+
+            const nuevaSolicitud = {
+                numero: document.getElementById('next-number').textContent,
+                fecha: new Date().toLocaleString('es-CO'),
+                mes: new Date().toLocaleString('es-CO', { month: 'long' }).toUpperCase(),
+                detalle: document.getElementById('detalle').value,
+                servicio: document.getElementById('servicio').value,
+                quienSolicita: currentUser.name,
+                especialidad: especialidad,
+                asignadoA: asignaciones[especialidad] || 'Equipo Ingeniería - General',
+                respuesta: '',
+                estado: urgencia === 'CRÍTICA' ? 'ASIGNADA' : 'RECIBIDA',
+                urgencia: urgencia,
+                equipoAfectado: document.getElementById('equipo').value,
+                ubicacionEspecifica: document.getElementById('ubicacion').value,
+                tiempoRespuesta: ''
+            };
+
+            solicitudes.unshift(nuevaSolicitud);
+            saveSolicitudes();
+            
+            // Simular notificación WhatsApp
+            const mensaje = `✅ Solicitud ${nuevaSolicitud.numero} creada exitosamente!\n📱 Notificación enviada por WhatsApp al técnico\n⏰ Tiempo estimado de respuesta: ${tiemposRespuesta[urgencia]}\n👤 Asignado a: ${nuevaSolicitud.asignadoA}`;
+            
+            alert(mensaje);
+            
+            // Agregar notificación
+            notifications.unshift({
+                id: notifications.length + 1,
+                tipo: 'nueva',
+                mensaje: `Nueva solicitud ${nuevaSolicitud.numero} creada y asignada`,
+                tiempo: 'Ahora',
+                leida: false
+            });
+            
+            // Limpiar formulario y actualizar vistas
+            clearForm();
+            updateNextNumber();
+            updateMetrics();
+            updateViews();
+            showView('mis-solicitudes');
+        });
+
+        // Actualizar fecha cada minuto
+        setInterval(() => {
+            updateCurrentDate();
+        }, 60000);
+    </script>
+</body>
+</html>

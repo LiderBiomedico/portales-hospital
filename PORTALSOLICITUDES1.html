@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Solicitudes - Hospital Susana López de Valencia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Developer credit bar */
+        .developer-bar {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            border-bottom: 2px solid #2563eb;
+        }
+
+        .developer-bar span {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 60px);
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+
+        .login-header .hospital-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .login-header h1 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: 0.75rem;
+            padding: 0.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 0.75rem;
+            background: transparent;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .auth-form {
+            text-align: left;
+        }
+
+        .auth-form.hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-input.error {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+            transform: translateY(-1px);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #047857, #065f46);
+            transform: translateY(-1px);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            width: auto;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border-color: #22c55e;
+            color: #15803d;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            color: #d97706;
+        }
+
+        /* Main Portal Styles */
+        .main-portal {
+            display: none;
+        }
+
+        .main-portal.active {
+            display: block;
+        }
+
+        .header {
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4.5rem;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo svg {
+            width: 3rem;
+            height: 3rem;
+            color: #2563eb;
+            margin-right: 1rem;
+        }
+
+        .hospital-info h1 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+            line-height: 1.2;
+        }
+
+        .hospital-info p {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #f8fafc;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #e2e8f0;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .user-details h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .verification-badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 1rem;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .welcome-section p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .nav-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-color: #2563eb;
+        }
+
+        .nav-card.active {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .nav-card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .nav-card h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-card p {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            margin-bottom: 2rem;
+        }
+
+        .content-card.hidden {
+            display: none;
+        }
+
+        .form-section {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h2 {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        /* Request Cards */
+        .request-card {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .request-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .request-card.pending {
+            border-left: 4px solid #f59e0b;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        }
+
+        .request-card.assigned {
+            border-left: 4px solid #2563eb;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+
+        .request-card.completed {
+            border-left: 4px solid #059669;
+            background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .request-number {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 1.125rem;
+        }
+
+        .request-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .request-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .request-detail-label {
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .request-detail-value {
+            color: #1f2937;
+        }
+
+        .status-pendiente {
+            background: #fef3c7;
+            color: #d97706;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-asignada {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-proceso {
+            background: #fed7aa;
+            color: #ea580c;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-completada {
+            background: #dcfce7;
+            color: #166534;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .welcome-section h1 {
+                font-size: 2rem;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hospital-info {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Developer Credit Bar -->
+    <div class="developer-bar">
+        💻 Desarrollado por <span>Ing. Paul Eduardo Muñoz R.</span> - Sistema Integrado de Gestión con Autenticación
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="hospital-logo">🏥</div>
+                <h1>Portal de Solicitudes</h1>
+                <p>Hospital Susana López de Valencia S.A.S.</p>
+            </div>
+
+            <!-- Auth Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="showAuthTab('login')">🔐 Iniciar Sesión</button>
+                <button class="auth-tab" onclick="showAuthTab('request')">📝 Solicitar Acceso</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <div id="login-alert"></div>
+                
+                <div class="alert alert-info">
+                    <strong>🔐 Autenticación con Código de Acceso</strong><br>
+                    Use su email y el código de 4 dígitos generado automáticamente por el Portal de Gestión tras la aprobación de su solicitud.
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">📧 Correo Electrónico</label>
+                    <input type="email" class="form-input" id="email" required placeholder="Ingrese su correo electrónico">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🔢 Código de Acceso (4 dígitos)</label>
+                    <input type="text" class="form-input" id="access-code" required placeholder="Código de 4 dígitos generado por el Portal de Gestión" maxlength="4" pattern="[0-9]{4}" style="text-align: center; font-size: 1.25rem; letter-spacing: 0.5rem;">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="login-btn">
+                    🚀 Acceder al Portal
+                </button>
+
+                <div style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: #6b7280;">
+                    ¿No tienes acceso? Haz clic en "Solicitar Acceso" y espera la aprobación
+                </div>
+            </form>
+
+            <!-- Request Access Form -->
+            <form id="request-form" class="auth-form hidden">
+                <div id="request-alert"></div>
+
+                <div class="alert alert-info">
+                    <strong>📋 Solicitud de Acceso Simplificada</strong><br>
+                    Complete los campos básicos para solicitar acceso al portal. Su solicitud será procesada automáticamente con sincronización en tiempo real.
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">👤 Nombre Completo *</label>
+                    <input type="text" class="form-input" id="req-name" required placeholder="Nombres y apellidos">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📧 Correo Electrónico *</label>
+                    <input type="email" class="form-input" id="req-email" required placeholder="correo@hospital.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🏥 Servicio/Área *</label>
+                    <select class="form-select" id="req-service" required>
+                        <option value="">Seleccione su servicio</option>
+                        <option value="URGENCIAS_ADULTO">Urgencias Adulto</option>
+                        <option value="URGENCIAS_PEDIATRICAS">Urgencias Pediátricas</option>
+                        <option value="URGENCIAS_GINECOLOGIA">Urgencias Ginecología</option>
+                        <option value="UCI_ADULTO">UCI Adulto</option>
+                        <option value="UCI_NEONATAL">UCI Neonatal</option>
+                        <option value="UCI_INTERMEDIOS">UCI Intermedios</option>
+                        <option value="HOSPITALIZACION_ADULTO">Hospitalización Adulto</option>
+                        <option value="HOSPITALIZACION_PEDIATRIA">Hospitalización Pediatría</option>
+                        <option value="CIRUGIA_ADULTO">Cirugía Adulto</option>
+                        <option value="CIRUGIA_PEDIATRICA">Cirugía Pediátrica</option>
+                        <option value="SALA_PARTOS">Sala de Partos</option>
+                        <option value="CONSULTA_EXTERNA">Consulta Externa</option>
+                        <option value="ENDOSCOPIA">Endoscopia</option>
+                        <option value="IMAGENES_DIAGNOSTICAS">Imágenes Diagnósticas</option>
+                        <option value="LABORATORIO_CLINICO">Laboratorio Clínico</option>
+                        <option value="FARMACIA_CENTRAL">Farmacia Central</option>
+                        <option value="FISIOTERAPIA">Fisioterapia</option>
+                        <option value="VACUNACION">Vacunación</option>
+                        <option value="CENTRAL_ESTERILIZACION_ADULTOS">Central de Esterilización Adultos</option>
+                        <option value="CENTRAL_ESTERILIZACION_UMI">Central de Esterilización UMI</option>
+                        <option value="INGENIERIA_BIOMEDICA">Ingeniería Biomédica</option>
+                        <option value="INFRAESTRUCTURA">Infraestructura</option>
+                        <option value="MECANICOS">Mecánicos</option>
+                        <option value="TRAILER">Trailer</option>
+                        <option value="AMBULANCIAS">Ambulancias</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">💼 Cargo/Posición *</label>
+                    <select class="form-select" id="req-position" required>
+                        <option value="">Seleccione su cargo</option>
+                        <option value="JEFE_SERVICIO">Jefe de Servicio</option>
+                        <option value="COORDINADOR">Coordinador</option>
+                        <option value="ENFERMERA_JEFE">Enfermera Jefe</option>
+                        <option value="MEDICO_ESPECIALISTA">Médico Especialista</option>
+                        <option value="AUXILIAR_ENFERMERIA">Auxiliar de Enfermería</option>
+                        <option value="ADMINISTRATIVO">Personal Administrativo</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📱 Teléfono/WhatsApp</label>
+                    <input type="tel" class="form-input" id="req-phone" placeholder="+57 300 123 4567">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="request-btn">
+                    📤 Enviar Solicitud de Acceso
+                </button>
+
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="debugAccessSystem()" style="width: auto;">
+                        🔍 Debug Sistema
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="clearAccessData()" style="width: auto;">
+                        🗑️ Limpiar Datos de Prueba
+                    </button>
+                    <button type="button" class="btn btn-warning btn-sm" onclick="testQuickAccess()" style="width: auto;">
+                        ⚡ Prueba Rápida
+                    </button>
+                </div>
+
+                <div style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: #6b7280;">
+                    ¿Ya tienes acceso? Haz clic en "Iniciar Sesión"
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Portal (hidden initially) -->
+    <div id="main-portal" class="main-portal">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content container">
+                <div class="logo">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                    <div class="hospital-info">
+                        <h1>Hospital Susana López de Valencia S.A.S.</h1>
+                        <p>Portal de Solicitudes de Servicios - Versión Autenticada</p>
+                    </div>
+                </div>
+
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">👤</div>
+                    <div class="user-details">
+                        <h3 id="user-name">Usuario del Sistema</h3>
+                        <p id="user-service">Seleccione servicio</p>
+                        <span class="verification-badge">✓ Verificado</span>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">🚪 Salir</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content container">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1>Portal Autenticado de Servicios</h1>
+                <p>Acceso seguro para personal autorizado del hospital</p>
+            </div>
+
+            <!-- Navigation Cards -->
+            <div class="nav-grid">
+                <div class="nav-card active" onclick="showSection('nueva-solicitud')">
+                    <span class="nav-card-icon">🛠️</span>
+                    <h3>Nueva Solicitud</h3>
+                    <p>Crear solicitud con discriminación automática por área técnica</p>
+                </div>
+                
+                <div class="nav-card" onclick="showSection('mis-solicitudes')">
+                    <span class="nav-card-icon">📋</span>
+                    <h3>Mis Solicitudes</h3>
+                    <p>Ver historial personalizado de sus solicitudes</p>
+                </div>
+                
+                <div class="nav-card" onclick="showSection('servicios')">
+                    <span class="nav-card-icon">🏥</span>
+                    <h3>Áreas de Ingeniería</h3>
+                    <p>Información sobre áreas técnicas disponibles</p>
+                </div>
+            </div>
+
+            <!-- Content sections -->
+            <div id="nueva-solicitud" class="content-card">
+                <div class="form-section">
+                    <div class="form-header">
+                        <h2>🛠️ Nueva Solicitud de Servicio</h2>
+                        <p>Sistema autenticado de solicitudes con asignación automática</p>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <strong>✅ Usuario Autenticado:</strong> <span id="auth-user-display"></span><br>
+                        <strong>🏥 Servicio Autorizado:</strong> <span id="auth-service-display"></span><br>
+                        <strong>⏰ Sesión Válida:</strong> <span id="session-timer"></span>
+                    </div>
+
+                    <!-- Formulario de Nueva Solicitud -->
+                    <form id="new-request-form">
+                        <div id="form-alert"></div>
+
+                        <div class="form-group">
+                            <label class="form-label">🔧 Área de Ingeniería *</label>
+                            <select id="area-ingenieria" class="form-select" required>
+                                <option value="">Seleccione el área técnica</option>
+                                <option value="INGENIERIA_BIOMEDICA">🏥 Ingeniería Biomédica</option>
+                                <option value="MECANICA">⚙️ Mecánica</option>
+                                <option value="INFRAESTRUCTURA">🏗️ Infraestructura</option>
+                            </select>
+                            <small style="color: #6b7280; font-size: 0.75rem;">La solicitud será asignada automáticamente al área seleccionada</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">🔨 Tipo de Servicio *</label>
+                            <select id="tipo-servicio" class="form-select" required>
+                                <option value="">Seleccione el tipo de servicio</option>
+                                <option value="MANTENIMIENTO_PREVENTIVO">🔧 Mantenimiento Preventivo</option>
+                                <option value="MANTENIMIENTO_CORRECTIVO">🛠️ Mantenimiento Correctivo</option>
+                                <option value="REPARACION">🔨 Reparación</option>
+                                <option value="INSTALACION">📦 Instalación</option>
+                                <option value="CALIBRACION">⚖️ Calibración</option>
+                                <option value="INSPECCION">👁️ Inspección</option>
+                                <option value="ACTUALIZACION">🔄 Actualización</option>
+                                <option value="EMERGENCIA">🚨 Emergencia</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">⚡ Prioridad *</label>
+                            <select id="prioridad" class="form-select" required>
+                                <option value="">Seleccione la prioridad</option>
+                                <option value="CRITICA">🚨 Crítica (Equipos vitales, falla total)</option>
+                                <option value="ALTA">🔴 Alta (Equipos importantes, funcionamiento limitado)</option>
+                                <option value="MEDIA">🟡 Media (Equipos secundarios, funcionamiento normal)</option>
+                                <option value="BAJA">🟢 Baja (Mantenimiento rutinario)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">🖥️ Equipo/Sistema Afectado *</label>
+                            <input type="text" id="equipo" class="form-input" required placeholder="Ej: Ventilador mecánico Marca X Modelo Y - Habitación 201">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📍 Ubicación Específica *</label>
+                            <input type="text" id="ubicacion" class="form-input" required placeholder="Ej: UCI Adulto - Habitación 201 - Cama 3">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📝 Descripción del Problema *</label>
+                            <textarea id="descripcion" class="form-textarea" required placeholder="Describa detalladamente el problema, síntomas observados, cuándo ocurrió, etc."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📋 Observaciones Adicionales</label>
+                            <textarea id="observaciones" class="form-textarea" placeholder="Información adicional que considere relevante"></textarea>
+                        </div>
+
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; margin: 1.5rem 0; border-left: 3px solid #2563eb;">
+                            <h4 style="color: #1e40af; margin-bottom: 0.5rem;">💡 Información del Sistema</h4>
+                            <ul style="color: #1e40af; margin: 0; padding-left: 1rem; font-size: 0.875rem;">
+                                <li>Su solicitud será enviada automáticamente al área de ingeniería correspondiente</li>
+                                <li>Recibirá notificación cuando sea asignada a un técnico</li>
+                                <li>Puede seguir el progreso en la sección "Mis Solicitudes"</li>
+                                <li>Para emergencias críticas, contacte también por teléfono</li>
+                            </ul>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="submit-request-btn">
+                            📤 Enviar Solicitud de Mantenimiento
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="mis-solicitudes" class="content-card hidden">
+                <div class="form-header">
+                    <h2>📋 Mis Solicitudes</h2>
+                    <p>Historial personalizado de solicitudes de su servicio</p>
+                </div>
+                
+                <div class="alert alert-info">
+                    <strong>🔍 Filtrado Automático:</strong> Solo se muestran las solicitudes de su servicio: <span id="filter-service-display"></span>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary btn-sm" onclick="refreshMyRequests()">
+                        🔄 Actualizar
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="filterMyRequests('all')">
+                        📋 Todas
+                    </button>
+                    <button class="btn btn-warning btn-sm" onclick="filterMyRequests('PENDIENTE')">
+                        ⏳ Pendientes
+                    </button>
+                    <button class="btn btn-success btn-sm" onclick="filterMyRequests('COMPLETADA')">
+                        ✅ Completadas
+                    </button>
+                </div>
+
+                <div id="my-requests-list">
+                    <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes registradas</h3>
+                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí una vez que las envíe</p>
+                        <button class="btn btn-primary" onclick="showSection('nueva-solicitud')">
+                            🛠️ Crear Primera Solicitud
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="servicios" class="content-card hidden">
+                <div class="form-header">
+                    <h2>🏥 Áreas de Ingeniería Disponibles</h2>
+                    <p>Información sobre las áreas técnicas del hospital</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 2rem; border-radius: 1rem; border: 2px solid #059669;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏥</div>
+                        <h3 style="color: #065f46; margin-bottom: 1rem;">Ingeniería Biomédica</h3>
+                        <p style="color: #047857; margin-bottom: 1rem;">Especializada en equipos médicos y tecnología hospitalaria</p>
+                        <ul style="color: #047857; font-size: 0.875rem; line-height: 1.6;">
+                            <li>Equipos de UCI y monitoreo</li>
+                            <li>Ventiladores mecánicos</li>
+                            <li>Bombas de infusión</li>
+                            <li>Equipos de imagenología</li>
+                            <li>Sistemas de gases medicinales</li>
+                            <li>Equipos de laboratorio</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #fefbeb 0%, #fef3c7 100%); padding: 2rem; border-radius: 1rem; border: 2px solid #f59e0b;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚙️</div>
+                        <h3 style="color: #d97706; margin-bottom: 1rem;">Mecánica</h3>
+                        <p style="color: #b45309; margin-bottom: 1rem;">Mantenimiento de sistemas mecánicos y equipos industriales</p>
+                        <ul style="color: #b45309; font-size: 0.875rem; line-height: 1.6;">
+                            <li>Sistemas de climatización</li>
+                            <li>Calderas y sistemas de vapor</li>
+                            <li>Compresores y sistemas neumáticos</li>
+                            <li>Equipos de lavandería</li>
+                            <li>Ascensores y montacargas</li>
+                            <li>Sistemas de bombeo</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #f3f4f6 0%, #ede9fe 100%); padding: 2rem; border-radius: 1rem; border: 2px solid #8b5cf6;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏗️</div>
+                        <h3 style="color: #7c3aed; margin-bottom: 1rem;">Infraestructura</h3>
+                        <p style="color: #6d28d9; margin-bottom: 1rem;">Mantenimiento de instalaciones y servicios generales</p>
+                        <ul style="color: #6d28d9; font-size: 0.875rem; line-height: 1.6;">
+                            <li>Sistemas eléctricos</li>
+                            <li>Redes hidráulicas y sanitarias</li>
+                            <li>Estructuras y acabados</li>
+                            <li>Sistemas de seguridad</li>
+                            <li>Jardines y áreas exteriores</li>
+                            <li>Señalización y demarcación</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #f8fafc; border-radius: 1rem; border-left: 4px solid #2563eb;">
+                    <h4 style="color: #1f2937; margin-bottom: 1rem;">💡 Cómo funciona el sistema</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">1. 📝 Envía tu solicitud</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">Describe el problema y selecciona el área correspondiente</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">2. 🤖 Asignación automática</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">El sistema asigna la solicitud al técnico disponible</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">3. 🔧 Atención técnica</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">El técnico especializado atiende tu solicitud</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">4. ✅ Seguimiento</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">Puedes seguir el progreso en "Mis Solicitudes"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mapas de servicios y areas
+        const serviciosHospitalarios = {
+            'URGENCIAS_ADULTO': 'Urgencias Adulto',
+            'URGENCIAS_PEDIATRICAS': 'Urgencias Pediátricas',
+            'URGENCIAS_GINECOLOGIA': 'Urgencias Ginecología',
+            'UCI_ADULTO': 'UCI Adulto',
+            'UCI_NEONATAL': 'UCI Neonatal',
+            'UCI_INTERMEDIOS': 'UCI Intermedios',
+            'HOSPITALIZACION_ADULTO': 'Hospitalización Adulto',
+            'HOSPITALIZACION_PEDIATRIA': 'Hospitalización Pediatría',
+            'CIRUGIA_ADULTO': 'Cirugía Adulto',
+            'CIRUGIA_PEDIATRICA': 'Cirugía Pediátrica',
+            'SALA_PARTOS': 'Sala de Partos',
+            'CONSULTA_EXTERNA': 'Consulta Externa',
+            'ENDOSCOPIA': 'Endoscopia',
+            'IMAGENES_DIAGNOSTICAS': 'Imágenes Diagnósticas',
+            'LABORATORIO_CLINICO': 'Laboratorio Clínico',
+            'FARMACIA_CENTRAL': 'Farmacia Central',
+            'FISIOTERAPIA': 'Fisioterapia',
+            'VACUNACION': 'Vacunación',
+            'CENTRAL_ESTERILIZACION_ADULTOS': 'Central de Esterilización Adultos',
+            'CENTRAL_ESTERILIZACION_UMI': 'Central de Esterilización UMI',
+            'INGENIERIA_BIOMEDICA': 'Ingeniería Biomédica',
+            'INFRAESTRUCTURA': 'Infraestructura',
+            'MECANICOS': 'Mecánicos',
+            'TRAILER': 'Trailer',
+            'AMBULANCIAS': 'Ambulancias'
+        };
+
+        const areasIngenieria = {
+            'INGENIERIA_BIOMEDICA': 'Ingeniería Biomédica',
+            'MECANICA': 'Mecánica',
+            'INFRAESTRUCTURA': 'Infraestructura'
+        };
+
+        let currentUser = null;
+        let sessionTimeout = null;
+        let myRequests = [];
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Portal de Solicitudes con Funcionalidad Completa Iniciado');
+            
+            // Cargar usuarios aprobados y verificar sesión existente
+            loadApprovedUsers();
+            checkExistingSession();
+            initializeEventListeners();
+            
+            console.log('✅ Sistema iniciado completamente');
+        });
+
+        function initializeEventListeners() {
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            
+            // Request access form
+            document.getElementById('request-form').addEventListener('submit', handleAccessRequest);
+            
+            // New request form
+            document.getElementById('new-request-form').addEventListener('submit', handleNewRequest);
+        }
+
+        function loadApprovedUsers() {
+            console.log('🔐 Cargando usuarios aprobados desde Portal de Gestión...');
+            
+            try {
+                const approvedUsersData = localStorage.getItem('hospital_approved_users');
+                const approvedUsers = approvedUsersData ? JSON.parse(approvedUsersData) : [];
+                
+                console.log(`✅ ${approvedUsers.length} usuarios aprobados encontrados:`, approvedUsers);
+                
+                return approvedUsers;
+            } catch (error) {
+                console.error('❌ Error al cargar usuarios aprobados:', error);
+                return [];
+            }
+        }
+
+        function showAuthTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide forms
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.add('hidden'));
+            
+            if (tab === 'login') {
+                document.getElementById('login-form').classList.remove('hidden');
+            } else {
+                document.getElementById('request-form').classList.remove('hidden');
+            }
+            
+            // Clear alerts
+            document.getElementById('login-alert').innerHTML = '';
+            document.getElementById('request-alert').innerHTML = '';
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const accessCode = document.getElementById('access-code').value.trim();
+            
+            const alertDiv = document.getElementById('login-alert');
+            const loginBtn = document.getElementById('login-btn');
+            
+            console.log('🔐 Intentando login con:', { email, accessCode });
+            
+            // Validaciones básicas
+            if (!email || !accessCode) {
+                showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos');
+                return;
+            }
+            
+            // Validar formato del código de acceso
+            if (accessCode.length !== 4 || !/^[0-9]{4}$/.test(accessCode)) {
+                showAlert(alertDiv, 'error', '❌ El código de acceso debe contener exactamente 4 dígitos');
+                return;
+            }
+            
+            // Cargar usuarios aprobados desde localStorage
+            const approvedUsers = loadApprovedUsers();
+            
+            if (approvedUsers.length === 0) {
+                showAlert(alertDiv, 'error', '⚠️ No hay usuarios aprobados en el sistema. Contacte al administrador o use el Portal de Gestión para aprobar solicitudes.');
+                return;
+            }
+            
+            // Buscar usuario por email
+            const user = approvedUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+            
+            if (!user) {
+                showAlert(alertDiv, 'error', '❌ Usuario no encontrado. Verifique su email o solicite acceso.');
+                return;
+            }
+            
+            // Verificar estado del usuario
+            if (user.estado !== 'ACTIVO') {
+                showAlert(alertDiv, 'error', `⏳ Su cuenta está en estado: ${user.estado}. Contacte al administrador.`);
+                return;
+            }
+            
+            // Verificar código de acceso
+            if (!user.codigoAcceso) {
+                showAlert(alertDiv, 'error', '❌ Su cuenta no tiene código de acceso asignado. Contacte al administrador del Portal de Gestión.');
+                return;
+            }
+            
+            const userCode = String(user.codigoAcceso);
+            const inputCode = String(accessCode);
+            
+            if (userCode !== inputCode) {
+                showAlert(alertDiv, 'error', '❌ Código de acceso incorrecto. Use el código de 4 dígitos proporcionado por el Portal de Gestión.');
+                return;
+            }
+            
+            // Login exitoso
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '⏳ Verificando...';
+            
+            setTimeout(() => {
+                authenticateUser(user);
+            }, 1500);
+        }
+
+        function handleAccessRequest(e) {
+            e.preventDefault();
+            
+            console.log('📝 Iniciando proceso de solicitud de acceso...');
+            
+            const formData = {
+                id: `ACC${Date.now()}${Math.random().toString(36).substring(2, 5).toUpperCase()}`,
+                nombreCompleto: document.getElementById('req-name').value.trim(),
+                email: document.getElementById('req-email').value.trim(),
+                telefono: document.getElementById('req-phone').value.trim(),
+                servicioHospitalario: document.getElementById('req-service').value,
+                cargo: document.getElementById('req-position').value,
+                justificacion: 'Solicitud de acceso al Portal de Solicitudes de Mantenimiento',
+                fechaSolicitud: new Date().toISOString(),
+                estado: 'PENDIENTE',
+                esUrgente: false,
+                numeroDocumento: '',
+                jefeSupervisor: ''
+            };
+            
+            const alertDiv = document.getElementById('request-alert');
+            
+            // Validaciones
+            if (!formData.nombreCompleto || !formData.email || !formData.servicioHospitalario || 
+                !formData.cargo) {
+                showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos obligatorios');
+                return;
+            }
+            
+            // Simular envío de solicitud
+            const requestBtn = document.getElementById('request-btn');
+            requestBtn.disabled = true;
+            requestBtn.innerHTML = '⏳ Enviando solicitud...';
+            
+            setTimeout(() => {
+                try {
+                    // Cargar solicitudes existentes del localStorage
+                    const existingRequests = JSON.parse(localStorage.getItem('hospital_access_requests') || '[]');
+                    
+                    // Agregar la nueva solicitud
+                    existingRequests.push(formData);
+                    
+                    // Guardar en localStorage
+                    localStorage.setItem('hospital_access_requests', JSON.stringify(existingRequests));
+                    
+                    showAlert(alertDiv, 'success', 
+                        `✅ Solicitud de acceso enviada correctamente.\n\n` +
+                        `📊 DATOS ENVIADOS:\n` +
+                        `• ID: ${formData.id}\n` +
+                        `• Nombre: ${formData.nombreCompleto}\n` +
+                        `• Email: ${formData.email}\n` +
+                        `• Servicio: ${serviciosHospitalarios[formData.servicioHospitalario] || formData.servicioHospitalario}\n` +
+                        `• Cargo: ${formData.cargo}\n\n` +
+                        `📧 Recibirá una notificación por correo cuando sea aprobada.\n` +
+                        `⏱️ El proceso de aprobación puede tomar 24-48 horas.`
+                    );
+                    
+                    // Limpiar formulario
+                    document.getElementById('request-form').reset();
+                    requestBtn.disabled = false;
+                    requestBtn.innerHTML = '📤 Enviar Solicitud de Acceso';
+                    
+                } catch (error) {
+                    console.error('❌ Error al procesar solicitud de acceso:', error);
+                    showAlert(alertDiv, 'error', '❌ Error al enviar la solicitud. Por favor intente nuevamente.');
+                    requestBtn.disabled = false;
+                    requestBtn.innerHTML = '📤 Enviar Solicitud de Acceso';
+                }
+            }, 2000);
+        }
+
+        function handleNewRequest(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                alert('❌ Error de sesión. Por favor inicie sesión nuevamente.');
+                return;
+            }
+            
+            console.log('📝 Creando nueva solicitud de mantenimiento...');
+            
+            const formData = {
+                numero: `SOL${Date.now()}${Math.random().toString(36).substring(2, 3).toUpperCase()}`,
+                servicioIngenieria: document.getElementById('area-ingenieria').value,
+                tipoServicio: document.getElementById('tipo-servicio').value,
+                prioridad: document.getElementById('prioridad').value,
+                equipo: document.getElementById('equipo').value.trim(),
+                ubicacion: document.getElementById('ubicacion').value.trim(),
+                descripcion: document.getElementById('descripcion').value.trim(),
+                observaciones: document.getElementById('observaciones').value.trim(),
+                
+                // Datos del usuario autenticado
+                solicitante: currentUser.name,
+                servicioHospitalario: currentUser.service,
+                servicioSolicitante: currentUser.serviceName,
+                emailSolicitante: currentUser.email,
+                
+                // Datos de gestión
+                fechaCreacion: new Date().toLocaleString('es-CO'),
+                fechaCreacionISO: new Date().toISOString(),
+                estado: 'PENDIENTE',
+                estadoGestion: 'PENDIENTE',
+                tecnicoAsignado: null,
+                fechaAsignacion: null
+            };
+            
+            const alertDiv = document.getElementById('form-alert');
+            
+            // Validaciones
+            if (!formData.servicioIngenieria || !formData.tipoServicio || !formData.prioridad || 
+                !formData.equipo || !formData.ubicacion || !formData.descripcion) {
+                showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos obligatorios (*)');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submit-request-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '⏳ Enviando solicitud...';
+            
+            setTimeout(() => {
+                try {
+                    // Cargar solicitudes existentes
+                    const existingRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]');
+                    
+                    // Agregar nueva solicitud
+                    existingRequests.push(formData);
+                    
+                    // Guardar en localStorage para sincronización con Portal de Gestión
+                    localStorage.setItem('hospital_solicitudes', JSON.stringify(existingRequests));
+                    
+                    // Agregar a solicitudes del usuario
+                    myRequests.push(formData);
+                    
+                    console.log('✅ Solicitud creada:', formData);
+                    
+                    showAlert(alertDiv, 'success', 
+                        `✅ Solicitud enviada exitosamente\n\n` +
+                        `📋 DETALLES DE LA SOLICITUD:\n` +
+                        `• Número: ${formData.numero}\n` +
+                        `• Área: ${areasIngenieria[formData.servicioIngenieria]}\n` +
+                        `• Tipo: ${formData.tipoServicio.replace('_', ' ')}\n` +
+                        `• Prioridad: ${formData.prioridad}\n` +
+                        `• Equipo: ${formData.equipo}\n\n` +
+                        `🔄 Su solicitud será asignada automáticamente al área de ${areasIngenieria[formData.servicioIngenieria]}.\n` +
+                        `📱 Puede seguir el progreso en la sección "Mis Solicitudes".`
+                    );
+                    
+                    // Limpiar formulario
+                    document.getElementById('new-request-form').reset();
+                    
+                    // Actualizar contador de mis solicitudes
+                    updateMyRequestsDisplay();
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '📤 Enviar Solicitud de Mantenimiento';
+                    
+                    // Auto-navegar a "Mis Solicitudes" después de 3 segundos
+                    setTimeout(() => {
+                        showSection('mis-solicitudes');
+                    }, 3000);
+                    
+                } catch (error) {
+                    console.error('❌ Error al crear solicitud:', error);
+                    showAlert(alertDiv, 'error', '❌ Error al enviar la solicitud. Por favor intente nuevamente.');
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '📤 Enviar Solicitud de Mantenimiento';
+                }
+            }, 2000);
+        }
+
+        function authenticateUser(user) {
+            currentUser = {
+                email: user.email,
+                name: user.nombreCompleto,
+                service: user.servicioHospitalario,
+                serviceName: serviciosHospitalarios[user.servicioHospitalario] || user.servicioHospitalario,
+                position: user.cargo,
+                loginTime: new Date(),
+                sessionDuration: 4 * 60 * 60 * 1000 // 4 horas
+            };
+            
+            // Actualizar último login en localStorage
+            const approvedUsers = JSON.parse(localStorage.getItem('hospital_approved_users') || '[]');
+            const userIndex = approvedUsers.findIndex(u => u.email === user.email);
+            if (userIndex !== -1) {
+                approvedUsers[userIndex].ultimoAcceso = new Date().toISOString();
+                localStorage.setItem('hospital_approved_users', JSON.stringify(approvedUsers));
+            }
+            
+            // Guardar sesión
+            sessionStorage.setItem('hospitalSession', JSON.stringify(currentUser));
+            
+            // Cargar solicitudes del usuario
+            loadMyRequests();
+            
+            // Mostrar portal principal
+            showMainPortal();
+            
+            console.log('Usuario autenticado:', currentUser.name);
+        }
+
+        function showMainPortal() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-portal').classList.add('active');
+            
+            // Actualizar información del usuario
+            updateUserInterface();
+            
+            // Iniciar temporizador de sesión
+            startSessionTimer();
+            
+            // Mensaje de bienvenida
+            setTimeout(() => {
+                alert(`✅ ¡Bienvenido al Portal, ${currentUser.name}!\n\n🏥 Servicio autorizado: ${currentUser.serviceName}\n⏰ Sesión válida por 4 horas\n🔐 Acceso seguro activado\n\n🛠️ Ya puede crear y gestionar solicitudes de mantenimiento`);
+            }, 500);
+        }
+
+        function updateUserInterface() {
+            // Actualizar header
+            document.getElementById('user-name').textContent = currentUser.name;
+            document.getElementById('user-service').textContent = currentUser.serviceName;
+            
+            // Crear iniciales para avatar
+            const initials = currentUser.name.split(' ')
+                .filter(word => word.length > 0)
+                .map(word => word[0])
+                .join('')
+                .substring(0, 2)
+                .toUpperCase();
+            
+            document.getElementById('user-avatar').textContent = initials;
+            
+            // Actualizar información de autenticación
+            document.getElementById('auth-user-display').textContent = currentUser.name;
+            document.getElementById('auth-service-display').textContent = currentUser.serviceName;
+            document.getElementById('filter-service-display').textContent = currentUser.serviceName;
+        }
+
+        function startSessionTimer() {
+            const updateTimer = () => {
+                if (!currentUser) return;
+                
+                const now = new Date();
+                const elapsed = now - currentUser.loginTime;
+                const remaining = currentUser.sessionDuration - elapsed;
+                
+                if (remaining <= 0) {
+                    logout('Su sesión ha expirado por seguridad.');
+                    return;
+                }
+                
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                
+                const timerElement = document.getElementById('session-timer');
+                if (timerElement) {
+                    timerElement.textContent = `${hours}h ${minutes}m restantes`;
+                }
+            };
+            
+            updateTimer();
+            sessionTimeout = setInterval(updateTimer, 60000); // Actualizar cada minuto
+        }
+
+        function checkExistingSession() {
+            const savedSession = sessionStorage.getItem('hospitalSession');
+            if (savedSession) {
+                try {
+                    const session = JSON.parse(savedSession);
+                    const now = new Date();
+                    const elapsed = now - new Date(session.loginTime);
+                    
+                    if (elapsed < session.sessionDuration) {
+                        currentUser = session;
+                        currentUser.loginTime = new Date(session.loginTime);
+                        loadMyRequests();
+                        showMainPortal();
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Error recuperando sesión:', e);
+                }
+            }
+            
+            // Limpiar sesión inválida
+            sessionStorage.removeItem('hospitalSession');
+        }
+
+        function loadMyRequests() {
+            if (!currentUser) return;
+            
+            try {
+                // Cargar todas las solicitudes
+                const allRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]');
+                
+                // Filtrar solicitudes del usuario por email y servicio
+                myRequests = allRequests.filter(request => 
+                    request.emailSolicitante === currentUser.email || 
+                    request.servicioHospitalario === currentUser.service ||
+                    request.servicioSolicitante === currentUser.serviceName
+                );
+                
+                console.log(`📋 Cargadas ${myRequests.length} solicitudes del usuario`);
+                updateMyRequestsDisplay();
+                
+            } catch (error) {
+                console.error('❌ Error al cargar solicitudes del usuario:', error);
+                myRequests = [];
+            }
+        }
+
+        function updateMyRequestsDisplay() {
+            const container = document.getElementById('my-requests-list');
+            
+            if (myRequests.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes registradas</h3>
+                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí una vez que las envíe</p>
+                        <button class="btn btn-primary" onclick="showSection('nueva-solicitud')">
+                            🛠️ Crear Primera Solicitud
+                        </button>
+                    </div>
+                `;
+            } else {
+                const requestsHTML = myRequests
+                    .sort((a, b) => new Date(b.fechaCreacionISO || b.fechaCreacion) - new Date(a.fechaCreacionISO || a.fechaCreacion))
+                    .map(request => createMyRequestCard(request))
+                    .join('');
+                
+                container.innerHTML = requestsHTML;
+            }
+        }
+
+        function createMyRequestCard(request) {
+            const getStatusClass = (status) => {
+                const statusMap = {
+                    'PENDIENTE': 'pendiente',
+                    'ASIGNADA': 'asignada',
+                    'EN_PROCESO': 'proceso',
+                    'COMPLETADA': 'completada'
+                };
+                return statusMap[status] || 'pendiente';
+            };
+
+            const getRequestCardClass = (status) => {
+                const classMap = {
+                    'PENDIENTE': 'pending',
+                    'ASIGNADA': 'assigned',
+                    'EN_PROCESO': 'assigned',
+                    'COMPLETADA': 'completed'
+                };
+                return classMap[status] || 'pending';
+            };
+
+            const getPriorityColor = (priority) => {
+                const colorMap = {
+                    'CRITICA': '#ef4444',
+                    'ALTA': '#f59e0b',
+                    'MEDIA': '#3b82f6',
+                    'BAJA': '#059669'
+                };
+                return colorMap[priority] || '#6b7280';
+            };
+
+            const estado = request.estadoGestion || request.estado || 'PENDIENTE';
+            const areaInfo = request.servicioIngenieria ? areasIngenieria[request.servicioIngenieria] : 'Sin especificar';
+            
+            return `
+                <div class="request-card ${getRequestCardClass(estado)}">
+                    <div class="request-header">
+                        <div class="request-number">📋 ${request.numero}</div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <span class="status-${getStatusClass(estado)}">${estado.replace('_', ' ')}</span>
+                            <span style="background: ${getPriorityColor(request.prioridad)}; color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;">
+                                ${request.prioridad}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="request-details">
+                        <div class="request-detail">
+                            <div class="request-detail-label">🔧 Área Técnica</div>
+                            <div class="request-detail-value">${areaInfo}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🔨 Tipo de Servicio</div>
+                            <div class="request-detail-value">${request.tipoServicio?.replace('_', ' ') || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🖥️ Equipo</div>
+                            <div class="request-detail-value">${request.equipo || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📍 Ubicación</div>
+                            <div class="request-detail-value">${request.ubicacion || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📅 Fecha de Solicitud</div>
+                            <div class="request-detail-value">${request.fechaCreacion || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">👨‍🔧 Técnico Asignado</div>
+                            <div class="request-detail-value">${request.tecnicoAsignado || '<span style="color: #f59e0b;">Pendiente de asignación</span>'}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 3px solid #2563eb;">
+                        <div class="request-detail-label">📝 Descripción del Problema</div>
+                        <div style="margin-top: 0.5rem; color: #1f2937;">${request.descripcion || 'No especificada'}</div>
+                        ${request.observaciones ? `<div style="margin-top: 0.5rem; font-style: italic; color: #6b7280;"><strong>Observaciones:</strong> ${request.observaciones}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function refreshMyRequests() {
+            loadMyRequests();
+            alert('🔄 Solicitudes actualizadas');
+        }
+
+        function filterMyRequests(filter) {
+            const allMyRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]')
+                .filter(request => 
+                    request.emailSolicitante === currentUser.email || 
+                    request.servicioHospitalario === currentUser.service ||
+                    request.servicioSolicitante === currentUser.serviceName
+                );
+            
+            let filteredRequests;
+            if (filter === 'all') {
+                filteredRequests = allMyRequests;
+            } else {
+                filteredRequests = allMyRequests.filter(request => 
+                    (request.estadoGestion || request.estado) === filter
+                );
+            }
+            
+            myRequests = filteredRequests;
+            updateMyRequestsDisplay();
+        }
+
+        function showAlert(container, type, message) {
+            container.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message.replace(/\n/g, '<br>')}
+                </div>
+            `;
+        }
+
+        function showSection(sectionName) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.content-card').forEach(card => {
+                card.classList.add('hidden');
+            });
+
+            // Mostrar sección seleccionada
+            document.getElementById(sectionName).classList.remove('hidden');
+
+            // Actualizar navegación
+            document.querySelectorAll('.nav-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Si se cambia a "mis-solicitudes", actualizar la lista
+            if (sectionName === 'mis-solicitudes') {
+                loadMyRequests();
+            }
+        }
+
+        function logout(message = null) {
+            const confirmation = confirm('¿Está seguro que desea cerrar sesión?');
+            if (!confirmation && !message) return;
+
+            if (sessionTimeout) {
+                clearInterval(sessionTimeout);
+            }
+            
+            sessionStorage.removeItem('hospitalSession');
+            currentUser = null;
+            myRequests = [];
+            
+            document.getElementById('main-portal').classList.remove('active');
+            document.getElementById('login-screen').style.display = 'flex';
+            
+            // Limpiar formularios
+            document.getElementById('login-form').reset();
+            document.getElementById('login-alert').innerHTML = '';
+            
+            if (message) {
+                setTimeout(() => {
+                    showAlert(document.getElementById('login-alert'), 'info', message);
+                }, 500);
+            }
+            
+            console.log('Sesión cerrada');
+        }
+
+        // Funciones de utilidad para compatibilidad
+        function debugAccessSystem() {
+            console.log('🔍 Iniciando debug del sistema de solicitudes de acceso...');
+            
+            const rawData = localStorage.getItem('hospital_access_requests');
+            const parsedData = rawData ? JSON.parse(rawData) : null;
+            const approvedUsersData = localStorage.getItem('hospital_approved_users');
+            const approvedUsers = approvedUsersData ? JSON.parse(approvedUsersData) : [];
+            
+            const debugInfo = `🔍 DEBUG - Sistema de Solicitudes de Acceso
+
+📋 ESTADO DEL LOCALSTORAGE:
+• Solicitudes de acceso: ${parsedData ? parsedData.length : 0}
+• Usuarios aprobados: ${approvedUsers.length}
+
+👥 USUARIOS DISPONIBLES PARA LOGIN:
+${approvedUsers.length > 0 ? 
+    approvedUsers.map((user, i) => `${i+1}. ${user.nombreCompleto}\n   📧 ${user.email}\n   🔢 Código: ${user.codigoAcceso || 'Sin código'}`).join('\n\n') :
+    'No hay usuarios aprobados disponibles'
+}
+
+💡 INSTRUCCIONES:
+1. Use el Portal de Gestión para aprobar solicitudes
+2. Los códigos se generan automáticamente al aprobar
+3. Use email + código de 4 dígitos para hacer login aquí`;
+
+            alert(debugInfo);
+        }
+
+        function clearAccessData() {
+            const confirmation = confirm('¿Limpiar todos los datos de solicitudes?');
+            if (confirmation) {
+                localStorage.removeItem('hospital_access_requests');
+                localStorage.removeItem('hospital_approved_users');
+                localStorage.removeItem('hospital_solicitudes');
+                alert('🗑️ Datos limpiados completamente');
+            }
+        }
+
+        function testQuickAccess() {
+            const timestamp = new Date().toLocaleTimeString('es-CO');
+            document.getElementById('req-name').value = `Usuario Prueba ${timestamp}`;
+            document.getElementById('req-email').value = `prueba.${Date.now()}@hospital.com`;
+            document.getElementById('req-phone').value = '+57 300 123 4567';
+            document.getElementById('req-service').value = 'URGENCIAS_ADULTO';
+            document.getElementById('req-position').value = 'MEDICO_ESPECIALISTA';
+            
+            alert('⚡ Formulario llenado para prueba. Haz clic en "Enviar Solicitud" para completar.');
+        }
+
+        // Log de inicialización
+        console.log('Portal de Solicitudes con Funcionalidad Completa Iniciado');
+        console.log('🔐 Sistema de autenticación: Email + Código de 4 dígitos');
+        console.log('🛠️ Funcionalidades: Crear solicitudes, ver mis solicitudes, información de áreas');
+        console.log('💾 Sincronización: localStorage con Portal de Gestión');
+    </script>
+</body>
+</html>
