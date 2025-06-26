@@ -93,6 +93,8 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            border: none;
+            cursor: pointer;
         }
 
         .portal-btn::before {
@@ -184,6 +186,143 @@
             margin: 0;
         }
 
+        /* Modal para contraseña */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .password-modal {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.9);
+            animation: modalPop 0.3s ease forwards;
+        }
+
+        @keyframes modalPop {
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-5px); }
+        }
+
+        .modal-title {
+            color: #1f2937;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-subtitle {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            text-align: center;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+        }
+
+        .modal-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+        }
+
+        .modal-btn.secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .modal-btn.secondary:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 2rem 1.5rem;
@@ -201,6 +340,15 @@
                 padding: 1.25rem 1.5rem;
                 font-size: 1rem;
             }
+
+            .password-modal {
+                padding: 2rem;
+                width: 95%;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -215,29 +363,29 @@
             <a href="PORTALSOLICITUDES1.html" class="portal-btn user">
                 📝 Portal de Solicitudes
                 <small>Para personal del hospital - Crear y seguir solicitudes</small>
-            <a href="PORTALSOLICITUDES1.html" class="portal-btn user">
+            </a>
             
-            <a href="PORTALMANTENIMIENTO1.HTML" class="portal-btn admin">
+            <button onclick="showPasswordModal()" class="portal-btn admin">
                 ⚙️ Portal de Gestión
                 <small>Para administradores - Gestionar solicitudes y técnicos</small>
-            <a href="PORTALMANTENIMIENTO1.HTML" class="portal-btn admin">
+            </button>
         </div>
 
         <div class="features">
             <div class="feature">
-                <div class="feature-icon">🔐</div>
-                <div class="feature-title">Acceso Seguro</div>
-                <div class="feature-desc">Sistema de códigos de 4 dígitos</div>
+                <div class="feature-icon">🔧</div>
+                <div class="feature-title">Gestión Integral</div>
+                <div class="feature-desc">Solicitudes y técnicos unificados</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <div class="feature-title">Tiempo Real</div>
-                <div class="feature-desc">Sincronización automática</div>
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">Reportes</div>
+                <div class="feature-desc">Estadísticas y seguimiento</div>
             </div>
             <div class="feature">
-                <div class="feature-icon">📱</div>
-                <div class="feature-title">Responsive</div>
-                <div class="feature-desc">Funciona en móviles</div>
+                <div class="feature-icon">🏥</div>
+                <div class="feature-title">Hospitalario</div>
+                <div class="feature-desc">Diseñado para hospitales</div>
             </div>
         </div>
 
@@ -245,14 +393,156 @@
             <h3>💡 Información del Sistema</h3>
             <p>
                 <strong>Portal de Solicitudes:</strong> Permite al personal del hospital crear solicitudes de mantenimiento con autenticación por email y código.<br>
-                <strong>Portal de Gestión:</strong> Interface administrativa para asignar técnicos, gestionar solicitudes y generar reportes.
+                <strong>Portal de Gestión:</strong> Interface administrativa protegida con contraseña para asignar técnicos, gestionar solicitudes y generar reportes.
             </p>
         </div>
     </div>
 
+    <!-- Modal de contraseña -->
+    <div class="modal-overlay" id="passwordModal">
+        <div class="password-modal">
+            <div class="modal-icon">🔐</div>
+            <h3 class="modal-title">Acceso Restringido</h3>
+            <p class="modal-subtitle">Ingrese la contraseña para acceder al Portal de Gestión</p>
+            
+            <input 
+                type="password" 
+                id="passwordInput" 
+                class="password-input" 
+                placeholder="••••••••"
+                maxlength="20"
+                autocomplete="off"
+            >
+            
+            <div class="error-message" id="errorMessage">
+                ❌ Contraseña incorrecta. Intente nuevamente.
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closePasswordModal()">
+                    Cancelar
+                </button>
+                <button class="modal-btn primary" onclick="validatePassword()">
+                    Acceder
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Animación adicional para los botones
+        // Función para mostrar el modal de contraseña
+        function showPasswordModal() {
+            const modal = document.getElementById('passwordModal');
+            const input = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            modal.classList.add('show');
+            errorMsg.style.display = 'none';
+            
+            // Enfocar el input después de la animación
+            setTimeout(() => {
+                input.focus();
+                input.value = '';
+            }, 300);
+        }
+
+        // Función para cerrar el modal
+        function closePasswordModal() {
+            const modal = document.getElementById('passwordModal');
+            modal.classList.remove('show');
+        }
+
+        // Función para validar la contraseña
+        function validatePassword() {
+            const password = document.getElementById('passwordInput').value;
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (password === '') {
+                showError('Por favor ingrese la contraseña');
+                return;
+            }
+            
+            if (password === 'pm2066412') {
+                // Contraseña correcta - mostrar animación de éxito
+                showSuccess();
+                setTimeout(() => {
+                    window.location.href = 'PORTALMANTENIMIENTO1.HTML';
+                }, 1000);
+            } else {
+                // Contraseña incorrecta
+                showError('❌ Contraseña incorrecta. Intente nuevamente.');
+                
+                // Limpiar el campo después de un momento
+                setTimeout(() => {
+                    document.getElementById('passwordInput').value = '';
+                    document.getElementById('passwordInput').focus();
+                }, 1500);
+            }
+        }
+
+        // Función para mostrar error
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMessage');
+            const input = document.getElementById('passwordInput');
+            
+            errorMsg.textContent = message;
+            errorMsg.style.display = 'block';
+            input.style.borderColor = '#dc2626';
+            input.style.backgroundColor = '#fef2f2';
+            
+            // Animar el input
+            input.style.animation = 'shake 0.5s ease';
+            setTimeout(() => {
+                input.style.animation = '';
+            }, 500);
+        }
+
+        // Función para mostrar éxito
+        function showSuccess() {
+            const modal = document.querySelector('.password-modal');
+            const input = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            input.style.borderColor = '#059669';
+            input.style.backgroundColor = '#f0fdf4';
+            errorMsg.style.display = 'none';
+            
+            // Cambiar el contenido del modal
+            modal.innerHTML = `
+                <div class="modal-icon" style="color: #059669;">✅</div>
+                <h3 class="modal-title" style="color: #059669;">¡Acceso Autorizado!</h3>
+                <p class="modal-subtitle">Redirigiendo al Portal de Gestión...</p>
+                <div style="margin-top: 1rem; color: #059669;">
+                    <div style="animation: pulse 1s infinite;">🔓</div>
+                </div>
+            `;
+        }
+
+        // Permitir envío con Enter
         document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('passwordInput');
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    validatePassword();
+                }
+            });
+            
+            // Cerrar modal con Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closePasswordModal();
+                }
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            document.getElementById('passwordModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closePasswordModal();
+                }
+            });
+
+            // Animación adicional para los botones
             const buttons = document.querySelectorAll('.portal-btn');
             buttons.forEach((btn, index) => {
                 setTimeout(() => {
@@ -273,6 +563,8 @@
         console.log('👨‍💻 Desarrollado por: Ing. Paul Eduardo Muñoz R.');
         console.log('🚀 Versión de Despliegue: Básica (Archivos Estáticos)');
         console.log('📅 Fecha de Despliegue:', new Date().toLocaleDateString('es-CO'));
+        console.log('🔐 Portal de Gestión: Acceso protegido con contraseña');
+        console.log('🔒 Seguridad: Campo de contraseña protegido con asteriscos');
     </script>
 </body>
 </html>
