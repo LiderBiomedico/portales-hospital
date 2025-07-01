@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hospital Susana López de Valencia - Portal Gestión de Solicitudes</title>
+    <title>Hospital Susana López de Valencia - Portal Gestión COMPLETO</title>
     <style>
         * {
             margin: 0;
@@ -400,7 +400,7 @@
             background: white;
             border-radius: 1rem;
             padding: 0;
-            max-width: 600px;
+            max-width: 800px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
@@ -464,6 +464,12 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
+        textarea.form-input {
+            resize: vertical;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
         /* Technician cards */
         .technician-card {
             background: #f8fafc;
@@ -477,6 +483,16 @@
         .technician-card:hover {
             border-color: #2563eb;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .technician-card.selectable {
+            cursor: pointer;
+        }
+
+        .technician-card.selected {
+            border-color: #059669;
+            background: #dcfce7;
+            box-shadow: 0 4px 8px rgba(5, 150, 105, 0.2);
         }
 
         .technician-header {
@@ -613,6 +629,12 @@
         .request-card.completed {
             border-left: 4px solid #059669;
             background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
+        }
+
+        .request-card.critical {
+            border-left: 4px solid #ef4444;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            animation: blink 2s infinite;
         }
 
         .request-header {
@@ -753,31 +775,162 @@
             margin-top: 0.5rem;
         }
 
+        /* Access Request Cards */
+        .access-request-card {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .access-request-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .access-request-card.pending {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        }
+
+        .access-request-card.approved {
+            border-left-color: #059669;
+            background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
+        }
+
+        .access-request-card.rejected {
+            border-left-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        }
+
+        /* User cards */
+        .user-card {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+            border-left: 4px solid #059669;
+        }
+
+        .user-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .user-card.approved {
+            background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
+        }
+
         /* Hidden class utility */
         .hidden {
             display: none !important;
         }
 
-        /* Persistence indicator */
-        .persistence-status {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border: 2px solid #22c55e;
+        /* Animación para notificaciones críticas */
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.7; }
+        }
+
+        /* Assignment Modal */
+        .tech-selection-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 1rem 0;
+        }
+
+        .tech-selection-item {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .tech-selection-item:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+
+        .tech-selection-item.selected {
+            border-color: #059669;
+            background: #dcfce7;
+        }
+
+        .tech-selection-item.unavailable {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #f9fafb;
+        }
+
+        /* Priority badges */
+        .priority-critica {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .priority-alta {
+            background: #fed7aa;
+            color: #ea580c;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .priority-media {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .priority-baja {
+            background: #dcfce7;
+            color: #166534;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Respuesta del técnico */
+        .tecnico-response {
+            background: #f0fdf4;
+            border: 2px solid #059669;
             border-radius: 0.75rem;
             padding: 1rem;
             margin: 1rem 0;
-            text-align: center;
         }
 
-        .persistence-status h4 {
-            color: #15803d;
+        .tecnico-response-label {
+            font-weight: 600;
+            color: #065f46;
             margin-bottom: 0.5rem;
-            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .persistence-status p {
-            color: #166534;
-            font-size: 0.875rem;
-            margin: 0;
+        .tecnico-response-content {
+            color: #047857;
+            line-height: 1.6;
+            background: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #059669;
         }
 
         /* Responsive */
@@ -839,7 +992,7 @@
                 <div class="hospital-info">
                     <h1>HOSPITAL SUSANA LOPEZ DE VALENCIA E.S.E.</h1>
                     <p class="developer-credit">Desarrollado por Ing. Paul Eduardo Muñoz R.</p>
-                    <p>Portal Gestión de Solicitudes - Sistema Integrado con Persistencia</p>
+                    <p>Portal Gestión COMPLETO - Solicitudes y Asignación de Técnicos</p>
                 </div>
             </div>
 
@@ -848,13 +1001,13 @@
                     📊 Dashboard
                 </button>
                 <button class="nav-tab" onclick="showView('solicitudes')" data-view="solicitudes">
-                    📋 Gestión (<span id="total-count">0</span>)
+                    📋 Solicitudes (<span id="total-count">0</span>)
                 </button>
                 <button class="nav-tab" onclick="showView('areas')" data-view="areas">
                     🔧 Por Áreas
                 </button>
                 <button class="nav-tab" onclick="showView('tecnicos')" data-view="tecnicos">
-                    👥 Personal (<span id="total-technicians-nav">0</span>)
+                    👥 Ingenieros/Técnicos (<span id="total-technicians-nav">0</span>)
                 </button>
                 <button class="nav-tab" onclick="showView('accesos')" data-view="accesos">
                     🔐 Accesos (<span id="pending-access-count">0</span>)
@@ -877,18 +1030,12 @@
     <main class="main-layout container">
         <!-- Dashboard View -->
         <div id="dashboard-view" class="view">
-            <!-- Estado de Persistencia -->
-            <div class="persistence-status">
-                <h4>✅ Sistema de Persistencia Activado</h4>
-                <p>Todos los datos se guardan automáticamente y permanecen disponibles en GitHub Pages</p>
-            </div>
-
             <!-- Alertas de Solicitudes Críticas -->
             <div id="critical-alerts"></div>
 
             <!-- Metrics por Área de Ingeniería -->
             <div class="metrics-grid">
-                <div class="metric-card total" onclick="filterByArea('all')">
+                <div class="metric-card total" onclick="showView('solicitudes')">
                     <div class="metric-icon">📋</div>
                     <div class="metric-number" id="metric-total">0</div>
                     <div class="metric-label">Total Solicitudes</div>
@@ -913,6 +1060,11 @@
                     <div class="metric-number" id="metric-pendientes">0</div>
                     <div class="metric-label">Pendientes Asignación</div>
                 </div>
+            </div>
+
+            <!-- Alert de Solicitudes Pendientes -->
+            <div id="pending-alerts">
+                <!-- Las alertas aparecerán aquí cuando haya solicitudes pendientes -->
             </div>
 
             <!-- Resumen de Personal por Área -->
@@ -955,28 +1107,53 @@
             </div>
         </div>
 
-        <!-- Solicitudes View -->
+        <!-- Solicitudes View - COMPLETAMENTE FUNCIONAL -->
         <div id="solicitudes-view" class="view hidden">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">📋 Gestión General de Solicitudes</h2>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <button class="btn btn-success btn-sm" onclick="addSampleRequest()">
-                            ➕ Agregar Solicitud de Prueba
+                    <h2 class="card-title">📋 Gestión de Solicitudes de Mantenimiento - FUNCIONAL</h2>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-success btn-sm" onclick="autoAssignAllPending()">
+                            🤖 Auto-asignar Todas
                         </button>
-                        <button class="btn btn-primary btn-sm" onclick="syncData()">
-                            🔄 Sincronizar Datos
+                        <button class="btn btn-primary btn-sm" onclick="syncAllRequests()">
+                            🔄 Sincronizar
+                        </button>
+                        <button class="btn btn-warning btn-sm" onclick="showFilterOptions()">
+                            🔍 Filtros
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="exportRequestsReport()">
+                            📤 Exportar
                         </button>
                     </div>
                 </div>
                 <div class="card-content">
+                    <!-- Filtros rápidos -->
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-sm" onclick="filterRequests('all')" id="filter-all">
+                            📋 Todas (<span id="count-all">0</span>)
+                        </button>
+                        <button class="btn btn-warning btn-sm" onclick="filterRequests('PENDIENTE')" id="filter-pending">
+                            ⏳ Pendientes (<span id="count-pending">0</span>)
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="filterRequests('ASIGNADA')" id="filter-assigned">
+                            👤 Asignadas (<span id="count-assigned">0</span>)
+                        </button>
+                        <button class="btn btn-success btn-sm" onclick="filterRequests('COMPLETADA')" id="filter-completed">
+                            ✅ Completadas (<span id="count-completed">0</span>)
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="filterRequests('CRITICA')" id="filter-critical">
+                            🚨 Críticas (<span id="count-critical">0</span>)
+                        </button>
+                    </div>
+
                     <div id="solicitudes-list">
                         <div style="text-align: center; padding: 3rem; color: #6b7280;">
                             <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
                             <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes registradas</h3>
-                            <p style="margin-bottom: 1.5rem;">Las solicitudes aparecerán aquí y se guardarán automáticamente</p>
-                            <button class="btn btn-primary" onclick="addSampleRequest()">
-                                ➕ Agregar Solicitud de Prueba
+                            <p style="margin-bottom: 1.5rem;">Las solicitudes del Portal de Solicitudes aparecerán aquí automáticamente</p>
+                            <button class="btn btn-primary" onclick="syncAllRequests()">
+                                🔄 Sincronizar con Portal de Solicitudes
                             </button>
                         </div>
                     </div>
@@ -1002,7 +1179,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">🏥 Solicitudes - Ingeniería Biomédica</h2>
-                        <button class="btn btn-primary btn-sm" onclick="showAreaRequests('INGENIERIA_BIOMEDICA')">
+                        <button class="btn btn-primary btn-sm" onclick="refreshAreaRequests('INGENIERIA_BIOMEDICA')">
                             🔄 Actualizar
                         </button>
                     </div>
@@ -1018,7 +1195,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">⚙️ Solicitudes - Mecánica</h2>
-                        <button class="btn btn-primary btn-sm" onclick="showAreaRequests('MECANICA')">
+                        <button class="btn btn-primary btn-sm" onclick="refreshAreaRequests('MECANICA')">
                             🔄 Actualizar
                         </button>
                     </div>
@@ -1034,7 +1211,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">🏗️ Solicitudes - Infraestructura</h2>
-                        <button class="btn btn-primary btn-sm" onclick="showAreaRequests('INFRAESTRUCTURA')">
+                        <button class="btn btn-primary btn-sm" onclick="refreshAreaRequests('INFRAESTRUCTURA')">
                             🔄 Actualizar
                         </button>
                     </div>
@@ -1051,13 +1228,13 @@
         <div id="tecnicos-view" class="view hidden">
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">👥 Gestión de Personal Técnico ✅ PERSISTENCIA ACTIVA</h2>
+                    <h2 class="card-title">👥 Gestión de Ingenieros/Técnicos</h2>
                     <div style="display: flex; gap: 0.5rem;">
                         <button class="btn btn-success btn-sm" onclick="showAddTechnicianModal()">
-                            ➕ Agregar Personal
+                            ➕ Agregar Ingeniero/Técnico
                         </button>
-                        <button class="btn btn-primary btn-sm" onclick="addSampleTechnicians()">
-                            🧪 Agregar Personal de Prueba
+                        <button class="btn btn-primary btn-sm" onclick="exportTechnicians()">
+                            📤 Exportar Lista
                         </button>
                         <button class="btn btn-warning btn-sm" onclick="clearAllTechnicians()">
                             🗑️ Limpiar Todos
@@ -1073,7 +1250,7 @@
                     <div class="card-header" style="background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);">
                         <h3 class="card-title" style="color: #065f46;">🏥 Ingeniería Biomédica</h3>
                         <div style="display: flex; gap: 0.5rem;">
-                            <span class="status-disponible" id="biomedica-total">0 personas</span>
+                            <span class="status-disponible" id="biomedica-total">0 ingenieros/técnicos</span>
                             <button class="btn btn-success btn-sm" onclick="showAddTechnicianModal('INGENIERIA_BIOMEDICA')">
                                 ➕ Agregar
                             </button>
@@ -1083,10 +1260,10 @@
                         <div id="biomedica-technicians-list">
                             <div style="text-align: center; padding: 2rem; color: #6b7280;">
                                 <div style="font-size: 3rem; margin-bottom: 1rem;">🏥</div>
-                                <h4>No hay personal registrado</h4>
-                                <p style="font-size: 0.875rem;">El personal se guardará automáticamente</p>
+                                <h4>No hay ingenieros/técnicos registrados</h4>
+                                <p style="font-size: 0.875rem;">Comience agregando personal especializado</p>
                                 <button class="btn btn-primary btn-sm" onclick="showAddTechnicianModal('INGENIERIA_BIOMEDICA')" style="margin-top: 1rem;">
-                                    ➕ Agregar Primera Persona
+                                    ➕ Agregar Primer Ingeniero/Técnico
                                 </button>
                             </div>
                         </div>
@@ -1098,7 +1275,7 @@
                     <div class="card-header" style="background: linear-gradient(135deg, #fefbeb 0%, #fef3c7 100%);">
                         <h3 class="card-title" style="color: #d97706;">⚙️ Mecánica</h3>
                         <div style="display: flex; gap: 0.5rem;">
-                            <span class="status-ocupado" id="mecanica-total">0 personas</span>
+                            <span class="status-ocupado" id="mecanica-total">0 ingenieros/técnicos</span>
                             <button class="btn btn-warning btn-sm" onclick="showAddTechnicianModal('MECANICA')">
                                 ➕ Agregar
                             </button>
@@ -1108,10 +1285,10 @@
                         <div id="mecanica-technicians-list">
                             <div style="text-align: center; padding: 2rem; color: #6b7280;">
                                 <div style="font-size: 3rem; margin-bottom: 1rem;">⚙️</div>
-                                <h4>No hay personal registrado</h4>
-                                <p style="font-size: 0.875rem;">El personal se guardará automáticamente</p>
+                                <h4>No hay técnicos registrados</h4>
+                                <p style="font-size: 0.875rem;">Comience agregando personal especializado</p>
                                 <button class="btn btn-primary btn-sm" onclick="showAddTechnicianModal('MECANICA')" style="margin-top: 1rem;">
-                                    ➕ Agregar Primera Persona
+                                    ➕ Agregar Primer Técnico
                                 </button>
                             </div>
                         </div>
@@ -1123,7 +1300,7 @@
                     <div class="card-header" style="background: linear-gradient(135deg, #f3f4f6 0%, #ede9fe 100%);">
                         <h3 class="card-title" style="color: #7c3aed;">🏗️ Infraestructura</h3>
                         <div style="display: flex; gap: 0.5rem;">
-                            <span class="status-inactivo" id="infraestructura-total">0 personas</span>
+                            <span class="status-inactivo" id="infraestructura-total">0 ingenieros/técnicos</span>
                             <button class="btn btn-primary btn-sm" onclick="showAddTechnicianModal('INFRAESTRUCTURA')">
                                 ➕ Agregar
                             </button>
@@ -1133,10 +1310,10 @@
                         <div id="infraestructura-technicians-list">
                             <div style="text-align: center; padding: 2rem; color: #6b7280;">
                                 <div style="font-size: 3rem; margin-bottom: 1rem;">🏗️</div>
-                                <h4>No hay personal registrado</h4>
-                                <p style="font-size: 0.875rem;">El personal se guardará automáticamente</p>
+                                <h4>No hay técnicos registrados</h4>
+                                <p style="font-size: 0.875rem;">Comience agregando personal especializado</p>
                                 <button class="btn btn-primary btn-sm" onclick="showAddTechnicianModal('INFRAESTRUCTURA')" style="margin-top: 1rem;">
-                                    ➕ Agregar Primera Persona
+                                    ➕ Agregar Primer Técnico
                                 </button>
                             </div>
                         </div>
@@ -1147,7 +1324,7 @@
             <!-- Estadísticas de Personal -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">📊 Estadísticas de Personal</h3>
+                    <h3 class="card-title">📊 Estadísticas de Personal Técnico</h3>
                 </div>
                 <div class="card-content">
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
@@ -1167,17 +1344,14 @@
                             <div style="font-size: 2rem; font-weight: bold; color: #059669;" id="available-technicians">0</div>
                             <div style="color: #6b7280; font-size: 0.875rem;">Disponibles</div>
                         </div>
-                    </div>
-
-                    <!-- Indicador de Persistencia -->
-                    <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border-left: 3px solid #059669;">
-                        <h4 style="color: #1f2937; margin-bottom: 0.5rem;">💾 Estado de Persistencia</h4>
-                        <ul style="color: #6b7280; font-size: 0.875rem; line-height: 1.6;">
-                            <li><strong>✅ Guardado automático:</strong> Los datos se almacenan inmediatamente</li>
-                            <li><strong>✅ Persistencia GitHub:</strong> Compatible con GitHub Pages</li>
-                            <li><strong>✅ Recuperación:</strong> Los datos permanecen al recargar la página</li>
-                            <li><strong>💽 Almacenamiento:</strong> localStorage del navegador (no requiere servidor)</li>
-                        </ul>
+                        <div style="text-align: center; padding: 1rem; background: #fef3c7; border-radius: 0.5rem;">
+                            <div style="font-size: 2rem; font-weight: bold; color: #f59e0b;" id="busy-technicians">0</div>
+                            <div style="color: #6b7280; font-size: 0.875rem;">Ocupados</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: #fee2e2; border-radius: 0.5rem;">
+                            <div style="font-size: 2rem; font-weight: bold; color: #ef4444;" id="inactive-technicians">0</div>
+                            <div style="color: #6b7280; font-size: 0.875rem;">Inactivos</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1185,9 +1359,15 @@
 
         <!-- Accesos View -->
         <div id="accesos-view" class="view hidden">
+            <!-- Alert de Códigos de Acceso -->
             <div class="alert alert-info">
-                <h3 style="font-weight: 600; margin-bottom: 0.5rem;">🔢 Sistema de Códigos de Acceso</h3>
-                <p>Sistema de códigos únicos de 4 dígitos con persistencia completa en GitHub Pages.</p>
+                <h3 style="font-weight: 600; margin-bottom: 0.5rem;">🔢 Sistema de Códigos de Acceso de 4 Dígitos</h3>
+                <p>Al aprobar solicitudes de acceso, el sistema genera automáticamente códigos únicos de 4 dígitos para el acceso al Portal de Solicitudes.</p>
+            </div>
+
+            <!-- Alert de Solicitudes de Acceso Pendientes -->
+            <div id="access-alerts">
+                <!-- Las alertas aparecerán aquí cuando haya solicitudes pendientes -->
             </div>
 
             <!-- Estadísticas de Accesos -->
@@ -1207,6 +1387,38 @@
                     <div class="metric-number" id="approved-users">0</div>
                     <div class="metric-label">Usuarios Aprobados</div>
                 </div>
+                <div class="metric-card infraestructura">
+                    <div class="metric-icon">❌</div>
+                    <div class="metric-number" id="rejected-users">0</div>
+                    <div class="metric-label">Accesos Rechazados</div>
+                </div>
+            </div>
+
+            <!-- Solicitudes de Acceso Pendientes -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">⏳ Solicitudes de Acceso Pendientes</h2>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-success btn-sm" onclick="approveAllPending()">
+                            ✅ Aprobar Todas
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="syncAccessRequests()">
+                            🔄 Sincronizar
+                        </button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div id="pending-access-list">
+                        <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                            <div style="font-size: 4rem; margin-bottom: 1rem;">🔐</div>
+                            <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes de acceso pendientes</h3>
+                            <p style="margin-bottom: 1.5rem;">Las solicitudes aparecerán aquí cuando los usuarios se registren</p>
+                            <button class="btn btn-primary" onclick="syncAccessRequests()">
+                                🔄 Sincronizar Solicitudes de Acceso
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Usuarios Aprobados -->
@@ -1214,8 +1426,8 @@
                 <div class="card-header">
                     <h2 class="card-title">✅ Usuarios con Acceso Aprobado</h2>
                     <div style="display: flex; gap: 0.5rem;">
-                        <button class="btn btn-success btn-sm" onclick="addSampleUser()">
-                            ➕ Agregar Usuario de Prueba
+                        <button class="btn btn-success btn-sm" onclick="regenerateAllCodes()">
+                            🔄 Regenerar Códigos
                         </button>
                         <button class="btn btn-warning btn-sm" onclick="exportUsersList()">
                             📤 Exportar Lista
@@ -1227,10 +1439,7 @@
                         <div style="text-align: center; padding: 2rem; color: #6b7280;">
                             <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
                             <h4>No hay usuarios aprobados</h4>
-                            <p style="font-size: 0.875rem;">Los usuarios se guardarán automáticamente</p>
-                            <button class="btn btn-primary btn-sm" onclick="addSampleUser()" style="margin-top: 1rem;">
-                                ➕ Agregar Usuario de Prueba
-                            </button>
+                            <p style="font-size: 0.875rem;">Los usuarios aprobados aparecerán aquí</p>
                         </div>
                     </div>
                 </div>
@@ -1243,23 +1452,43 @@
                 <div class="card-header">
                     <h2 class="card-title">📈 Reportes y Estadísticas</h2>
                     <div style="display: flex; gap: 0.5rem;">
-                        <button class="btn btn-primary btn-sm" onclick="generateReport()">
-                            📊 Generar Reporte
+                        <button class="btn btn-primary btn-sm" onclick="generateFullReport()">
+                            📊 Reporte Completo
                         </button>
                         <button class="btn btn-success btn-sm" onclick="exportAllData()">
-                            📤 Exportar Todos los Datos
+                            📤 Exportar Todo
                         </button>
                     </div>
                 </div>
                 <div class="card-content">
                     <div id="reports-content">
-                        <div style="text-align: center; padding: 2rem; color: #6b7280;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
-                            <h4>Reportes del Sistema</h4>
-                            <p style="font-size: 0.875rem;">Genere reportes completos del estado del sistema</p>
-                            <button class="btn btn-primary" onclick="generateReport()" style="margin-top: 1rem;">
-                                📈 Generar Reporte Ahora
-                            </button>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                            <div style="background: #f8fafc; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
+                                <h4 style="color: #1f2937; margin-bottom: 1rem;">📋 Solicitudes por Estado</h4>
+                                <div id="status-chart" style="font-size: 0.875rem;">
+                                    <div>Pendientes: <span id="report-pending">0</span></div>
+                                    <div>Asignadas: <span id="report-assigned">0</span></div>
+                                    <div>Completadas: <span id="report-completed">0</span></div>
+                                </div>
+                            </div>
+                            
+                            <div style="background: #f8fafc; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
+                                <h4 style="color: #1f2937; margin-bottom: 1rem;">👥 Personal por Área</h4>
+                                <div id="personnel-chart" style="font-size: 0.875rem;">
+                                    <div>Biomédica: <span id="report-biomedica-staff">0</span></div>
+                                    <div>Mecánica: <span id="report-mecanica-staff">0</span></div>
+                                    <div>Infraestructura: <span id="report-infraestructura-staff">0</span></div>
+                                </div>
+                            </div>
+                            
+                            <div style="background: #f8fafc; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #e5e7eb;">
+                                <h4 style="color: #1f2937; margin-bottom: 1rem;">🔐 Gestión de Accesos</h4>
+                                <div id="access-chart" style="font-size: 0.875rem;">
+                                    <div>Pendientes: <span id="report-access-pending">0</span></div>
+                                    <div>Aprobados: <span id="report-access-approved">0</span></div>
+                                    <div>Total Usuarios: <span id="report-total-users">0</span></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1270,93 +1499,56 @@
     <!-- System Status -->
     <div class="system-status">
         <div class="status-online">
-            💾 Persistencia Activa
+            🔄 Sistema Iniciando...
         </div>
     </div>
 
     <script>
-        // ===== SISTEMA DE PERSISTENCIA CORREGIDO =====
-        let solicitudes = [];
+        // ===== VARIABLES GLOBALES COMPLETAS =====
+        let solicitudesFromPortal = []; // Solicitudes del Portal de Solicitudes
+        let accessRequests = []; // Solicitudes de acceso
+        let approvedUsers = []; // Usuarios aprobados
+        let rejectedUsers = []; // Usuarios rechazados
+        let currentFilter = 'all'; // Filtro actual de solicitudes
+        let selectedTechnicianForAssignment = null;
+        let lastSyncTime = new Date();
+
+        // Base de datos de técnicos por área
         let tecnicosPorArea = {
             'INGENIERIA_BIOMEDICA': [],
             'MECANICA': [],
             'INFRAESTRUCTURA': []
         };
-        let accessRequests = [];
-        let approvedUsers = [];
 
-        // Claves de localStorage
-        const STORAGE_KEYS = {
-            SOLICITUDES: 'hospital_solicitudes_v2',
-            TECNICOS: 'hospital_tecnicos_v2',
-            ACCESS_REQUESTS: 'hospital_access_v2',
-            APPROVED_USERS: 'hospital_approved_v2'
+        // Mapas de servicios y areas
+        const serviciosHospitalarios = {
+            'URGENCIAS_ADULTO': 'Urgencias Adulto',
+            'URGENCIAS_PEDIATRICAS': 'Urgencias Pediátricas',
+            'URGENCIAS_GINECOLOGIA': 'Urgencias Ginecología',
+            'UCI_ADULTO': 'UCI Adulto',
+            'UCI_NEONATAL': 'UCI Neonatal',
+            'UCI_INTERMEDIOS': 'UCI Intermedios',
+            'HOSPITALIZACION_ADULTO': 'Hospitalización Adulto',
+            'HOSPITALIZACION_PEDIATRIA': 'Hospitalización Pediatría',
+            'CIRUGIA_ADULTO': 'Cirugía Adulto',
+            'CIRUGIA_PEDIATRICA': 'Cirugía Pediátrica',
+            'SALA_PARTOS': 'Sala de Partos',
+            'CONSULTA_EXTERNA': 'Consulta Externa',
+            'ENDOSCOPIA': 'Endoscopia',
+            'IMAGENES_DIAGNOSTICAS': 'Imágenes Diagnósticas',
+            'LABORATORIO_CLINICO': 'Laboratorio Clínico',
+            'FARMACIA_CENTRAL': 'Farmacia Central',
+            'FISIOTERAPIA': 'Fisioterapia',
+            'VACUNACION': 'Vacunación',
+            'CENTRAL_ESTERILIZACION_ADULTOS': 'Central de Esterilización Adultos',
+            'CENTRAL_ESTERILIZACION_UMI': 'Central de Esterilización UMI',
+            'INGENIERIA_BIOMEDICA': 'Ingeniería Biomédica',
+            'INFRAESTRUCTURA': 'Infraestructura',
+            'MECANICOS': 'Mecánicos',
+            'TRAILER': 'Trailer',
+            'AMBULANCIAS': 'Ambulancias'
         };
 
-        // ===== FUNCIONES DE PERSISTENCIA MEJORADAS =====
-        function saveToLocalStorage(key, data) {
-            try {
-                const jsonData = JSON.stringify(data);
-                localStorage.setItem(key, jsonData);
-                console.log(`💾 Guardado ${key}:`, data);
-                updateSystemStatus(`Datos guardados: ${new Date().toLocaleTimeString()}`);
-                return true;
-            } catch (error) {
-                console.error(`❌ Error guardando ${key}:`, error);
-                return false;
-            }
-        }
-
-        function loadFromLocalStorage(key, defaultValue = []) {
-            try {
-                const data = localStorage.getItem(key);
-                if (data && data !== 'null' && data !== 'undefined') {
-                    const parsed = JSON.parse(data);
-                    console.log(`📂 Cargado ${key}:`, parsed);
-                    return parsed;
-                }
-                console.log(`📂 No hay datos para ${key}, usando valor por defecto`);
-                return defaultValue;
-            } catch (error) {
-                console.error(`❌ Error cargando ${key}:`, error);
-                return defaultValue;
-            }
-        }
-
-        function saveAllData() {
-            const results = {
-                solicitudes: saveToLocalStorage(STORAGE_KEYS.SOLICITUDES, solicitudes),
-                tecnicos: saveToLocalStorage(STORAGE_KEYS.TECNICOS, tecnicosPorArea),
-                accessRequests: saveToLocalStorage(STORAGE_KEYS.ACCESS_REQUESTS, accessRequests),
-                approvedUsers: saveToLocalStorage(STORAGE_KEYS.APPROVED_USERS, approvedUsers)
-            };
-            
-            const allSaved = Object.values(results).every(result => result === true);
-            updateSystemStatus(allSaved ? '✅ Todos los datos guardados' : '⚠️ Error al guardar algunos datos');
-            return allSaved;
-        }
-
-        function loadAllData() {
-            solicitudes = loadFromLocalStorage(STORAGE_KEYS.SOLICITUDES, []);
-            tecnicosPorArea = loadFromLocalStorage(STORAGE_KEYS.TECNICOS, {
-                'INGENIERIA_BIOMEDICA': [],
-                'MECANICA': [],
-                'INFRAESTRUCTURA': []
-            });
-            accessRequests = loadFromLocalStorage(STORAGE_KEYS.ACCESS_REQUESTS, []);
-            approvedUsers = loadFromLocalStorage(STORAGE_KEYS.APPROVED_USERS, []);
-            
-            // Asegurar estructura correcta de técnicos
-            if (!tecnicosPorArea['INGENIERIA_BIOMEDICA']) tecnicosPorArea['INGENIERIA_BIOMEDICA'] = [];
-            if (!tecnicosPorArea['MECANICA']) tecnicosPorArea['MECANICA'] = [];
-            if (!tecnicosPorArea['INFRAESTRUCTURA']) tecnicosPorArea['INFRAESTRUCTURA'] = [];
-            
-            console.log('📂 Todos los datos cargados exitosamente');
-            updateAllDisplays();
-            updateSystemStatus('📂 Datos cargados correctamente');
-        }
-
-        // ===== MAPAS DE DATOS =====
         const serviciosIngenieria = {
             'INGENIERIA_BIOMEDICA': 'Ingeniería Biomédica',
             'INFRAESTRUCTURA': 'Infraestructura',
@@ -1369,19 +1561,784 @@
             'MECANICA': '⚙️'
         };
 
+        // ===== FUNCIONES DE PERSISTENCIA =====
+        function saveAllData() {
+            try {
+                localStorage.setItem('hospital_technicians', JSON.stringify(tecnicosPorArea));
+                localStorage.setItem('hospital_solicitudes', JSON.stringify(solicitudesFromPortal));
+                localStorage.setItem('hospital_access_requests', JSON.stringify(accessRequests));
+                localStorage.setItem('hospital_approved_users', JSON.stringify(approvedUsers));
+                localStorage.setItem('hospital_rejected_users', JSON.stringify(rejectedUsers));
+                console.log('💾 Todos los datos guardados correctamente');
+                return true;
+            } catch (error) {
+                console.error('❌ Error al guardar datos:', error);
+                return false;
+            }
+        }
+
+        function loadAllData() {
+            try {
+                console.log('📂 Cargando todos los datos...');
+                
+                // Cargar técnicos
+                const savedTechnicians = localStorage.getItem('hospital_technicians');
+                if (savedTechnicians) {
+                    const parsed = JSON.parse(savedTechnicians);
+                    if (parsed && typeof parsed === 'object') {
+                        tecnicosPorArea = {
+                            'INGENIERIA_BIOMEDICA': Array.isArray(parsed['INGENIERIA_BIOMEDICA']) ? parsed['INGENIERIA_BIOMEDICA'] : [],
+                            'MECANICA': Array.isArray(parsed['MECANICA']) ? parsed['MECANICA'] : [],
+                            'INFRAESTRUCTURA': Array.isArray(parsed['INFRAESTRUCTURA']) ? parsed['INFRAESTRUCTURA'] : []
+                        };
+                    }
+                }
+                
+                // Cargar solicitudes
+                const savedRequests = localStorage.getItem('hospital_solicitudes');
+                if (savedRequests) {
+                    const parsed = JSON.parse(savedRequests);
+                    if (Array.isArray(parsed)) {
+                        solicitudesFromPortal = parsed;
+                    }
+                }
+                
+                // Cargar datos de accesos
+                const savedAccessRequests = localStorage.getItem('hospital_access_requests');
+                if (savedAccessRequests) {
+                    const parsed = JSON.parse(savedAccessRequests);
+                    if (Array.isArray(parsed)) {
+                        accessRequests = parsed;
+                    }
+                }
+                
+                const savedApprovedUsers = localStorage.getItem('hospital_approved_users');
+                if (savedApprovedUsers) {
+                    const parsed = JSON.parse(savedApprovedUsers);
+                    if (Array.isArray(parsed)) {
+                        approvedUsers = parsed;
+                    }
+                }
+                
+                const savedRejectedUsers = localStorage.getItem('hospital_rejected_users');
+                if (savedRejectedUsers) {
+                    const parsed = JSON.parse(savedRejectedUsers);
+                    if (Array.isArray(parsed)) {
+                        rejectedUsers = parsed;
+                    }
+                }
+                
+                const totalTechnicians = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
+                const totalRequests = solicitudesFromPortal.length;
+                const totalUsers = approvedUsers.length;
+                const pendingAccess = accessRequests.filter(req => req.estado === 'PENDIENTE').length;
+                
+                console.log(`📊 Datos cargados: ${totalTechnicians} técnicos, ${totalRequests} solicitudes, ${totalUsers} usuarios, ${pendingAccess} accesos pendientes`);
+                
+                return true;
+            } catch (error) {
+                console.error('❌ Error al cargar datos:', error);
+                return false;
+            }
+        }
+
+        // ===== FUNCIONES DE GENERACIÓN DE CÓDIGOS =====
+        function generateAccessCode() {
+            let code;
+            let isUnique = false;
+            
+            do {
+                code = Math.floor(1000 + Math.random() * 9000).toString();
+                isUnique = !approvedUsers.some(user => user.codigoAcceso === code);
+            } while (!isUnique);
+            
+            return code;
+        }
+
+        function generateTechnicianId(area) {
+            let areaPrefix;
+            switch(area) {
+                case 'INGENIERIA_BIOMEDICA': areaPrefix = 'IB'; break;
+                case 'MECANICA': areaPrefix = 'ME'; break;
+                case 'INFRAESTRUCTURA': areaPrefix = 'IN'; break;
+                default: areaPrefix = 'XX';
+            }
+            
+            const existingIds = tecnicosPorArea[area].map(t => t.id);
+            let newId = 1;
+            let techId;
+            do {
+                techId = `${areaPrefix}${String(newId).padStart(3, '0')}`;
+                newId++;
+            } while (existingIds.includes(techId));
+            
+            return techId;
+        }
+
+        // ===== FUNCIONES DE GESTIÓN DE SOLICITUDES COMPLETAMENTE FUNCIONALES =====
+        function syncAllRequests() {
+            console.log('🔄 Sincronizando todas las solicitudes...');
+            
+            try {
+                // Recargar datos desde localStorage
+                loadAllData();
+                
+                // Actualizar contadores
+                updateAllCounters();
+                
+                // Actualizar visualización de solicitudes
+                updateRequestsDisplay();
+                
+                // Actualizar vista por áreas
+                updateAreaRequests();
+                
+                // Mostrar alertas si hay solicitudes críticas
+                showCriticalAlerts();
+                
+                const totalRequests = solicitudesFromPortal.length;
+                const pendingRequests = solicitudesFromPortal.filter(req => !req.tecnicoAsignado || req.estadoGestion === 'PENDIENTE').length;
+                
+                alert(`🔄 SINCRONIZACIÓN COMPLETADA\n\n📊 RESULTADOS:\n• ${totalRequests} solicitudes de mantenimiento encontradas\n• ${pendingRequests} solicitudes pendientes de asignación\n\n✅ Sistema completamente sincronizado\n🔧 Listo para asignar técnicos`);
+                
+                updateSystemStatus(`🔄 Sincronizado: ${totalRequests} solicitudes, ${pendingRequests} pendientes`);
+                
+                return true;
+            } catch (error) {
+                console.error('❌ Error en sincronización:', error);
+                alert('❌ Error durante la sincronización. Intente nuevamente.');
+                return false;
+            }
+        }
+
+        function updateRequestsDisplay() {
+            console.log('🎨 Actualizando visualización de solicitudes...');
+            
+            const container = document.getElementById('solicitudes-list');
+            if (!container) return;
+            
+            let filteredRequests = solicitudesFromPortal;
+            
+            // Aplicar filtro actual
+            if (currentFilter !== 'all') {
+                if (currentFilter === 'PENDIENTE') {
+                    filteredRequests = solicitudesFromPortal.filter(req => !req.tecnicoAsignado || req.estadoGestion === 'PENDIENTE');
+                } else if (currentFilter === 'ASIGNADA') {
+                    filteredRequests = solicitudesFromPortal.filter(req => req.tecnicoAsignado && req.estadoGestion !== 'COMPLETADA');
+                } else if (currentFilter === 'COMPLETADA') {
+                    filteredRequests = solicitudesFromPortal.filter(req => req.estadoGestion === 'COMPLETADA');
+                } else if (currentFilter === 'CRITICA') {
+                    filteredRequests = solicitudesFromPortal.filter(req => req.prioridad === 'CRITICA');
+                }
+            }
+            
+            if (filteredRequests.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes ${currentFilter === 'all' ? '' : 'con este filtro'}</h3>
+                        <p style="margin-bottom: 1.5rem;">
+                            ${currentFilter === 'all' ? 
+                                'Las solicitudes del Portal de Solicitudes aparecerán aquí automáticamente' : 
+                                `No hay solicitudes ${currentFilter.toLowerCase()} en este momento`
+                            }
+                        </p>
+                        <button class="btn btn-primary" onclick="syncAllRequests()">
+                            🔄 Sincronizar con Portal de Solicitudes
+                        </button>
+                    </div>
+                `;
+            } else {
+                // Ordenar por fecha de creación (más recientes primero) y prioridad
+                const sortedRequests = filteredRequests.sort((a, b) => {
+                    // Primero por prioridad (crítica primero)
+                    const priorityOrder = { 'CRITICA': 0, 'ALTA': 1, 'MEDIA': 2, 'BAJA': 3 };
+                    const aPriority = priorityOrder[a.prioridad] || 4;
+                    const bPriority = priorityOrder[b.prioridad] || 4;
+                    
+                    if (aPriority !== bPriority) {
+                        return aPriority - bPriority;
+                    }
+                    
+                    // Luego por fecha (más reciente primero)
+                    const aDate = new Date(a.fechaCreacionISO || a.fechaCreacion);
+                    const bDate = new Date(b.fechaCreacionISO || b.fechaCreacion);
+                    return bDate - aDate;
+                });
+                
+                const requestsHTML = sortedRequests.map(request => createRequestCard(request)).join('');
+                container.innerHTML = requestsHTML;
+                
+                console.log(`✅ Mostrando ${filteredRequests.length} solicitudes`);
+            }
+            
+            // Actualizar contadores de filtros
+            updateFilterCounts();
+        }
+
+        function createRequestCard(request) {
+            const serviceName = serviciosHospitalarios[request.servicioHospitalario] || request.servicioHospitalario;
+            const areaName = serviciosIngenieria[request.servicioIngenieria] || request.servicioIngenieria;
+            const estado = request.estadoGestion || request.estado || 'PENDIENTE';
+            const isPending = !request.tecnicoAsignado || estado === 'PENDIENTE';
+            const isCritical = request.prioridad === 'CRITICA';
+            
+            let cardClass = 'request-card';
+            if (isCritical) cardClass += ' critical';
+            else if (isPending) cardClass += ' pending';
+            else if (estado === 'COMPLETADA') cardClass += ' completed';
+            else cardClass += ' assigned';
+            
+            const priorityClass = `priority-${request.prioridad.toLowerCase()}`;
+            const statusClass = isPending ? 'status-pendiente' : 
+                                estado === 'COMPLETADA' ? 'status-completada' : 
+                                'status-asignada';
+            
+            return `
+                <div class="${cardClass}">
+                    <div class="request-header">
+                        <div class="request-number">📋 ${request.numero}</div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                            <span class="${priorityClass}">${request.prioridad}</span>
+                            <span class="${statusClass}">${isPending ? 'PENDIENTE' : estado}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="request-details">
+                        <div class="request-detail">
+                            <div class="request-detail-label">🔧 Área Técnica</div>
+                            <div class="request-detail-value">${areaName}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🔨 Tipo de Servicio</div>
+                            <div class="request-detail-value">${(request.tipoServicio || 'No especificado').replace('_', ' ')}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🏥 Servicio Solicitante</div>
+                            <div class="request-detail-value">${serviceName}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">👤 Solicitante</div>
+                            <div class="request-detail-value">${request.solicitante || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🖥️ Equipo</div>
+                            <div class="request-detail-value">${request.equipo || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📍 Ubicación</div>
+                            <div class="request-detail-value">${request.ubicacion || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📅 Fecha de Solicitud</div>
+                            <div class="request-detail-value">${request.fechaCreacion || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">👨‍🔧 Técnico Asignado</div>
+                            <div class="request-detail-value">
+                                ${request.tecnicoAsignado ? 
+                                    `<span style="color: #059669; font-weight: 600;">${request.tecnicoAsignado}</span>` : 
+                                    '<span style="color: #f59e0b;">Pendiente de asignación</span>'
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin: 1rem 0; padding: 1rem; background: #f0f9ff; border-radius: 0.5rem; border-left: 3px solid #2563eb;">
+                        <div class="request-detail-label">📝 Descripción del Problema</div>
+                        <div style="margin-top: 0.5rem; color: #1f2937;">${request.descripcion || 'No especificada'}</div>
+                        ${request.observaciones ? `
+                            <div style="margin-top: 0.5rem; font-style: italic; color: #6b7280;">
+                                <strong>Observaciones:</strong> ${request.observaciones}
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    ${request.respuestaTecnico ? `
+                        <div class="tecnico-response">
+                            <div class="tecnico-response-label">
+                                ✅ Respuesta del Técnico
+                            </div>
+                            <div class="tecnico-response-content">
+                                ${request.respuestaTecnico}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <div class="request-actions">
+                        ${isPending ? `
+                            <button class="btn btn-success btn-sm" onclick="showAssignTechnicianModal('${request.numero}')">
+                                👤 Asignar
+                            </button>
+                            <button class="btn btn-primary btn-sm" onclick="autoAssignTechnician('${request.numero}')">
+                                🤖 Auto-asignar
+                            </button>
+                        ` : ''}
+                        
+                        ${request.tecnicoAsignado && estado !== 'COMPLETADA' ? `
+                            <button class="btn btn-warning btn-sm" onclick="changeRequestStatus('${request.numero}', 'EN_PROCESO')">
+                                ⏳ Marcar En Proceso
+                            </button>
+                            <button class="btn btn-success btn-sm" onclick="changeRequestStatus('${request.numero}', 'COMPLETADA')">
+                                ✅ Marcar Completada
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="reassignTechnician('${request.numero}')">
+                                🔄 Reasignar
+                            </button>
+                        ` : ''}
+                        
+                        <button class="btn btn-secondary btn-sm" onclick="viewRequestDetails('${request.numero}')">
+                            👁️ Ver Detalles
+                        </button>
+                        
+                        ${estado === 'COMPLETADA' ? `
+                            <button class="btn btn-primary btn-sm" onclick="generateWorkReport('${request.numero}')">
+                                📄 Reporte de Trabajo
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterRequests(filter) {
+            currentFilter = filter;
+            
+            // Actualizar estado visual de botones de filtro
+            document.querySelectorAll('[id^="filter-"]').forEach(btn => {
+                btn.style.background = '';
+                btn.style.color = '';
+            });
+            
+            const activeBtn = document.getElementById(`filter-${filter}`);
+            if (activeBtn) {
+                activeBtn.style.background = '#2563eb';
+                activeBtn.style.color = 'white';
+            }
+            
+            // Actualizar visualización
+            updateRequestsDisplay();
+            
+            console.log(`🔍 Filtro aplicado: ${filter}`);
+        }
+
+        function updateFilterCounts() {
+            const counts = {
+                all: solicitudesFromPortal.length,
+                pending: solicitudesFromPortal.filter(req => !req.tecnicoAsignado || req.estadoGestion === 'PENDIENTE').length,
+                assigned: solicitudesFromPortal.filter(req => req.tecnicoAsignado && req.estadoGestion !== 'COMPLETADA' && req.estadoGestion !== 'PENDIENTE').length,
+                completed: solicitudesFromPortal.filter(req => req.estadoGestion === 'COMPLETADA').length,
+                critical: solicitudesFromPortal.filter(req => req.prioridad === 'CRITICA').length
+            };
+            
+            const updateCount = (id, value) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = value;
+            };
+            
+            updateCount('count-all', counts.all);
+            updateCount('count-pending', counts.pending);
+            updateCount('count-assigned', counts.assigned);
+            updateCount('count-completed', counts.completed);
+            updateCount('count-critical', counts.critical);
+        }
+
+        // ===== FUNCIONES DE ASIGNACIÓN DE TÉCNICOS COMPLETAMENTE FUNCIONALES =====
+        function showAssignTechnicianModal(requestNumber) {
+            const request = solicitudesFromPortal.find(req => req.numero === requestNumber);
+            if (!request) {
+                alert('❌ Solicitud no encontrada');
+                return;
+            }
+            
+            const availableTechnicians = tecnicosPorArea[request.servicioIngenieria] || [];
+            const freeTechnicians = availableTechnicians.filter(tech => tech.estado === 'disponible');
+            
+            if (freeTechnicians.length === 0) {
+                const confirmation = confirm(`❌ No hay técnicos disponibles en ${serviciosIngenieria[request.servicioIngenieria]}\n\n¿Desea ver todos los técnicos del área (incluyendo ocupados)?`);
+                if (!confirmation) return;
+            }
+            
+            const modalHTML = `
+                <div id="assign-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">👤 Asignar - ${request.numero}</h3>
+                            <button class="modal-close" onclick="closeAssignModal()">✕</button>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; border-left: 3px solid #2563eb;">
+                                <h4 style="color: #1e40af; margin-bottom: 0.5rem;">📋 Detalles de la Solicitud</h4>
+                                <div style="color: #1e40af; font-size: 0.875rem;">
+                                    <div><strong>Equipo:</strong> ${request.equipo}</div>
+                                    <div><strong>Ubicación:</strong> ${request.ubicacion}</div>
+                                    <div><strong>Prioridad:</strong> ${request.prioridad}</div>
+                                    <div><strong>Área:</strong> ${serviciosIngenieria[request.servicioIngenieria]}</div>
+                                </div>
+                            </div>
+                            
+                            <h4 style="margin-bottom: 1rem;">🔧 Técnicos de ${serviciosIngenieria[request.servicioIngenieria]}</h4>
+                            
+                            <div class="tech-selection-list">
+                                ${availableTechnicians.length === 0 ? 
+                                    '<p style="text-align: center; color: #6b7280; padding: 2rem;">No hay técnicos registrados en esta área</p>' :
+                                    availableTechnicians.map(tech => createTechnicianSelectionCard(tech)).join('')
+                                }
+                            </div>
+                            
+                            <div style="display: flex; gap: 1rem; justify-content: end; margin-top: 1.5rem;">
+                                <button class="btn btn-secondary" onclick="closeAssignModal()">Cancelar</button>
+                                <button class="btn btn-success" onclick="confirmTechnicianAssignment('${requestNumber}')" id="confirm-assign-btn" disabled>
+                                    ✅ Asignar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function createTechnicianSelectionCard(tech) {
+            const isAvailable = tech.estado === 'disponible';
+            const typeIcon = tech.tipo === 'INGENIERO' ? '🎓' : '🔧';
+            
+            return `
+                <div class="tech-selection-item ${isAvailable ? 'selectable' : 'unavailable'}" 
+                     onclick="${isAvailable ? `selectTechnician('${tech.id}')` : ''}"
+                     data-tech-id="${tech.id}">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <div style="font-weight: 600; color: #1f2937;">${typeIcon} ${tech.nombre}</div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <span style="background: #2563eb; color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem;">${tech.id}</span>
+                            <span class="status-${tech.estado}">${tech.estado.charAt(0).toUpperCase() + tech.estado.slice(1)}</span>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.875rem; color: #6b7280;">
+                        <div>🎯 ${tech.especialidad}</div>
+                        <div>📞 ${tech.telefono}</div>
+                        <div>📧 ${tech.email}</div>
+                        <div>📅 ${tech.fechaCreacion}</div>
+                    </div>
+                    ${tech.solicitudAsignada ? `
+                        <div style="margin-top: 0.5rem; padding: 0.5rem; background: #fef3c7; border-radius: 0.375rem; font-size: 0.75rem; color: #d97706;">
+                            🔧 Trabajando en: ${tech.solicitudAsignada}
+                        </div>
+                    ` : ''}
+                    ${!isAvailable ? `
+                        <div style="margin-top: 0.5rem; padding: 0.5rem; background: #fee2e2; border-radius: 0.375rem; font-size: 0.75rem; color: #dc2626;">
+                            ⚠️ No disponible - Estado: ${tech.estado}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function selectTechnician(techId) {
+            // Deseleccionar todos
+            document.querySelectorAll('.tech-selection-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Seleccionar el elegido
+            const selectedItem = document.querySelector(`[data-tech-id="${techId}"]`);
+            if (selectedItem && selectedItem.classList.contains('selectable')) {
+                selectedItem.classList.add('selected');
+                selectedTechnicianForAssignment = techId;
+                
+                // Habilitar botón de confirmación
+                const confirmBtn = document.getElementById('confirm-assign-btn');
+                if (confirmBtn) {
+                    confirmBtn.disabled = false;
+                }
+            }
+        }
+
+        function confirmTechnicianAssignment(requestNumber) {
+            if (!selectedTechnicianForAssignment) {
+                alert('❌ Por favor seleccione un técnico');
+                return;
+            }
+            
+            const request = solicitudesFromPortal.find(req => req.numero === requestNumber);
+            const technician = findTechnicianById(selectedTechnicianForAssignment);
+            
+            if (!request || !technician) {
+                alert('❌ Error: Solicitud o técnico no encontrado');
+                return;
+            }
+            
+            const confirmation = confirm(`¿Asignar la solicitud ${requestNumber} a ${technician.nombre}?\n\nEquipo: ${request.equipo}\nUbicación: ${request.ubicacion}\nPrioridad: ${request.prioridad}`);
+            
+            if (!confirmation) return;
+            
+            // Realizar asignación
+            request.tecnicoAsignado = technician.nombre;
+            request.estadoGestion = 'ASIGNADA';
+            request.fechaAsignacion = new Date().toLocaleString('es-CO');
+            
+            // Actualizar estado del técnico
+            technician.estado = 'ocupado';
+            technician.disponible = false;
+            technician.solicitudAsignada = requestNumber;
+            
+            // Guardar cambios
+            saveAllData();
+            
+            // Cerrar modal
+            closeAssignModal();
+            
+            // Actualizar interfaz
+            updateRequestsDisplay();
+            updateTechniciansDisplay();
+            updateAllCounters();
+            
+            alert(`✅ ASIGNACIÓN EXITOSA\n\n👤 Técnico: ${technician.nombre}\n📋 Solicitud: ${requestNumber}\n🔧 Área: ${serviciosIngenieria[request.servicioIngenieria]}\n📅 Fecha: ${request.fechaAsignacion}\n\n✅ El técnico ha sido marcado como ocupado`);
+            
+            updateSystemStatus(`✅ Solicitud ${requestNumber} asignada a ${technician.nombre}`);
+        }
+
+        function autoAssignTechnician(requestNumber) {
+            const request = solicitudesFromPortal.find(req => req.numero === requestNumber);
+            if (!request) {
+                alert('❌ Solicitud no encontrada');
+                return;
+            }
+            
+            const availableTechnicians = tecnicosPorArea[request.servicioIngenieria] || [];
+            const freeTechnicians = availableTechnicians.filter(tech => tech.estado === 'disponible');
+            
+            if (freeTechnicians.length === 0) {
+                alert(`❌ No hay técnicos disponibles en ${serviciosIngenieria[request.servicioIngenieria]}\n\nUse la asignación manual para ver todas las opciones.`);
+                return;
+            }
+            
+            // Seleccionar técnico basado en carga de trabajo (el que tiene menos solicitudes asignadas)
+            const selectedTechnician = freeTechnicians.reduce((best, current) => {
+                // Contar solicitudes asignadas actualmente
+                const bestCount = solicitudesFromPortal.filter(req => req.tecnicoAsignado === best.nombre && req.estadoGestion !== 'COMPLETADA').length;
+                const currentCount = solicitudesFromPortal.filter(req => req.tecnicoAsignado === current.nombre && req.estadoGestion !== 'COMPLETADA').length;
+                
+                return currentCount < bestCount ? current : best;
+            });
+            
+            const confirmation = confirm(`🤖 AUTO-ASIGNACIÓN\n\nSolicitud: ${requestNumber}\n👤 Técnico seleccionado: ${selectedTechnician.nombre}\n🎯 Especialidad: ${selectedTechnician.especialidad}\n\n¿Confirmar asignación automática?`);
+            
+            if (!confirmation) return;
+            
+            // Realizar asignación
+            request.tecnicoAsignado = selectedTechnician.nombre;
+            request.estadoGestion = 'ASIGNADA';
+            request.fechaAsignacion = new Date().toLocaleString('es-CO');
+            
+            // Actualizar estado del técnico
+            selectedTechnician.estado = 'ocupado';
+            selectedTechnician.disponible = false;
+            selectedTechnician.solicitudAsignada = requestNumber;
+            
+            // Guardar cambios
+            saveAllData();
+            
+            // Actualizar interfaz
+            updateRequestsDisplay();
+            updateTechniciansDisplay();
+            updateAllCounters();
+            
+            alert(`✅ ASIGNACIÓN AUTOMÁTICA EXITOSA\n\n👤 Técnico: ${selectedTechnician.nombre}\n📋 Solicitud: ${requestNumber}\n🤖 Seleccionado automáticamente por menor carga de trabajo`);
+            
+            updateSystemStatus(`🤖 Auto-asignación: ${requestNumber} → ${selectedTechnician.nombre}`);
+        }
+
+        function autoAssignAllPending() {
+            const pendingRequests = solicitudesFromPortal.filter(req => !req.tecnicoAsignado || req.estadoGestion === 'PENDIENTE');
+            
+            if (pendingRequests.length === 0) {
+                alert('📋 No hay solicitudes pendientes para asignar');
+                return;
+            }
+            
+            const confirmation = confirm(`🤖 AUTO-ASIGNACIÓN MASIVA\n\n¿Asignar automáticamente ${pendingRequests.length} solicitudes pendientes?\n\nEl sistema distribuirá las solicitudes entre los técnicos disponibles de cada área.`);
+            
+            if (!confirmation) return;
+            
+            let assigned = 0;
+            let errors = 0;
+            let noTechnicians = 0;
+            
+            pendingRequests.forEach(request => {
+                try {
+                    const availableTechnicians = tecnicosPorArea[request.servicioIngenieria] || [];
+                    const freeTechnicians = availableTechnicians.filter(tech => tech.estado === 'disponible');
+                    
+                    if (freeTechnicians.length === 0) {
+                        noTechnicians++;
+                        return;
+                    }
+                    
+                    // Seleccionar técnico con menor carga
+                    const selectedTechnician = freeTechnicians.reduce((best, current) => {
+                        const bestCount = solicitudesFromPortal.filter(req => req.tecnicoAsignado === best.nombre && req.estadoGestion !== 'COMPLETADA').length;
+                        const currentCount = solicitudesFromPortal.filter(req => req.tecnicoAsignado === current.nombre && req.estadoGestion !== 'COMPLETADA').length;
+                        return currentCount < bestCount ? current : best;
+                    });
+                    
+                    // Asignar
+                    request.tecnicoAsignado = selectedTechnician.nombre;
+                    request.estadoGestion = 'ASIGNADA';
+                    request.fechaAsignacion = new Date().toLocaleString('es-CO');
+                    
+                    // Actualizar técnico
+                    selectedTechnician.estado = 'ocupado';
+                    selectedTechnician.disponible = false;
+                    selectedTechnician.solicitudAsignada = request.numero;
+                    
+                    assigned++;
+                    
+                } catch (error) {
+                    console.error(`❌ Error asignando ${request.numero}:`, error);
+                    errors++;
+                }
+            });
+            
+            // Guardar cambios
+            saveAllData();
+            
+            // Actualizar interfaz
+            updateRequestsDisplay();
+            updateTechniciansDisplay();
+            updateAllCounters();
+            
+            alert(`🤖 AUTO-ASIGNACIÓN MASIVA COMPLETADA\n\n📊 RESULTADOS:\n• ${assigned} solicitudes asignadas exitosamente\n• ${noTechnicians} solicitudes sin técnicos disponibles\n• ${errors} errores encontrados\n\n✅ Proceso completado`);
+            
+            updateSystemStatus(`🤖 Asignación masiva: ${assigned} asignadas, ${noTechnicians} sin técnicos`);
+        }
+
+        function changeRequestStatus(requestNumber, newStatus) {
+            const request = solicitudesFromPortal.find(req => req.numero === requestNumber);
+            if (!request) {
+                alert('❌ Solicitud no encontrada');
+                return;
+            }
+            
+            const statusNames = {
+                'EN_PROCESO': 'En Proceso',
+                'COMPLETADA': 'Completada',
+                'PENDIENTE': 'Pendiente'
+            };
+
+            // Si se está completando la solicitud, solicitar la respuesta del técnico
+            if (newStatus === 'COMPLETADA') {
+                const tecnicoResponse = prompt(`📝 Ingrese la respuesta/informe del técnico para completar la solicitud ${requestNumber}:\n\n(Describa brevemente el trabajo realizado, hallazgos, reparaciones efectuadas, etc.)`, '');
+                
+                if (tecnicoResponse === null) {
+                    return; // Usuario canceló
+                }
+                
+                if (tecnicoResponse.trim() === '') {
+                    alert('⚠️ Es obligatorio ingresar una respuesta del técnico para completar la solicitud.');
+                    return;
+                }
+                
+                const confirmation = confirm(`¿Completar la solicitud ${requestNumber}?\n\nEstado: COMPLETADA\nRespuesta del técnico: ${tecnicoResponse.substring(0, 100)}${tecnicoResponse.length > 100 ? '...' : ''}`);
+                
+                if (!confirmation) return;
+                
+                // Guardar la respuesta del técnico
+                request.respuestaTecnico = tecnicoResponse.trim();
+                request.fechaRespuesta = new Date().toLocaleString('es-CO');
+            } else {
+                const confirmation = confirm(`¿Cambiar el estado de la solicitud ${requestNumber} a "${statusNames[newStatus]}"?`);
+                if (!confirmation) return;
+            }
+            
+            const oldStatus = request.estadoGestion;
+            request.estadoGestion = newStatus;
+            
+            // Si se completa la solicitud, liberar al técnico
+            if (newStatus === 'COMPLETADA' && request.tecnicoAsignado) {
+                const technician = findTechnicianByName(request.tecnicoAsignado);
+                if (technician) {
+                    technician.estado = 'disponible';
+                    technician.disponible = true;
+                    technician.solicitudAsignada = null;
+                }
+                request.fechaCompletada = new Date().toLocaleString('es-CO');
+            }
+            
+            // Guardar cambios
+            saveAllData();
+            
+            // Actualizar interfaz
+            updateRequestsDisplay();
+            updateTechniciansDisplay();
+            updateAllCounters();
+            
+            if (newStatus === 'COMPLETADA') {
+                alert(`✅ Solicitud completada: ${requestNumber}\n\n📝 Respuesta registrada del técnico\n🎉 Técnico liberado para nuevas asignaciones\n📅 Fecha de finalización: ${request.fechaCompletada}`);
+            } else {
+                alert(`✅ Estado actualizado: ${requestNumber}\n\nAnterior: ${oldStatus || 'PENDIENTE'}\nNuevo: ${newStatus}`);
+            }
+            
+            updateSystemStatus(`✅ ${requestNumber} → ${statusNames[newStatus]}`);
+        }
+
+        function reassignTechnician(requestNumber) {
+            const request = solicitudesFromPortal.find(req => req.numero === requestNumber);
+            if (!request) {
+                alert('❌ Solicitud no encontrada');
+                return;
+            }
+            
+            // Liberar técnico actual
+            if (request.tecnicoAsignado) {
+                const currentTechnician = findTechnicianByName(request.tecnicoAsignado);
+                if (currentTechnician) {
+                    currentTechnician.estado = 'disponible';
+                    currentTechnician.disponible = true;
+                    currentTechnician.solicitudAsignada = null;
+                }
+            }
+            
+            // Limpiar asignación
+            request.tecnicoAsignado = null;
+            request.estadoGestion = 'PENDIENTE';
+            request.fechaAsignacion = null;
+            
+            // Guardar cambios
+            saveAllData();
+            
+            // Mostrar modal de asignación
+            showAssignTechnicianModal(requestNumber);
+            
+            // Actualizar interfaz
+            updateRequestsDisplay();
+            updateTechniciansDisplay();
+            updateAllCounters();
+            
+            updateSystemStatus(`🔄 Solicitud ${requestNumber} liberada para reasignación`);
+        }
+
+        function closeAssignModal() {
+            const modal = document.getElementById('assign-modal');
+            if (modal) {
+                modal.remove();
+            }
+            selectedTechnicianForAssignment = null;
+        }
+
         // ===== FUNCIONES DE GESTIÓN DE TÉCNICOS =====
         function showAddTechnicianModal(area = '') {
             const modalHTML = `
                 <div id="add-technician-modal" class="modal">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h3 class="modal-title">➕ Agregar Personal Técnico</h3>
-                            <button class="modal-close" onclick="closeModal('add-technician-modal')">✕</button>
+                            <h3 class="modal-title">➕ Agregar Nuevo Ingeniero/Técnico</h3>
+                            <button class="modal-close" onclick="closeAddTechnicianModal()">✕</button>
                         </div>
                         <div style="padding: 1.5rem;">
                             <form id="add-technician-form">
                                 <div class="form-group">
-                                    <label class="form-label">🔧 Área *</label>
+                                    <label class="form-label">🔧 Área de Ingeniería *</label>
                                     <select id="tech-area" class="form-select" required>
                                         <option value="">Seleccionar área</option>
                                         <option value="INGENIERIA_BIOMEDICA" ${area === 'INGENIERIA_BIOMEDICA' ? 'selected' : ''}>🏥 Ingeniería Biomédica</option>
@@ -1391,7 +2348,7 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="form-label">👨‍🎓 Tipo *</label>
+                                    <label class="form-label">👨‍🎓 Tipo de Personal *</label>
                                     <select id="tech-type" class="form-select" required>
                                         <option value="">Seleccionar tipo</option>
                                         <option value="INGENIERO">🎓 Ingeniero</option>
@@ -1401,12 +2358,12 @@
                                 
                                 <div class="form-group">
                                     <label class="form-label">👤 Nombre Completo *</label>
-                                    <input type="text" id="tech-name" class="form-input" required placeholder="Nombre y apellidos">
+                                    <input type="text" id="tech-name" class="form-input" required placeholder="Ej: Juan Pérez">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label class="form-label">🎓 Especialidad *</label>
-                                    <input type="text" id="tech-specialty" class="form-input" required placeholder="Área de especialización">
+                                    <input type="text" id="tech-specialty" class="form-input" required placeholder="Ej: Equipos Biomédicos">
                                 </div>
                                 
                                 <div class="form-group">
@@ -1416,11 +2373,11 @@
                                 
                                 <div class="form-group">
                                     <label class="form-label">📧 Email *</label>
-                                    <input type="email" id="tech-email" class="form-input" required placeholder="email@hospital.com">
+                                    <input type="email" id="tech-email" class="form-input" required placeholder="juan.perez@hospital.com">
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="form-label">📋 Estado</label>
+                                    <label class="form-label">📋 Estado Inicial</label>
                                     <select id="tech-status" class="form-select">
                                         <option value="disponible">✅ Disponible</option>
                                         <option value="ocupado">⏳ Ocupado</option>
@@ -1428,14 +2385,9 @@
                                     </select>
                                 </div>
                                 
-                                <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
-                                    <h4 style="color: #1e40af; margin-bottom: 0.5rem;">💾 Persistencia Garantizada</h4>
-                                    <p style="color: #1e40af; margin: 0; font-size: 0.875rem;">Los datos se guardan automáticamente y permanecen en GitHub Pages.</p>
-                                </div>
-                                
                                 <div style="display: flex; gap: 1rem; justify-content: end; margin-top: 1.5rem;">
-                                    <button type="button" class="btn btn-secondary" onclick="closeModal('add-technician-modal')">Cancelar</button>
-                                    <button type="submit" class="btn btn-success">✅ Guardar Personal</button>
+                                    <button type="button" class="btn btn-secondary" onclick="closeAddTechnicianModal()">Cancelar</button>
+                                    <button type="submit" class="btn btn-success">✅ Agregar Técnico</button>
                                 </div>
                             </form>
                         </div>
@@ -1445,351 +2397,87 @@
             
             document.body.insertAdjacentHTML('beforeend', modalHTML);
             
+            // Manejar envío del formulario
             document.getElementById('add-technician-form').addEventListener('submit', function(e) {
                 e.preventDefault();
-                addTechnician();
+                addNewTechnician();
             });
         }
 
-        function addTechnician() {
-            const formData = {
-                area: document.getElementById('tech-area').value,
-                type: document.getElementById('tech-type').value,
-                name: document.getElementById('tech-name').value.trim(),
-                specialty: document.getElementById('tech-specialty').value.trim(),
-                phone: document.getElementById('tech-phone').value.trim(),
-                email: document.getElementById('tech-email').value.trim(),
-                status: document.getElementById('tech-status').value || 'disponible'
-            };
+        function addNewTechnician() {
+            try {
+                const area = document.getElementById('tech-area').value;
+                const type = document.getElementById('tech-type').value;
+                const name = document.getElementById('tech-name').value.trim();
+                const specialty = document.getElementById('tech-specialty').value.trim();
+                const phone = document.getElementById('tech-phone').value.trim();
+                const email = document.getElementById('tech-email').value.trim();
+                const status = document.getElementById('tech-status').value;
 
-            // Validación
-            for (const [key, value] of Object.entries(formData)) {
-                if (key !== 'status' && (!value || value === '')) {
-                    alert(`❌ Por favor complete el campo: ${key}`);
+                // Validaciones
+                if (!area || !type || !name || !specialty || !phone || !email) {
+                    alert('❌ Por favor complete todos los campos obligatorios');
                     return;
                 }
-            }
 
-            // Generar ID único
-            const areaPrefix = {
-                'INGENIERIA_BIOMEDICA': 'IB',
-                'MECANICA': 'ME',
-                'INFRAESTRUCTURA': 'IN'
-            }[formData.area] || 'XX';
-
-            const existingIds = tecnicosPorArea[formData.area].map(t => t.id);
-            let counter = 1;
-            let newId;
-            do {
-                newId = `${areaPrefix}${String(counter).padStart(3, '0')}`;
-                counter++;
-            } while (existingIds.includes(newId));
-
-            // Crear nuevo técnico
-            const prefix = formData.type === 'INGENIERO' ? 'Ing.' : 'Téc.';
-            const newTechnician = {
-                id: newId,
-                nombre: `${prefix} ${formData.name}`,
-                tipo: formData.type,
-                especialidad: formData.specialty,
-                telefono: formData.phone,
-                email: formData.email,
-                estado: formData.status,
-                fechaCreacion: new Date().toLocaleString('es-CO'),
-                disponible: formData.status === 'disponible'
-            };
-
-            // Agregar y guardar
-            tecnicosPorArea[formData.area].push(newTechnician);
-            saveToLocalStorage(STORAGE_KEYS.TECNICOS, tecnicosPorArea);
-
-            // Cerrar modal y actualizar
-            closeModal('add-technician-modal');
-            updateAllDisplays();
-
-            const areaName = serviciosIngenieria[formData.area];
-            alert(`✅ ${formData.type} agregado exitosamente a ${areaName}\n\n🆔 ID: ${newId}\n👤 Nombre: ${newTechnician.nombre}\n💾 Guardado automáticamente`);
-        }
-
-        function addSampleTechnicians() {
-            const samples = [
-                {
-                    area: 'INGENIERIA_BIOMEDICA',
-                    type: 'INGENIERO',
-                    name: 'María García López',
-                    specialty: 'Equipos Críticos',
-                    phone: '+57 300 123 4567',
-                    email: 'maria.garcia@hospital.com',
-                    status: 'disponible'
-                },
-                {
-                    area: 'MECANICA',
-                    type: 'TECNICO',
-                    name: 'Carlos Rodríguez Pérez',
-                    specialty: 'Sistemas HVAC',
-                    phone: '+57 301 987 6543',
-                    email: 'carlos.rodriguez@hospital.com',
-                    status: 'disponible'
-                },
-                {
-                    area: 'INFRAESTRUCTURA',
-                    type: 'INGENIERO',
-                    name: 'Ana Martínez Silva',
-                    specialty: 'Construcción Hospitalaria',
-                    phone: '+57 302 456 7890',
-                    email: 'ana.martinez@hospital.com',
-                    status: 'disponible'
+                if (!email.includes('@')) {
+                    alert('❌ Por favor ingrese un email válido');
+                    return;
                 }
-            ];
 
-            let added = 0;
-            samples.forEach(sample => {
-                const areaPrefix = {
-                    'INGENIERIA_BIOMEDICA': 'IB',
-                    'MECANICA': 'ME',
-                    'INFRAESTRUCTURA': 'IN'
-                }[sample.area];
+                // Asegurar que el área existe
+                if (!tecnicosPorArea[area]) {
+                    tecnicosPorArea[area] = [];
+                }
 
-                const existingIds = tecnicosPorArea[sample.area].map(t => t.id);
-                let counter = 1;
-                let newId;
-                do {
-                    newId = `${areaPrefix}${String(counter).padStart(3, '0')}`;
-                    counter++;
-                } while (existingIds.includes(newId));
+                // Generar ID único
+                const techId = generateTechnicianId(area);
 
-                const prefix = sample.type === 'INGENIERO' ? 'Ing.' : 'Téc.';
+                // Crear técnico
+                const prefix = type === 'INGENIERO' ? 'Ing.' : 'Téc.';
+                const fullName = `${prefix} ${name}`;
+
                 const newTechnician = {
-                    id: newId,
-                    nombre: `${prefix} ${sample.name}`,
-                    tipo: sample.type,
-                    especialidad: sample.specialty,
-                    telefono: sample.phone,
-                    email: sample.email,
-                    estado: sample.status,
-                    fechaCreacion: new Date().toLocaleString('es-CO'),
-                    disponible: sample.status === 'disponible'
+                    id: techId,
+                    nombre: fullName,
+                    tipo: type,
+                    especialidad: specialty,
+                    telefono: phone,
+                    email: email,
+                    disponible: status === 'disponible',
+                    estado: status,
+                    solicitudAsignada: null,
+                    fechaCreacion: new Date().toLocaleString('es-CO')
                 };
 
-                tecnicosPorArea[sample.area].push(newTechnician);
-                added++;
-            });
+                // Agregar a la lista
+                tecnicosPorArea[area].push(newTechnician);
 
-            saveToLocalStorage(STORAGE_KEYS.TECNICOS, tecnicosPorArea);
-            updateAllDisplays();
+                // Guardar cambios
+                saveAllData();
 
-            alert(`✅ ${added} personas de prueba agregadas exitosamente\n\n💾 Datos guardados automáticamente en GitHub Pages`);
-        }
+                // Cerrar modal
+                closeAddTechnicianModal();
 
-        function deleteTechnician(area, techId) {
-            const technician = tecnicosPorArea[area]?.find(t => t.id === techId);
-            if (!technician) {
-                alert('❌ Personal no encontrado');
-                return;
-            }
+                // Actualizar interfaz
+                updateTechniciansDisplay();
+                updateAllCounters();
 
-            const confirmation = confirm(`¿Eliminar a ${technician.nombre}?\n\n⚠️ Esta acción no se puede deshacer.`);
-            if (confirmation) {
-                const index = tecnicosPorArea[area].findIndex(t => t.id === techId);
-                if (index > -1) {
-                    tecnicosPorArea[area].splice(index, 1);
-                    saveToLocalStorage(STORAGE_KEYS.TECNICOS, tecnicosPorArea);
-                    updateAllDisplays();
-                    alert(`🗑️ ${technician.nombre} eliminado exitosamente`);
-                }
+                alert(`✅ Técnico agregado exitosamente\n\n👤 ${fullName}\n🏥 ${serviciosIngenieria[area]}\n🆔 ${techId}`);
+
+                updateSystemStatus(`✅ Técnico agregado: ${fullName}`);
+
+            } catch (error) {
+                console.error('❌ Error al agregar técnico:', error);
+                alert('❌ Error al agregar el técnico');
             }
         }
 
-        function toggleTechnicianStatus(area, techId) {
-            const technician = tecnicosPorArea[area]?.find(t => t.id === techId);
-            if (!technician) return;
-
-            const statuses = ['disponible', 'ocupado', 'inactivo'];
-            const currentIndex = statuses.indexOf(technician.estado);
-            const nextIndex = (currentIndex + 1) % statuses.length;
-            const newStatus = statuses[nextIndex];
-
-            technician.estado = newStatus;
-            technician.disponible = newStatus === 'disponible';
-
-            saveToLocalStorage(STORAGE_KEYS.TECNICOS, tecnicosPorArea);
-            updateAllDisplays();
-
-            alert(`✅ Estado cambiado: ${technician.nombre} → ${newStatus}`);
-        }
-
-        function clearAllTechnicians() {
-            const total = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
-            if (total === 0) {
-                alert('📋 No hay personal registrado');
-                return;
+        function closeAddTechnicianModal() {
+            const modal = document.getElementById('add-technician-modal');
+            if (modal) {
+                modal.remove();
             }
-
-            const confirmation = confirm(`¿Eliminar TODOS los ${total} registros de personal?\n\n⚠️ Esta acción no se puede deshacer.`);
-            if (confirmation) {
-                tecnicosPorArea = {
-                    'INGENIERIA_BIOMEDICA': [],
-                    'MECANICA': [],
-                    'INFRAESTRUCTURA': []
-                };
-                saveToLocalStorage(STORAGE_KEYS.TECNICOS, tecnicosPorArea);
-                updateAllDisplays();
-                alert('🗑️ Todo el personal ha sido eliminado');
-            }
-        }
-
-        // ===== FUNCIONES DE GESTIÓN DE SOLICITUDES =====
-        function addSampleRequest() {
-            const samples = [
-                {
-                    numero: `SOL-${Date.now()}-001`,
-                    servicioIngenieria: 'INGENIERIA_BIOMEDICA',
-                    tipoServicio: 'CORRECTIVO',
-                    prioridad: 'ALTA',
-                    descripcion: 'Ventilador mecánico presenta falla en el sistema de alarmas',
-                    equipo: 'Ventilador Mecánico Modelo VM-300',
-                    ubicacion: 'UCI - Cama 15',
-                    solicitante: 'Dr. Juan Pérez',
-                    servicioHospitalario: 'UCI_ADULTO',
-                    fechaCreacion: new Date().toLocaleString('es-CO'),
-                    estado: 'PENDIENTE',
-                    tecnicoAsignado: null
-                },
-                {
-                    numero: `SOL-${Date.now()}-002`,
-                    servicioIngenieria: 'MECANICA',
-                    tipoServicio: 'PREVENTIVO',
-                    prioridad: 'MEDIA',
-                    descripcion: 'Mantenimiento rutinario del sistema de aire acondicionado',
-                    equipo: 'Sistema HVAC Central',
-                    ubicacion: 'Quirófano 3',
-                    solicitante: 'Ing. Ana García',
-                    servicioHospitalario: 'CIRUGIA',
-                    fechaCreacion: new Date().toLocaleString('es-CO'),
-                    estado: 'PENDIENTE',
-                    tecnicoAsignado: null
-                }
-            ];
-
-            const randomSample = samples[Math.floor(Math.random() * samples.length)];
-            solicitudes.push(randomSample);
-            saveToLocalStorage(STORAGE_KEYS.SOLICITUDES, solicitudes);
-            updateAllDisplays();
-
-            alert(`✅ Solicitud de prueba agregada\n\n📋 Número: ${randomSample.numero}\n🔧 Área: ${serviciosIngenieria[randomSample.servicioIngenieria]}\n💾 Guardado automáticamente`);
-        }
-
-        // ===== FUNCIONES DE GESTIÓN DE ACCESOS =====
-        function addSampleUser() {
-            const newUser = {
-                id: `USR-${Date.now()}`,
-                nombreCompleto: `Dr. Usuario Prueba ${Date.now().toString().slice(-4)}`,
-                email: `usuario.prueba${Date.now().toString().slice(-4)}@hospital.com`,
-                telefono: '+57 300 123 4567',
-                numeroDocumento: Math.floor(10000000 + Math.random() * 90000000).toString(),
-                servicioHospitalario: 'URGENCIAS',
-                cargo: 'Médico Especialista',
-                fechaAprobacion: new Date().toISOString(),
-                aprobadoPor: 'Sistema de Prueba',
-                estado: 'ACTIVO',
-                codigoAcceso: Math.floor(1000 + Math.random() * 9000).toString(),
-                fechaGeneracionCodigo: new Date().toISOString()
-            };
-
-            approvedUsers.push(newUser);
-            saveToLocalStorage(STORAGE_KEYS.APPROVED_USERS, approvedUsers);
-            updateAllDisplays();
-
-            alert(`✅ Usuario de prueba agregado\n\n👤 ${newUser.nombreCompleto}\n🔢 Código: ${newUser.codigoAcceso}\n💾 Guardado automáticamente`);
-        }
-
-        function exportUsersList() {
-            if (approvedUsers.length === 0) {
-                alert('📋 No hay usuarios para exportar');
-                return;
-            }
-
-            const exportData = {
-                fechaExportacion: new Date().toLocaleString('es-CO'),
-                totalUsuarios: approvedUsers.length,
-                usuarios: approvedUsers
-            };
-
-            const dataStr = JSON.stringify(exportData, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
-            link.download = `usuarios_hospital_${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-            
-            alert(`📤 Lista de ${approvedUsers.length} usuarios exportada exitosamente`);
-        }
-
-        // ===== FUNCIONES DE VISUALIZACIÓN =====
-        function updateAllDisplays() {
-            updateAllCounters();
-            updateTechniciansDisplay();
-            updateRequestsDisplay();
-            updateAccessDisplay();
-            updatePersonnelSummaries();
-        }
-
-        function updateAllCounters() {
-            // Contadores de solicitudes
-            const total = solicitudes.length;
-            const biomedica = solicitudes.filter(r => r.servicioIngenieria === 'INGENIERIA_BIOMEDICA').length;
-            const mecanica = solicitudes.filter(r => r.servicioIngenieria === 'MECANICA').length;
-            const infraestructura = solicitudes.filter(r => r.servicioIngenieria === 'INFRAESTRUCTURA').length;
-            const pendientes = solicitudes.filter(r => r.estado === 'PENDIENTE' || !r.tecnicoAsignado).length;
-
-            document.getElementById('metric-total').textContent = total;
-            document.getElementById('metric-biomedica').textContent = biomedica;
-            document.getElementById('metric-mecanica').textContent = mecanica;
-            document.getElementById('metric-infraestructura').textContent = infraestructura;
-            document.getElementById('metric-pendientes').textContent = pendientes;
-            document.getElementById('total-count').textContent = total;
-            document.getElementById('notification-count').textContent = pendientes;
-            document.getElementById('tab-biomedica-count').textContent = biomedica;
-            document.getElementById('tab-mecanica-count').textContent = mecanica;
-            document.getElementById('tab-infraestructura-count').textContent = infraestructura;
-
-            // Contadores de técnicos
-            const totalTech = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
-            const biomedicaTech = tecnicosPorArea['INGENIERIA_BIOMEDICA'].length;
-            const mecanicaTech = tecnicosPorArea['MECANICA'].length;
-            const infraestructuraTech = tecnicosPorArea['INFRAESTRUCTURA'].length;
-
-            document.getElementById('total-technicians-nav').textContent = totalTech;
-            document.getElementById('biomedica-total').textContent = `${biomedicaTech} personas`;
-            document.getElementById('mecanica-total').textContent = `${mecanicaTech} personas`;
-            document.getElementById('infraestructura-total').textContent = `${infraestructuraTech} personas`;
-            document.getElementById('total-technicians').textContent = totalTech;
-
-            // Contar por tipo
-            let engineers = 0, technicians = 0, available = 0;
-            Object.values(tecnicosPorArea).forEach(area => {
-                area.forEach(person => {
-                    if (person.tipo === 'INGENIERO') engineers++;
-                    else technicians++;
-                    if (person.estado === 'disponible') available++;
-                });
-            });
-
-            document.getElementById('total-engineers').textContent = engineers;
-            document.getElementById('total-technicians-only').textContent = technicians;
-            document.getElementById('available-technicians').textContent = available;
-
-            // Contadores de accesos
-            document.getElementById('total-users').textContent = approvedUsers.length;
-            document.getElementById('pending-access').textContent = accessRequests.length;
-            document.getElementById('approved-users').textContent = approvedUsers.length;
-            document.getElementById('pending-access-count').textContent = accessRequests.length;
-
-            // Contadores de personal en dashboard
-            document.getElementById('biomedica-personnel-count').textContent = `${biomedicaTech} registrados`;
-            document.getElementById('mecanica-personnel-count').textContent = `${mecanicaTech} registrados`;
-            document.getElementById('infraestructura-personnel-count').textContent = `${infraestructuraTech} registrados`;
         }
 
         function updateTechniciansDisplay() {
@@ -1798,26 +2486,27 @@
                 { key: 'MECANICA', name: 'mecanica', icon: '⚙️' },
                 { key: 'INFRAESTRUCTURA', name: 'infraestructura', icon: '🏗️' }
             ];
-
+            
             areas.forEach(area => {
                 const technicians = tecnicosPorArea[area.key] || [];
-                const container = document.getElementById(`${area.name}-technicians-list`);
+                const listContainer = document.getElementById(`${area.name}-technicians-list`);
                 
-                if (!container) return;
-
+                if (!listContainer) return;
+                
                 if (technicians.length === 0) {
-                    container.innerHTML = `
+                    listContainer.innerHTML = `
                         <div style="text-align: center; padding: 2rem; color: #6b7280;">
                             <div style="font-size: 3rem; margin-bottom: 1rem;">${area.icon}</div>
-                            <h4>No hay personal registrado</h4>
-                            <p style="font-size: 0.875rem;">El personal se guardará automáticamente</p>
+                            <h4>No hay ingenieros/técnicos registrados</h4>
+                            <p style="font-size: 0.875rem;">Comience agregando personal especializado</p>
                             <button class="btn btn-primary btn-sm" onclick="showAddTechnicianModal('${area.key}')" style="margin-top: 1rem;">
-                                ➕ Agregar Primera Persona
+                                ➕ Agregar Primer Ingeniero/Técnico
                             </button>
                         </div>
                     `;
                 } else {
-                    container.innerHTML = technicians.map(tech => createTechnicianCard(tech, area.key)).join('');
+                    const techniciansHTML = technicians.map(tech => createTechnicianCard(tech, area.key)).join('');
+                    listContainer.innerHTML = techniciansHTML;
                 }
             });
         }
@@ -1849,6 +2538,12 @@
                             <span>📅</span>
                             <span>${tech.fechaCreacion}</span>
                         </div>
+                        ${tech.solicitudAsignada ? `
+                            <div class="technician-detail">
+                                <span>📋</span>
+                                <span>Solicitud: ${tech.solicitudAsignada}</span>
+                            </div>
+                        ` : ''}
                     </div>
                     <div style="margin-bottom: 1rem;">
                         <span class="${statusClass}">${tech.estado.charAt(0).toUpperCase() + tech.estado.slice(1)}</span>
@@ -1865,119 +2560,301 @@
             `;
         }
 
-        function updateRequestsDisplay() {
-            const container = document.getElementById('solicitudes-list');
+        function toggleTechnicianStatus(area, techId) {
+            const technician = tecnicosPorArea[area]?.find(tech => tech.id === techId);
+            if (!technician) {
+                alert('❌ Técnico no encontrado');
+                return;
+            }
+
+            const statusOptions = ['disponible', 'ocupado', 'inactivo'];
+            const currentIndex = statusOptions.indexOf(technician.estado);
+            const nextIndex = (currentIndex + 1) % statusOptions.length;
+            const newStatus = statusOptions[nextIndex];
+
+            const confirmation = confirm(`¿Cambiar estado de ${technician.nombre}?\n\nActual: ${technician.estado}\nNuevo: ${newStatus}`);
             
-            if (solicitudes.length === 0) {
+            if (confirmation) {
+                technician.estado = newStatus;
+                technician.disponible = newStatus === 'disponible';
+                
+                if (newStatus === 'disponible') {
+                    technician.solicitudAsignada = null;
+                }
+                
+                saveAllData();
+                updateTechniciansDisplay();
+                updateAllCounters();
+                
+                alert(`✅ Estado cambiado: ${technician.nombre} → ${newStatus}`);
+            }
+        }
+
+        function deleteTechnician(area, techId) {
+            const technician = tecnicosPorArea[area]?.find(tech => tech.id === techId);
+            if (!technician) {
+                alert('❌ Técnico no encontrado');
+                return;
+            }
+
+            const confirmation = confirm(`¿ELIMINAR a ${technician.nombre}?\n\n⚠️ Esta acción no se puede deshacer.`);
+            
+            if (confirmation) {
+                const index = tecnicosPorArea[area].findIndex(tech => tech.id === techId);
+                if (index > -1) {
+                    tecnicosPorArea[area].splice(index, 1);
+                    saveAllData();
+                    updateTechniciansDisplay();
+                    updateAllCounters();
+                    alert(`🗑️ ${technician.nombre} eliminado`);
+                }
+            }
+        }
+
+        function exportTechnicians() {
+            const totalTechnicians = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
+            
+            if (totalTechnicians === 0) {
+                alert('📋 No hay técnicos para exportar');
+                return;
+            }
+
+            const exportData = {
+                fechaExportacion: new Date().toLocaleString('es-CO'),
+                totalTecnicos: totalTechnicians,
+                datosPorArea: tecnicosPorArea
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `tecnicos_hospital_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            alert(`📤 Lista de ${totalTechnicians} técnicos exportada`);
+        }
+
+        function clearAllTechnicians() {
+            const totalTechnicians = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
+            
+            if (totalTechnicians === 0) {
+                alert('📋 No hay técnicos para eliminar');
+                return;
+            }
+
+            const confirmation = confirm(`¿ELIMINAR TODOS los ${totalTechnicians} técnicos?\n\n⚠️ ESTA ACCIÓN NO SE PUEDE DESHACER`);
+            
+            if (confirmation) {
+                tecnicosPorArea = {
+                    'INGENIERIA_BIOMEDICA': [],
+                    'MECANICA': [],
+                    'INFRAESTRUCTURA': []
+                };
+                
+                saveAllData();
+                updateTechniciansDisplay();
+                updateAllCounters();
+                
+                alert('🗑️ TODOS los técnicos eliminados');
+            }
+        }
+
+        // ===== FUNCIONES DE GESTIÓN DE ACCESOS =====
+        function syncAccessRequests() {
+            console.log('🔄 Sincronizando solicitudes de acceso...');
+            
+            try {
+                loadAllData();
+                updateAccessRequestsDisplay();
+                updateApprovedUsersDisplay();
+                updateAllCounters();
+                
+                const pendingCount = accessRequests.filter(req => req.estado === 'PENDIENTE').length;
+                
+                alert(`🔄 Sincronización de accesos completada\n\n📊 Estado:\n• ${pendingCount} solicitudes pendientes\n• ${approvedUsers.length} usuarios aprobados`);
+                
+                return true;
+            } catch (error) {
+                console.error('❌ Error en sincronización de accesos:', error);
+                alert('❌ Error durante la sincronización');
+                return false;
+            }
+        }
+
+        function updateAccessRequestsDisplay() {
+            const container = document.getElementById('pending-access-list');
+            if (!container) return;
+            
+            const pendingRequests = accessRequests.filter(req => req.estado === 'PENDIENTE');
+            
+            if (pendingRequests.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
-                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes registradas</h3>
-                        <p style="margin-bottom: 1.5rem;">Las solicitudes se guardarán automáticamente</p>
-                        <button class="btn btn-primary" onclick="addSampleRequest()">
-                            ➕ Agregar Solicitud de Prueba
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🔐</div>
+                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes pendientes</h3>
+                        <p style="margin-bottom: 1.5rem;">Las solicitudes aparecerán aquí cuando los usuarios se registren</p>
+                        <button class="btn btn-primary" onclick="syncAccessRequests()">
+                            🔄 Sincronizar
                         </button>
                     </div>
                 `;
             } else {
-                container.innerHTML = solicitudes
-                    .sort((a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion))
-                    .map(request => createRequestCard(request))
-                    .join('');
+                const requestsHTML = pendingRequests.map(request => createAccessRequestCard(request)).join('');
+                container.innerHTML = requestsHTML;
             }
         }
 
-        function createRequestCard(request) {
-            const areaInfo = serviciosIngenieria[request.servicioIngenieria] || 'Sin especificar';
-            const iconoArea = iconosIngenieria[request.servicioIngenieria] || '🔧';
+        function createAccessRequestCard(request) {
+            const serviceName = serviciosHospitalarios[request.servicioHospitalario] || request.servicioHospitalario;
+            const fechaFormatted = new Date(request.fechaSolicitud).toLocaleString('es-CO');
             
             return `
-                <div class="request-card pending">
+                <div class="access-request-card pending">
                     <div class="request-header">
-                        <div class="request-number">📋 ${request.numero}</div>
-                        <div style="display: flex; gap: 0.5rem; align-items: center;">
-                            <span class="status-pendiente">${request.estado}</span>
-                            <span style="background: #f59e0b; color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem;">
-                                ${request.prioridad}
-                            </span>
+                        <div class="request-number">📋 ${request.id}</div>
+                        <div>
+                            <span class="status-pendiente">PENDIENTE</span>
                         </div>
                     </div>
                     
-                    <div style="background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
-                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                            <span style="font-size: 1.25rem;">${iconoArea}</span>
-                            <strong style="color: #1f2937;">Área: ${areaInfo}</strong>
-                        </div>
-                        <div style="font-size: 0.875rem; color: #6b7280;">
-                            <strong>Tipo:</strong> ${request.tipoServicio} |
-                            <strong>Equipo:</strong> ${request.equipo}
-                        </div>
-                    </div>
-
                     <div class="request-details">
                         <div class="request-detail">
+                            <div class="request-detail-label">👤 Nombre</div>
+                            <div class="request-detail-value">${request.nombreCompleto}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📧 Email</div>
+                            <div class="request-detail-value">${request.email}</div>
+                        </div>
+                        <div class="request-detail">
                             <div class="request-detail-label">🏥 Servicio</div>
-                            <div class="request-detail-value">${request.servicioHospitalario}</div>
+                            <div class="request-detail-value">${serviceName}</div>
                         </div>
                         <div class="request-detail">
-                            <div class="request-detail-label">👤 Solicitante</div>
-                            <div class="request-detail-value">${request.solicitante}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">📍 Ubicación</div>
-                            <div class="request-detail-value">${request.ubicacion}</div>
+                            <div class="request-detail-label">💼 Cargo</div>
+                            <div class="request-detail-value">${request.cargo}</div>
                         </div>
                         <div class="request-detail">
                             <div class="request-detail-label">📅 Fecha</div>
-                            <div class="request-detail-value">${request.fechaCreacion}</div>
+                            <div class="request-detail-value">${fechaFormatted}</div>
                         </div>
                     </div>
 
-                    <div style="margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 0.5rem;">
-                        <div class="request-detail-label">📝 Descripción</div>
-                        <div style="margin-top: 0.5rem; color: #1f2937;">${request.descripcion}</div>
-                    </div>
-
                     <div class="request-actions">
-                        <button class="btn btn-success btn-sm" onclick="assignTechnician('${request.numero}')">
-                            👨‍🔧 Asignar Técnico
+                        <button class="btn btn-success" onclick="approveAccessRequest('${request.id}')">
+                            ✅ Aprobar
                         </button>
-                        <button class="btn btn-primary btn-sm" onclick="viewRequest('${request.numero}')">
-                            👁️ Ver Detalles
+                        <button class="btn btn-danger" onclick="rejectAccessRequest('${request.id}')">
+                            ❌ Rechazar
                         </button>
                     </div>
                 </div>
             `;
         }
 
-        function updateAccessDisplay() {
+        function approveAccessRequest(requestId) {
+            const request = accessRequests.find(req => req.id === requestId);
+            if (!request) {
+                alert('❌ Solicitud no encontrada');
+                return;
+            }
+            
+            const confirmation = confirm(`¿Aprobar solicitud de ${request.nombreCompleto}?\n\nSe generará un código de acceso automáticamente.`);
+            if (!confirmation) return;
+            
+            const accessCode = generateAccessCode();
+            
+            const approvedUser = {
+                id: `USR${Date.now()}`,
+                nombreCompleto: request.nombreCompleto,
+                email: request.email,
+                telefono: request.telefono,
+                servicioHospitalario: request.servicioHospitalario,
+                cargo: request.cargo,
+                codigoAcceso: accessCode,
+                estado: 'ACTIVO',
+                fechaAprobacion: new Date().toISOString(),
+                ultimoAcceso: null
+            };
+            
+            approvedUsers.push(approvedUser);
+            
+            // Remover de pendientes
+            const index = accessRequests.findIndex(req => req.id === requestId);
+            accessRequests.splice(index, 1);
+            
+            saveAllData();
+            updateAccessRequestsDisplay();
+            updateApprovedUsersDisplay();
+            updateAllCounters();
+            
+            alert(`✅ SOLICITUD APROBADA\n\n👤 Usuario: ${request.nombreCompleto}\n🔢 Código: ${accessCode}\n\n📧 Comunique el código al usuario`);
+        }
+
+        function rejectAccessRequest(requestId) {
+            const request = accessRequests.find(req => req.id === requestId);
+            if (!request) {
+                alert('❌ Solicitud no encontrada');
+                return;
+            }
+            
+            const reason = prompt(`¿Rechazar solicitud de ${request.nombreCompleto}?\n\nIngrese el motivo:`, 'No autorizado');
+            if (reason === null) return;
+            
+            request.estado = 'RECHAZADA';
+            request.motivoRechazo = reason;
+            request.fechaRechazo = new Date().toISOString();
+            
+            rejectedUsers.push(request);
+            
+            // Remover de pendientes
+            const index = accessRequests.findIndex(req => req.id === requestId);
+            accessRequests.splice(index, 1);
+            
+            saveAllData();
+            updateAccessRequestsDisplay();
+            updateAllCounters();
+            
+            alert(`❌ Solicitud rechazada: ${request.nombreCompleto}`);
+        }
+
+        function updateApprovedUsersDisplay() {
             const container = document.getElementById('approved-users-list');
+            if (!container) return;
             
             if (approvedUsers.length === 0) {
                 container.innerHTML = `
                     <div style="text-align: center; padding: 2rem; color: #6b7280;">
                         <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
                         <h4>No hay usuarios aprobados</h4>
-                        <p style="font-size: 0.875rem;">Los usuarios se guardarán automáticamente</p>
-                        <button class="btn btn-primary btn-sm" onclick="addSampleUser()" style="margin-top: 1rem;">
-                            ➕ Agregar Usuario de Prueba
-                        </button>
                     </div>
                 `;
             } else {
-                container.innerHTML = approvedUsers.map(user => createUserCard(user)).join('');
+                const usersHTML = approvedUsers.map(user => createApprovedUserCard(user)).join('');
+                container.innerHTML = usersHTML;
             }
         }
 
-        function createUserCard(user) {
+        function createApprovedUserCard(user) {
+            const serviceName = serviciosHospitalarios[user.servicioHospitalario] || user.servicioHospitalario;
+            const fechaAprobacion = new Date(user.fechaAprobacion).toLocaleString('es-CO');
+            const ultimoAcceso = user.ultimoAcceso ? new Date(user.ultimoAcceso).toLocaleString('es-CO') : 'Nunca';
+            
             return `
-                <div class="request-card" style="border-left: 4px solid #059669; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);">
+                <div class="user-card approved">
                     <div class="request-header">
-                        <div class="request-number">✅ ${user.nombreCompleto}</div>
-                        <div style="display: flex; gap: 0.5rem; align-items: center;">
-                            <span class="status-completada">ACTIVO</span>
-                            <div style="background: #2563eb; color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem;">${user.id}</div>
+                        <div class="request-number">👤 ${user.nombreCompleto}</div>
+                        <div>
+                            <span class="status-disponible">ACTIVO</span>
                         </div>
+                    </div>
+                    
+                    <div class="access-code-display">
+                        <div class="access-code-label">🔢 CÓDIGO DE ACCESO</div>
+                        <div class="access-code-number">${user.codigoAcceso}</div>
+                        <div class="access-code-info">Válido para: ${user.email}</div>
                     </div>
                     
                     <div class="request-details">
@@ -1987,34 +2864,322 @@
                         </div>
                         <div class="request-detail">
                             <div class="request-detail-label">🏥 Servicio</div>
-                            <div class="request-detail-value">${user.servicioHospitalario}</div>
+                            <div class="request-detail-value">${serviceName}</div>
                         </div>
                         <div class="request-detail">
-                            <div class="request-detail-label">👔 Cargo</div>
+                            <div class="request-detail-label">💼 Cargo</div>
                             <div class="request-detail-value">${user.cargo}</div>
                         </div>
                         <div class="request-detail">
-                            <div class="request-detail-label">📅 Aprobado</div>
-                            <div class="request-detail-value">${new Date(user.fechaAprobacion).toLocaleString('es-CO')}</div>
+                            <div class="request-detail-label">📅 Aprobación</div>
+                            <div class="request-detail-value">${fechaAprobacion}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🕐 Último Acceso</div>
+                            <div class="request-detail-value">${ultimoAcceso}</div>
                         </div>
                     </div>
 
-                    <div class="access-code-display">
-                        <div class="access-code-label">🔢 CÓDIGO DE ACCESO</div>
-                        <div class="access-code-number">${user.codigoAcceso}</div>
-                        <div class="access-code-info">Generado: ${new Date(user.fechaGeneracionCodigo).toLocaleString('es-CO')}</div>
-                    </div>
-
                     <div class="request-actions">
-                        <button class="btn btn-primary btn-sm" onclick="regenerateCode('${user.id}')">
+                        <button class="btn btn-warning btn-sm" onclick="regenerateUserCode('${user.id}')">
                             🔄 Regenerar Código
                         </button>
-                        <button class="btn btn-warning btn-sm" onclick="copyCode('${user.codigoAcceso}')">
-                            📋 Copiar Código
+                        <button class="btn btn-danger btn-sm" onclick="deleteUser('${user.id}')">
+                            🗑️ Eliminar
                         </button>
                     </div>
                 </div>
             `;
+        }
+
+        function approveAllPending() {
+            const pending = accessRequests.filter(req => req.estado === 'PENDIENTE');
+            
+            if (pending.length === 0) {
+                alert('📋 No hay solicitudes pendientes');
+                return;
+            }
+            
+            const confirmation = confirm(`¿Aprobar todas las ${pending.length} solicitudes pendientes?`);
+            if (!confirmation) return;
+            
+            let approved = 0;
+            
+            pending.forEach(request => {
+                const accessCode = generateAccessCode();
+                
+                const approvedUser = {
+                    id: `USR${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
+                    nombreCompleto: request.nombreCompleto,
+                    email: request.email,
+                    telefono: request.telefono,
+                    servicioHospitalario: request.servicioHospitalario,
+                    cargo: request.cargo,
+                    codigoAcceso: accessCode,
+                    estado: 'ACTIVO',
+                    fechaAprobacion: new Date().toISOString(),
+                    ultimoAcceso: null
+                };
+                
+                approvedUsers.push(approvedUser);
+                approved++;
+            });
+            
+            // Limpiar pendientes
+            accessRequests = accessRequests.filter(req => req.estado !== 'PENDIENTE');
+            
+            saveAllData();
+            updateAccessRequestsDisplay();
+            updateApprovedUsersDisplay();
+            updateAllCounters();
+            
+            alert(`✅ ${approved} usuarios aprobados masivamente`);
+        }
+
+        function regenerateUserCode(userId) {
+            const user = approvedUsers.find(u => u.id === userId);
+            if (!user) {
+                alert('❌ Usuario no encontrado');
+                return;
+            }
+            
+            const confirmation = confirm(`¿Regenerar código para ${user.nombreCompleto}?`);
+            if (!confirmation) return;
+            
+            const oldCode = user.codigoAcceso;
+            user.codigoAcceso = generateAccessCode();
+            
+            saveAllData();
+            updateApprovedUsersDisplay();
+            
+            alert(`🔄 Código regenerado para ${user.nombreCompleto}\n\nAnterior: ${oldCode}\nNuevo: ${user.codigoAcceso}`);
+        }
+
+        function regenerateAllCodes() {
+            if (approvedUsers.length === 0) {
+                alert('📋 No hay usuarios aprobados');
+                return;
+            }
+            
+            const confirmation = confirm(`¿Regenerar códigos para ${approvedUsers.length} usuarios?`);
+            if (!confirmation) return;
+            
+            approvedUsers.forEach(user => {
+                user.codigoAcceso = generateAccessCode();
+            });
+            
+            saveAllData();
+            updateApprovedUsersDisplay();
+            
+            alert(`🔄 ${approvedUsers.length} códigos regenerados`);
+        }
+
+        function deleteUser(userId) {
+            const user = approvedUsers.find(u => u.id === userId);
+            if (!user) {
+                alert('❌ Usuario no encontrado');
+                return;
+            }
+            
+            const confirmation = confirm(`¿Eliminar acceso de ${user.nombreCompleto}?`);
+            if (!confirmation) return;
+            
+            const index = approvedUsers.findIndex(u => u.id === userId);
+            approvedUsers.splice(index, 1);
+            
+            saveAllData();
+            updateApprovedUsersDisplay();
+            updateAllCounters();
+            
+            alert(`🗑️ Acceso eliminado: ${user.nombreCompleto}`);
+        }
+
+        function exportUsersList() {
+            if (approvedUsers.length === 0) {
+                alert('📋 No hay usuarios para exportar');
+                return;
+            }
+            
+            const exportData = {
+                fechaExportacion: new Date().toLocaleString('es-CO'),
+                totalUsuarios: approvedUsers.length,
+                usuarios: approvedUsers
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `usuarios_aprobados_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            alert(`📤 ${approvedUsers.length} usuarios exportados`);
+        }
+
+        // ===== FUNCIONES DE UTILIDAD =====
+        function findTechnicianById(techId) {
+            for (const area of Object.keys(tecnicosPorArea)) {
+                const technician = tecnicosPorArea[area].find(tech => tech.id === techId);
+                if (technician) return technician;
+            }
+            return null;
+        }
+
+        function findTechnicianByName(name) {
+            for (const area of Object.keys(tecnicosPorArea)) {
+                const technician = tecnicosPorArea[area].find(tech => tech.nombre === name);
+                if (technician) return technician;
+            }
+            return null;
+        }
+
+        function showCriticalAlerts() {
+            const criticalRequests = solicitudesFromPortal.filter(req => req.prioridad === 'CRITICA' && (!req.tecnicoAsignado || req.estadoGestion === 'PENDIENTE'));
+            
+            const alertsContainer = document.getElementById('critical-alerts');
+            if (!alertsContainer) return;
+            
+            if (criticalRequests.length > 0) {
+                alertsContainer.innerHTML = `
+                    <div class="alert alert-danger" style="animation: blink 2s infinite;">
+                        <h3 style="font-weight: 600; margin-bottom: 0.5rem;">🚨 SOLICITUDES CRÍTICAS PENDIENTES</h3>
+                        <p>Hay <strong>${criticalRequests.length}</strong> solicitudes críticas sin asignar que requieren atención inmediata.</p>
+                        <div style="margin-top: 1rem;">
+                            <button class="btn btn-danger btn-sm" onclick="showView('solicitudes'); filterRequests('CRITICA');">
+                                🚨 Ver Críticas
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="autoAssignAllPending()">
+                                🤖 Auto-asignar Todas
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                alertsContainer.innerHTML = '';
+            }
+        }
+
+        function updateAreaRequests() {
+            const areas = ['INGENIERIA_BIOMEDICA', 'MECANICA', 'INFRAESTRUCTURA'];
+            
+            areas.forEach(area => {
+                const areaRequests = solicitudesFromPortal.filter(req => req.servicioIngenieria === area);
+                const containerName = area === 'INGENIERIA_BIOMEDICA' ? 'biomedica' : 
+                                   area === 'MECANICA' ? 'mecanica' : 'infraestructura';
+                
+                const container = document.getElementById(`${containerName}-requests`);
+                if (!container) return;
+                
+                if (areaRequests.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #6b7280;">No hay solicitudes para esta área</p>';
+                } else {
+                    const requestsHTML = areaRequests.map(request => createRequestCard(request)).join('');
+                    container.innerHTML = requestsHTML;
+                }
+            });
+        }
+
+        function refreshAreaRequests(area) {
+            console.log(`🔄 Actualizando solicitudes de ${area}`);
+            syncAllRequests();
+            updateAreaRequests();
+        }
+
+        function updateAllCounters() {
+            try {
+                // Contadores de solicitudes
+                const total = solicitudesFromPortal.length;
+                const biomedica = solicitudesFromPortal.filter(r => r.servicioIngenieria === 'INGENIERIA_BIOMEDICA').length;
+                const mecanica = solicitudesFromPortal.filter(r => r.servicioIngenieria === 'MECANICA').length;
+                const infraestructura = solicitudesFromPortal.filter(r => r.servicioIngenieria === 'INFRAESTRUCTURA').length;
+                const pendientes = solicitudesFromPortal.filter(r => !r.tecnicoAsignado || r.estadoGestion === 'PENDIENTE').length;
+
+                // Contadores de técnicos
+                const totalTechnicians = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
+                const biomedicaPersonnel = tecnicosPorArea['INGENIERIA_BIOMEDICA'].length;
+                const mecanicaPersonnel = tecnicosPorArea['MECANICA'].length;
+                const infraestructuraPersonnel = tecnicosPorArea['INFRAESTRUCTURA'].length;
+
+                // Contadores de accesos
+                const pendingAccess = accessRequests.filter(req => req.estado === 'PENDIENTE').length;
+                const totalUsers = approvedUsers.length;
+
+                // Función para actualizar elementos
+                const updateElement = (id, value) => {
+                    const element = document.getElementById(id);
+                    if (element) element.textContent = value;
+                };
+
+                // Actualizar métricas del dashboard
+                updateElement('metric-total', total);
+                updateElement('metric-biomedica', biomedica);
+                updateElement('metric-mecanica', mecanica);
+                updateElement('metric-infraestructura', infraestructura);
+                updateElement('metric-pendientes', pendientes);
+
+                // Actualizar navegación
+                updateElement('total-count', total);
+                updateElement('notification-count', pendientes);
+                updateElement('total-technicians-nav', totalTechnicians);
+                updateElement('pending-access-count', pendingAccess);
+
+                // Actualizar tabs de área
+                updateElement('tab-biomedica-count', biomedica);
+                updateElement('tab-mecanica-count', mecanica);
+                updateElement('tab-infraestructura-count', infraestructura);
+
+                // Actualizar contadores de personal
+                updateElement('biomedica-personnel-count', `${biomedicaPersonnel} registrados`);
+                updateElement('mecanica-personnel-count', `${mecanicaPersonnel} registrados`);
+                updateElement('infraestructura-personnel-count', `${infraestructuraPersonnel} registrados`);
+
+                updateElement('biomedica-total', `${biomedicaPersonnel} ingenieros/técnicos`);
+                updateElement('mecanica-total', `${mecanicaPersonnel} ingenieros/técnicos`);
+                updateElement('infraestructura-total', `${infraestructuraPersonnel} ingenieros/técnicos`);
+
+                // Estadísticas de técnicos
+                let totalEngineers = 0;
+                let totalTechsOnly = 0;
+                let availableCount = 0;
+                let busyCount = 0;
+                let inactiveCount = 0;
+
+                Object.values(tecnicosPorArea).forEach(areaList => {
+                    areaList.forEach(tech => {
+                        if (tech.tipo === 'INGENIERO') totalEngineers++;
+                        else totalTechsOnly++;
+
+                        if (tech.estado === 'disponible') availableCount++;
+                        else if (tech.estado === 'ocupado') busyCount++;
+                        else if (tech.estado === 'inactivo') inactiveCount++;
+                    });
+                });
+
+                updateElement('total-technicians', totalTechnicians);
+                updateElement('total-engineers', totalEngineers);
+                updateElement('total-technicians-only', totalTechsOnly);
+                updateElement('available-technicians', availableCount);
+                updateElement('busy-technicians', busyCount);
+                updateElement('inactive-technicians', inactiveCount);
+
+                // Contadores de accesos
+                updateElement('total-users', totalUsers);
+                updateElement('pending-access', pendingAccess);
+                updateElement('approved-users', totalUsers);
+                updateElement('rejected-users', rejectedUsers.length);
+
+                // Actualizar resúmenes de personal en dashboard
+                updatePersonnelSummaries();
+
+                // Actualizar reportes
+                updateReports();
+
+                console.log(`📊 Contadores actualizados: ${total} solicitudes, ${totalTechnicians} técnicos, ${pendingAccess} accesos pendientes`);
+
+            } catch (error) {
+                console.error('❌ Error en updateAllCounters:', error);
+            }
         }
 
         function updatePersonnelSummaries() {
@@ -2029,7 +3194,7 @@
                 const summaryContainer = document.getElementById(`${area.name}-personnel-summary`);
                 
                 if (!summaryContainer) return;
-
+                
                 if (personnel.length === 0) {
                     summaryContainer.innerHTML = '<p style="color: #6b7280; text-align: center;">No hay personal registrado</p>';
                 } else {
@@ -2057,7 +3222,40 @@
             });
         }
 
-        // ===== FUNCIONES AUXILIARES =====
+        function updateReports() {
+            // Reportes por estado
+            const pendingCount = solicitudesFromPortal.filter(req => !req.tecnicoAsignado || req.estadoGestion === 'PENDIENTE').length;
+            const assignedCount = solicitudesFromPortal.filter(req => req.tecnicoAsignado && req.estadoGestion !== 'COMPLETADA' && req.estadoGestion !== 'PENDIENTE').length;
+            const completedCount = solicitudesFromPortal.filter(req => req.estadoGestion === 'COMPLETADA').length;
+
+            // Personal por área
+            const biomedicaStaff = tecnicosPorArea['INGENIERIA_BIOMEDICA'].length;
+            const mecanicaStaff = tecnicosPorArea['MECANICA'].length;
+            const infraestructuraStaff = tecnicosPorArea['INFRAESTRUCTURA'].length;
+
+            // Accesos
+            const accessPending = accessRequests.filter(req => req.estado === 'PENDIENTE').length;
+            const accessApproved = approvedUsers.length;
+            const totalUsersCount = approvedUsers.length;
+
+            const updateReportElement = (id, value) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = value;
+            };
+
+            updateReportElement('report-pending', pendingCount);
+            updateReportElement('report-assigned', assignedCount);
+            updateReportElement('report-completed', completedCount);
+
+            updateReportElement('report-biomedica-staff', biomedicaStaff);
+            updateReportElement('report-mecanica-staff', mecanicaStaff);
+            updateReportElement('report-infraestructura-staff', infraestructuraStaff);
+
+            updateReportElement('report-access-pending', accessPending);
+            updateReportElement('report-access-approved', accessApproved);
+            updateReportElement('report-total-users', totalUsersCount);
+        }
+
         function updateSystemStatus(message) {
             const statusElement = document.querySelector('.system-status .status-online');
             if (statusElement) {
@@ -2065,232 +3263,346 @@
             }
         }
 
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.remove();
-            }
-        }
-
-        function copyCode(code) {
-            navigator.clipboard.writeText(code).then(() => {
-                alert(`📋 Código ${code} copiado al portapapeles`);
-            }).catch(() => {
-                const textArea = document.createElement('textarea');
-                textArea.value = code;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert(`📋 Código ${code} copiado al portapapeles`);
-            });
-        }
-
-        function regenerateCode(userId) {
-            const user = approvedUsers.find(u => u.id === userId);
-            if (user) {
-                const oldCode = user.codigoAcceso;
-                const newCode = Math.floor(1000 + Math.random() * 9000).toString();
-                
-                user.codigoAcceso = newCode;
-                user.fechaGeneracionCodigo = new Date().toISOString();
-                
-                saveToLocalStorage(STORAGE_KEYS.APPROVED_USERS, approvedUsers);
-                updateAccessDisplay();
-                
-                alert(`🔄 Código regenerado\n\n👤 ${user.nombreCompleto}\n🔢 Código anterior: ${oldCode}\n🔢 Código nuevo: ${newCode}`);
-            }
-        }
-
-        function assignTechnician(requestNumber) {
-            alert('🔧 Función de asignación en desarrollo');
-        }
-
-        function viewRequest(requestNumber) {
-            const request = solicitudes.find(r => r.numero === requestNumber);
-            if (request) {
-                alert(`📋 Detalles de la solicitud\n\n🆔 ${request.numero}\n🔧 ${serviciosIngenieria[request.servicioIngenieria]}\n📝 ${request.descripcion}\n📅 ${request.fechaCreacion}`);
-            }
-        }
-
-        function syncData() {
-            saveAllData();
-            updateAllDisplays();
-            alert('🔄 Datos sincronizados correctamente\n\n💾 Todo guardado en localStorage para GitHub Pages');
-        }
-
-        function generateReport() {
-            const totalSolicitudes = solicitudes.length;
-            const totalTecnicos = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
-            const totalUsuarios = approvedUsers.length;
-            
-            const report = `📊 REPORTE DEL SISTEMA - ${new Date().toLocaleString('es-CO')}
-
-📋 SOLICITUDES:
-• Total: ${totalSolicitudes}
-• Biomédica: ${solicitudes.filter(r => r.servicioIngenieria === 'INGENIERIA_BIOMEDICA').length}
-• Mecánica: ${solicitudes.filter(r => r.servicioIngenieria === 'MECANICA').length}
-• Infraestructura: ${solicitudes.filter(r => r.servicioIngenieria === 'INFRAESTRUCTURA').length}
-
-👥 PERSONAL TÉCNICO:
-• Total: ${totalTecnicos}
-• Biomédica: ${tecnicosPorArea['INGENIERIA_BIOMEDICA'].length}
-• Mecánica: ${tecnicosPorArea['MECANICA'].length}
-• Infraestructura: ${tecnicosPorArea['INFRAESTRUCTURA'].length}
-
-🔐 USUARIOS CON ACCESO:
-• Total aprobados: ${totalUsuarios}
-
-💾 PERSISTENCIA:
-• ✅ Datos guardados en localStorage
-• ✅ Compatible con GitHub Pages
-• ✅ Sin necesidad de servidor
-
-Estado: SISTEMA FUNCIONANDO CORRECTAMENTE`;
-
-            document.getElementById('reports-content').innerHTML = `
-                <div style="background: #f8fafc; padding: 1.5rem; border-radius: 0.75rem; border-left: 4px solid #2563eb;">
-                    <pre style="white-space: pre-wrap; font-family: monospace; font-size: 0.875rem; margin: 0;">${report}</pre>
-                </div>
-            `;
-        }
-
-        function exportAllData() {
-            const allData = {
-                fechaExportacion: new Date().toLocaleString('es-CO'),
-                solicitudes: solicitudes,
-                tecnicosPorArea: tecnicosPorArea,
-                approvedUsers: approvedUsers,
-                resumen: {
-                    totalSolicitudes: solicitudes.length,
-                    totalTecnicos: Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0),
-                    totalUsuarios: approvedUsers.length
-                }
-            };
-
-            const dataStr = JSON.stringify(allData, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(dataBlob);
-            link.download = `hospital_backup_${new Date().toISOString().split('T')[0]}.json`;
-            link.click();
-            
-            alert('📤 Backup completo exportado exitosamente');
-        }
-
         // ===== FUNCIONES DE NAVEGACIÓN =====
         function showView(viewName) {
-            const views = document.querySelectorAll('.view');
-            views.forEach(view => view.classList.add('hidden'));
+            // Ocultar todas las vistas
+            document.querySelectorAll('.view').forEach(view => view.classList.add('hidden'));
             
+            // Mostrar vista seleccionada
             const targetView = document.getElementById(viewName + '-view');
             if (targetView) {
                 targetView.classList.remove('hidden');
             }
             
-            const tabs = document.querySelectorAll('.nav-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
+            // Actualizar tabs de navegación
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
             const activeTab = document.querySelector(`[data-view="${viewName}"]`);
             if (activeTab) {
                 activeTab.classList.add('active');
             }
 
+            // Acciones específicas por vista
+            if (viewName === 'solicitudes') {
+                syncAllRequests();
+            } else if (viewName === 'tecnicos') {
+                updateTechniciansDisplay();
+            } else if (viewName === 'accesos') {
+                syncAccessRequests();
+            } else if (viewName === 'areas') {
+                updateAreaRequests();
+            }
+
+            // Siempre actualizar contadores
             updateAllCounters();
         }
 
-        function showAreaTab(areaName) {
+        function showAreaTab(area) {
+            // Ocultar todos los contenidos de área
             document.querySelectorAll('.area-content').forEach(content => {
                 content.classList.add('hidden');
             });
             
-            const targetArea = document.getElementById(`area-${areaName}`);
-            if (targetArea) {
-                targetArea.classList.remove('hidden');
+            // Mostrar el contenido del área seleccionada
+            const targetContent = document.getElementById(`area-${area}`);
+            if (targetContent) {
+                targetContent.classList.remove('hidden');
             }
             
+            // Actualizar tabs activos
             document.querySelectorAll('.area-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            const activeTab = document.querySelector(`[data-area="${areaName}"]`);
+            const activeTab = document.querySelector(`[data-area="${area}"]`);
             if (activeTab) {
                 activeTab.classList.add('active');
-            }
-
-            showAreaRequests(getAreaKeyFromName(areaName));
-        }
-
-        function getAreaKeyFromName(areaName) {
-            const areaMap = {
-                'biomedica': 'INGENIERIA_BIOMEDICA',
-                'mecanica': 'MECANICA',
-                'infraestructura': 'INFRAESTRUCTURA'
-            };
-            return areaMap[areaName] || 'INGENIERIA_BIOMEDICA';
-        }
-
-        function showAreaRequests(areaKey) {
-            const areaRequests = solicitudes.filter(r => r.servicioIngenieria === areaKey);
-            const areaNames = {
-                'INGENIERIA_BIOMEDICA': 'biomedica',
-                'MECANICA': 'mecanica',
-                'INFRAESTRUCTURA': 'infraestructura'
-            };
-            
-            const containerName = areaNames[areaKey];
-            const container = document.getElementById(`${containerName}-requests`);
-            
-            if (!container) return;
-            
-            if (areaRequests.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 2rem; color: #6b7280;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">${iconosIngenieria[areaKey]}</div>
-                        <h4>No hay solicitudes para ${serviciosIngenieria[areaKey]}</h4>
-                        <p style="font-size: 0.875rem;">Las solicitudes aparecerán aquí automáticamente</p>
-                        <button class="btn btn-primary btn-sm" onclick="addSampleRequest()" style="margin-top: 1rem;">
-                            ➕ Agregar Solicitud de Prueba
-                        </button>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = areaRequests.map(request => createRequestCard(request)).join('');
             }
         }
 
         function filterByArea(area) {
-            console.log(`Filtrando por área: ${area}`);
+            showView('solicitudes');
+            setTimeout(() => {
+                if (area === 'all') {
+                    filterRequests('all');
+                } else {
+                    // Implementar filtro por área específica
+                    currentFilter = area;
+                    updateRequestsDisplay();
+                }
+            }, 100);
         }
 
         function filterByStatus(status) {
-            console.log(`Filtrando por estado: ${status}`);
+            showView('solicitudes');
+            setTimeout(() => {
+                filterRequests(status);
+            }, 100);
+        }
+
+        // ===== FUNCIONES ADICIONALES =====
+        function showFilterOptions() {
+            alert('🔍 Filtros disponibles:\n\n• Todas las solicitudes\n• Por estado (Pendiente, Asignada, Completada)\n• Por prioridad (Crítica, Alta, Media, Baja)\n• Por área de ingeniería\n\nUse los botones de filtros rápidos para navegar');
+        }
+
+        function exportRequestsReport() {
+            if (solicitudesFromPortal.length === 0) {
+                alert('📋 No hay solicitudes para exportar');
+                return;
+            }
+
+            const exportData = {
+                fechaExportacion: new Date().toLocaleString('es-CO'),
+                totalSolicitudes: solicitudesFromPortal.length,
+                solicitudes: solicitudesFromPortal,
+                estadisticas: {
+                    pendientes: solicitudesFromPortal.filter(r => !r.tecnicoAsignado || r.estadoGestion === 'PENDIENTE').length,
+                    asignadas: solicitudesFromPortal.filter(r => r.tecnicoAsignado && r.estadoGestion !== 'COMPLETADA' && r.estadoGestion !== 'PENDIENTE').length,
+                    completadas: solicitudesFromPortal.filter(r => r.estadoGestion === 'COMPLETADA').length,
+                    criticas: solicitudesFromPortal.filter(r => r.prioridad === 'CRITICA').length
+                }
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `solicitudes_mantenimiento_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            alert(`📤 Reporte de ${solicitudesFromPortal.length} solicitudes exportado`);
+        }
+
+        function viewRequestDetails(requestNumber) {
+            const request = solicitudesFromPortal.find(req => req.numero === requestNumber);
+            if (!request) {
+                alert('❌ Solicitud no encontrada');
+                return;
+            }
+
+            const serviceName = serviciosHospitalarios[request.servicioHospitalario] || request.servicioHospitalario;
+            const areaName = serviciosIngenieria[request.servicioIngenieria] || request.servicioIngenieria;
+
+            let details = `📋 DETALLES COMPLETOS DE SOLICITUD\n\n🆔 Número: ${request.numero}\n🔧 Área: ${areaName}\n🔨 Tipo: ${(request.tipoServicio || 'No especificado').replace('_', ' ')}\n⚡ Prioridad: ${request.prioridad}\n🏥 Servicio: ${serviceName}\n👤 Solicitante: ${request.solicitante || 'No especificado'}\n📧 Email: ${request.emailSolicitante || 'No especificado'}\n🖥️ Equipo: ${request.equipo || 'No especificado'}\n📍 Ubicación: ${request.ubicacion || 'No especificado'}\n📅 Fecha: ${request.fechaCreacion || 'No especificado'}\n👨‍🔧 Técnico: ${request.tecnicoAsignado || 'Sin asignar'}\n📊 Estado: ${request.estadoGestion || request.estado || 'PENDIENTE'}\n\n📝 Descripción:\n${request.descripcion || 'No especificada'}\n\n${request.observaciones ? `💭 Observaciones:\n${request.observaciones}\n\n` : ''}`;
+
+            if (request.respuestaTecnico) {
+                details += `✅ RESPUESTA DEL TÉCNICO:\n${request.respuestaTecnico}\n📅 Fecha respuesta: ${request.fechaRespuesta || 'No especificada'}`;
+            }
+
+            alert(details);
+        }
+
+        function generateWorkReport(requestNumber) {
+            const request = solicitudesFromPortal.find(req => req.numero === requestNumber);
+            if (!request) {
+                alert('❌ Solicitud no encontrada');
+                return;
+            }
+
+            if (request.estadoGestion !== 'COMPLETADA') {
+                alert('⚠️ Solo se pueden generar reportes para solicitudes completadas');
+                return;
+            }
+
+            const serviceName = serviciosHospitalarios[request.servicioHospitalario] || request.servicioHospitalario;
+            const areaName = serviciosIngenieria[request.servicioIngenieria] || request.servicioIngenieria;
+
+            const reportData = {
+                numeroSolicitud: request.numero,
+                fechaGeneracion: new Date().toLocaleString('es-CO'),
+                area: areaName,
+                tipoServicio: (request.tipoServicio || 'No especificado').replace('_', ' '),
+                prioridad: request.prioridad,
+                servicio: serviceName,
+                solicitante: request.solicitante || 'No especificado',
+                equipo: request.equipo || 'No especificado',
+                ubicacion: request.ubicacion || 'No especificado',
+                fechaSolicitud: request.fechaCreacion || 'No especificado',
+                tecnicoAsignado: request.tecnicoAsignado || 'No especificado',
+                fechaAsignacion: request.fechaAsignacion || 'No especificado',
+                fechaCompletada: request.fechaCompletada || 'No especificado',
+                descripcionProblema: request.descripcion || 'No especificada',
+                observaciones: request.observaciones || 'Ninguna',
+                respuestaTecnico: request.respuestaTecnico || 'No disponible',
+                fechaRespuesta: request.fechaRespuesta || 'No especificada'
+            };
+
+            const reportContent = `
+REPORTE DE TRABAJO - SOLICITUD DE MANTENIMIENTO
+===============================================
+
+📋 INFORMACIÓN GENERAL:
+- Número de Solicitud: ${reportData.numeroSolicitud}
+- Fecha de Generación: ${reportData.fechaGeneracion}
+- Área Técnica: ${reportData.area}
+- Tipo de Servicio: ${reportData.tipoServicio}
+- Prioridad: ${reportData.prioridad}
+
+🏥 INFORMACIÓN DEL SOLICITANTE:
+- Servicio: ${reportData.servicio}
+- Solicitante: ${reportData.solicitante}
+- Fecha de Solicitud: ${reportData.fechaSolicitud}
+
+🔧 INFORMACIÓN TÉCNICA:
+- Equipo/Sistema: ${reportData.equipo}
+- Ubicación: ${reportData.ubicacion}
+- Técnico Asignado: ${reportData.tecnicoAsignado}
+- Fecha de Asignación: ${reportData.fechaAsignacion}
+- Fecha de Finalización: ${reportData.fechaCompletada}
+
+📝 DESCRIPCIÓN DEL PROBLEMA:
+${reportData.descripcionProblema}
+
+💭 OBSERVACIONES:
+${reportData.observaciones}
+
+✅ RESPUESTA/INFORME DEL TÉCNICO:
+${reportData.respuestaTecnico}
+Fecha de Respuesta: ${reportData.fechaRespuesta}
+
+===============================================
+Hospital Susana López de Valencia E.S.E.
+Sistema de Gestión de Mantenimiento
+            `;
+
+            // Crear y descargar el reporte
+            const reportBlob = new Blob([reportContent], {type: 'text/plain;charset=utf-8'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(reportBlob);
+            link.download = `Reporte_Trabajo_${request.numero}_${new Date().toISOString().split('T')[0]}.txt`;
+            link.click();
+
+            alert(`📄 Reporte de trabajo generado para la solicitud ${request.numero}`);
+        }
+
+        function generateFullReport() {
+            const totalRequests = solicitudesFromPortal.length;
+            const totalTechnicians = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
+            const totalUsers = approvedUsers.length;
+            const pendingAccess = accessRequests.filter(req => req.estado === 'PENDIENTE').length;
+
+            const report = `📊 REPORTE COMPLETO DEL SISTEMA\n\n📅 Fecha: ${new Date().toLocaleString('es-CO')}\n\n📋 SOLICITUDES DE MANTENIMIENTO:\n• Total: ${totalRequests}\n• Pendientes: ${solicitudesFromPortal.filter(r => !r.tecnicoAsignado || r.estadoGestion === 'PENDIENTE').length}\n• Asignadas: ${solicitudesFromPortal.filter(r => r.tecnicoAsignado && r.estadoGestion !== 'COMPLETADA' && r.estadoGestion !== 'PENDIENTE').length}\n• Completadas: ${solicitudesFromPortal.filter(r => r.estadoGestion === 'COMPLETADA').length}\n• Críticas: ${solicitudesFromPortal.filter(r => r.prioridad === 'CRITICA').length}\n\n👥 PERSONAL TÉCNICO:\n• Total: ${totalTechnicians}\n• Biomédica: ${tecnicosPorArea['INGENIERIA_BIOMEDICA'].length}\n• Mecánica: ${tecnicosPorArea['MECANICA'].length}\n• Infraestructura: ${tecnicosPorArea['INFRAESTRUCTURA'].length}\n\n🔐 GESTIÓN DE ACCESOS:\n• Usuarios aprobados: ${totalUsers}\n• Solicitudes pendientes: ${pendingAccess}\n• Total rechazados: ${rejectedUsers.length}\n\n✅ Sistema funcionando correctamente`;
+
+            alert(report);
+        }
+
+        function exportAllData() {
+            const exportData = {
+                fechaExportacion: new Date().toLocaleString('es-CO'),
+                solicitudes: solicitudesFromPortal,
+                tecnicos: tecnicosPorArea,
+                usuariosAprobados: approvedUsers,
+                solicitudesAcceso: accessRequests,
+                usuariosRechazados: rejectedUsers,
+                estadisticas: {
+                    totalSolicitudes: solicitudesFromPortal.length,
+                    totalTecnicos: Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0),
+                    totalUsuarios: approvedUsers.length
+                }
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `hospital_datos_completos_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            alert('📤 Exportación completa de todos los datos realizada');
         }
 
         function showNotifications() {
-            const totalPersonnel = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
-            const pendingRequests = solicitudes.filter(r => r.estado === 'PENDIENTE').length;
+            const totalRequests = solicitudesFromPortal.length;
+            const pendingRequests = solicitudesFromPortal.filter(r => !r.tecnicoAsignado || r.estadoGestion === 'PENDIENTE').length;
+            const criticalRequests = solicitudesFromPortal.filter(r => r.prioridad === 'CRITICA').length;
+            const totalTechnicians = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
+            const availableTechnicians = Object.values(tecnicosPorArea).flat().filter(tech => tech.estado === 'disponible').length;
             const totalUsers = approvedUsers.length;
-            
-            alert(`🔔 ESTADO DEL SISTEMA\n\n📊 RESUMEN:\n• ${solicitudes.length} Solicitudes totales\n• ${pendingRequests} Solicitudes pendientes\n• ${totalPersonnel} Personal técnico registrado\n• ${totalUsers} Usuarios con acceso aprobado\n\n💾 PERSISTENCIA:\n• ✅ Datos guardados automáticamente\n• ✅ Compatible con GitHub Pages\n• ✅ Sin pérdida de información\n\n🚀 Sistema funcionando correctamente`);
+            const pendingAccess = accessRequests.filter(req => req.estado === 'PENDIENTE').length;
+
+            alert(`🔔 NOTIFICACIONES DEL SISTEMA\n\n📊 ESTADO ACTUAL:\n• ${totalRequests} Solicitudes de mantenimiento\n• ${pendingRequests} Solicitudes pendientes\n• ${criticalRequests} Solicitudes críticas\n• ${totalTechnicians} Técnicos registrados\n• ${availableTechnicians} Técnicos disponibles\n• ${totalUsers} Usuarios con acceso\n• ${pendingAccess} Accesos pendientes\n\n🎯 SISTEMA COMPLETAMENTE FUNCIONAL:\n• ✅ Recepción de solicitudes\n• ✅ Asignación de técnicos\n• ✅ Gestión de accesos\n• ✅ Reportes y estadísticas\n• ✅ Persistencia de datos\n• ✅ Respuestas de técnicos\n\n${pendingRequests > 0 ? `⚠️ HAY ${pendingRequests} SOLICITUDES PENDIENTES` : '🟢 No hay solicitudes pendientes'}\n${criticalRequests > 0 ? `🚨 HAY ${criticalRequests} SOLICITUDES CRÍTICAS` : ''}\n${pendingAccess > 0 ? `🔐 HAY ${pendingAccess} ACCESOS PENDIENTES` : ''}`);
         }
 
-        // ===== INICIALIZACIÓN =====
+        // ===== INICIALIZACIÓN DEL SISTEMA COMPLETO =====
+        function initializeCompleteSystem() {
+            console.log('🚀 Inicializando Portal de Gestión COMPLETO...');
+            updateSystemStatus('🚀 Iniciando sistema completo...');
+            
+            try {
+                // Cargar todos los datos
+                loadAllData();
+                
+                // Inicializar interfaz
+                updateTechniciansDisplay();
+                updateRequestsDisplay();
+                updateAccessRequestsDisplay();
+                updateApprovedUsersDisplay();
+                updateAreaRequests();
+                
+                // Actualizar contadores
+                updateAllCounters();
+                
+                // Mostrar alertas críticas
+                showCriticalAlerts();
+                
+                // Configurar auto-guardado
+                setInterval(() => {
+                    saveAllData();
+                }, 30000); // Cada 30 segundos
+                
+                // Configurar auto-sincronización
+                setInterval(() => {
+                    loadAllData();
+                    updateAllCounters();
+                    showCriticalAlerts();
+                }, 10000); // Cada 10 segundos
+                
+                // Guardar al cerrar
+                window.addEventListener('beforeunload', () => {
+                    saveAllData();
+                });
+                
+                const totalRequests = solicitudesFromPortal.length;
+                const totalTechnicians = Object.values(tecnicosPorArea).reduce((sum, area) => sum + area.length, 0);
+                const totalUsers = approvedUsers.length;
+                const pendingAccess = accessRequests.filter(req => req.estado === 'PENDIENTE').length;
+                
+                console.log(`✅ SISTEMA COMPLETO INICIADO:`);
+                console.log(`📋 ${totalRequests} solicitudes`);
+                console.log(`👥 ${totalTechnicians} técnicos`);
+                console.log(`🔐 ${totalUsers} usuarios, ${pendingAccess} pendientes`);
+                
+                updateSystemStatus(`✅ Sistema completo activo - ${totalRequests} solicitudes, ${totalTechnicians} técnicos`);
+                
+                return true;
+            } catch (error) {
+                console.error('❌ Error en inicialización:', error);
+                updateSystemStatus('❌ Error en inicialización');
+                return false;
+            }
+        }
+
+        // ===== INICIALIZACIÓN AUTOMÁTICA =====
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Portal de Gestión con Persistencia - Hospital Susana López de Valencia');
-            console.log('💾 Iniciando sistema de persistencia para GitHub Pages...');
+            console.log('🚀 Portal de Gestión Hospital Susana López de Valencia - VERSIÓN COMPLETA');
+            console.log('📋 Gestión de solicitudes de mantenimiento');
+            console.log('👥 Gestión de técnicos e ingenieros');
+            console.log('🔐 Gestión de accesos con códigos');
+            console.log('📊 Reportes y estadísticas');
+            console.log('📝 Respuestas de técnicos al completar solicitudes');
             
-            // Cargar todos los datos
-            loadAllData();
-            
-            // Actualizar estado del sistema
-            updateSystemStatus('✅ Sistema iniciado correctamente');
-            
-            console.log('✅ Sistema inicializado con persistencia completa');
-            console.log('💾 localStorage configurado para GitHub Pages');
-            console.log('🔄 Datos se guardan automáticamente');
+            setTimeout(() => {
+                initializeCompleteSystem();
+            }, 100);
         });
+
+        console.log('✅ Portal de Gestión COMPLETO - Todas las funcionalidades implementadas');
+        console.log('🔧 Funcionalidades: Solicitudes, Técnicos, Accesos, Reportes, Respuestas');
+        console.log('💾 Persistencia: localStorage con auto-guardado');
+        console.log('🔄 Sincronización: Automática cada 10 segundos');
+        console.log('📝 Nueva función: Respuesta del técnico al completar solicitudes');
+        console.log('🎯 Estado: COMPLETAMENTE FUNCIONAL CON RESPUESTAS');
     </script>
 </body>
 </html>
