@@ -689,29 +689,11 @@
                         <option value="">Seleccione su servicio</option>
                         <option value="URGENCIAS_ADULTO">Urgencias Adulto</option>
                         <option value="URGENCIAS_PEDIATRICAS">Urgencias Pediátricas</option>
-                        <option value="URGENCIAS_GINECOLOGIA">Urgencias Ginecología</option>
                         <option value="UCI_ADULTO">UCI Adulto</option>
                         <option value="UCI_NEONATAL">UCI Neonatal</option>
-                        <option value="UCI_INTERMEDIOS">UCI Intermedios</option>
                         <option value="HOSPITALIZACION_ADULTO">Hospitalización Adulto</option>
-                        <option value="HOSPITALIZACION_PEDIATRIA">Hospitalización Pediatría</option>
                         <option value="CIRUGIA_ADULTO">Cirugía Adulto</option>
                         <option value="CIRUGIA_PEDIATRICA">Cirugía Pediátrica</option>
-                        <option value="SALA_PARTOS">Sala de Partos</option>
-                        <option value="CONSULTA_EXTERNA">Consulta Externa</option>
-                        <option value="ENDOSCOPIA">Endoscopia</option>
-                        <option value="IMAGENES_DIAGNOSTICAS">Imágenes Diagnósticas</option>
-                        <option value="LABORATORIO_CLINICO">Laboratorio Clínico</option>
-                        <option value="FARMACIA_CENTRAL">Farmacia Central</option>
-                        <option value="FISIOTERAPIA">Fisioterapia</option>
-                        <option value="VACUNACION">Vacunación</option>
-                        <option value="CENTRAL_ESTERILIZACION_ADULTOS">Central de Esterilización Adultos</option>
-                        <option value="CENTRAL_ESTERILIZACION_UMI">Central de Esterilización UMI</option>
-                        <option value="INGENIERIA_BIOMEDICA">Ingeniería Biomédica</option>
-                        <option value="INFRAESTRUCTURA">Infraestructura</option>
-                        <option value="MECANICOS">Mecánicos</option>
-                        <option value="TRAILER">Trailer</option>
-                        <option value="AMBULANCIAS">Ambulancias</option>
                     </select>
                 </div>
 
@@ -887,6 +869,8 @@
                             <textarea id="observaciones" class="form-textarea" placeholder="Información adicional que considere relevante"></textarea>
                         </div>
 
+
+
                         <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; margin: 1.5rem 0; border-left: 3px solid #2563eb;">
                             <h4 style="color: #1e40af; margin-bottom: 0.5rem;">💡 Información del Sistema</h4>
                             <ul style="color: #1e40af; margin: 0; padding-left: 1rem; font-size: 0.875rem;">
@@ -1021,29 +1005,11 @@
         const serviciosHospitalarios = {
             'URGENCIAS_ADULTO': 'Urgencias Adulto',
             'URGENCIAS_PEDIATRICAS': 'Urgencias Pediátricas',
-            'URGENCIAS_GINECOLOGIA': 'Urgencias Ginecología',
             'UCI_ADULTO': 'UCI Adulto',
             'UCI_NEONATAL': 'UCI Neonatal',
-            'UCI_INTERMEDIOS': 'UCI Intermedios',
             'HOSPITALIZACION_ADULTO': 'Hospitalización Adulto',
-            'HOSPITALIZACION_PEDIATRIA': 'Hospitalización Pediatría',
             'CIRUGIA_ADULTO': 'Cirugía Adulto',
-            'CIRUGIA_PEDIATRICA': 'Cirugía Pediátrica',
-            'SALA_PARTOS': 'Sala de Partos',
-            'CONSULTA_EXTERNA': 'Consulta Externa',
-            'ENDOSCOPIA': 'Endoscopia',
-            'IMAGENES_DIAGNOSTICAS': 'Imágenes Diagnósticas',
-            'LABORATORIO_CLINICO': 'Laboratorio Clínico',
-            'FARMACIA_CENTRAL': 'Farmacia Central',
-            'FISIOTERAPIA': 'Fisioterapia',
-            'VACUNACION': 'Vacunación',
-            'CENTRAL_ESTERILIZACION_ADULTOS': 'Central de Esterilización Adultos',
-            'CENTRAL_ESTERILIZACION_UMI': 'Central de Esterilización UMI',
-            'INGENIERIA_BIOMEDICA': 'Ingeniería Biomédica',
-            'INFRAESTRUCTURA': 'Infraestructura',
-            'MECANICOS': 'Mecánicos',
-            'TRAILER': 'Trailer',
-            'AMBULANCIAS': 'Ambulancias'
+            'CIRUGIA_PEDIATRICA': 'Cirugía Pediátrica'
         };
 
         const areasIngenieria = {
@@ -1233,7 +1199,7 @@
                         `• ID: ${formData.id}\n` +
                         `• Nombre: ${formData.nombreCompleto}\n` +
                         `• Email: ${formData.email}\n` +
-                        `• Servicio: ${serviciosHospitalarios[formData.servicioHospitalario] || formData.servicioHospitalario}\n` +
+                        `• Servicio: ${formData.servicioHospitalario}\n` +
                         `• Cargo: ${formData.cargo}\n\n` +
                         `📧 Recibirá una notificación por correo cuando sea aprobada.\n` +
                         `⏱️ El proceso de aprobación puede tomar 24-48 horas.`
@@ -1272,6 +1238,7 @@
                 ubicacion: document.getElementById('ubicacion').value.trim(),
                 descripcion: document.getElementById('descripcion').value.trim(),
                 observaciones: document.getElementById('observaciones').value.trim(),
+                tiempoEstimado: document.getElementById('tiempo-estimado').value,
                 
                 // Datos del usuario autenticado
                 solicitante: currentUser.name,
@@ -1596,6 +1563,13 @@
                         <div style="margin-top: 0.5rem; color: #1f2937;">${request.descripcion || 'No especificada'}</div>
                         ${request.observaciones ? `<div style="margin-top: 0.5rem; font-style: italic; color: #6b7280;"><strong>Observaciones:</strong> ${request.observaciones}</div>` : ''}
                     </div>
+
+                    ${request.tiempoEstimado ? `
+                        <div style="background: #eff6ff; padding: 0.75rem; border-radius: 0.5rem; border-left: 3px solid #3b82f6;">
+                            <strong style="color: #1e40af;">⏱️ Tiempo Estimado:</strong> 
+                            <span style="color: #1e40af;">${request.tiempoEstimado.replace('_', ' ')}</span>
+                        </div>
+                    ` : ''}
                 </div>
             `;
         }
