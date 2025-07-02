@@ -1713,5 +1713,103 @@ ${approvedUsers.length > 0 ?
         console.log('🛠️ Funcionalidades: Crear solicitudes, ver mis solicitudes, información de áreas');
         console.log('💾 Sincronización: localStorage con Portal de Gestión');
     </script>
+<!-- Firebase Funciones -->
+<script type="module">
+  import {
+    getFirestore, collection, addDoc, onSnapshot
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const db = window.firebaseDB;
+
+  // Función para guardar solicitud
+  window.guardarSolicitudFirebase = async function (data) {
+    try {
+      await addDoc(collection(db, "solicitudes"), data);
+      alert("✅ Solicitud enviada correctamente a la base de datos.");
+    } catch (error) {
+      console.error("❌ Error al guardar la solicitud:", error);
+      alert("Error al guardar la solicitud.");
+    }
+  };
+
+  // Función para cargar solicitudes en tiempo real
+  window.cargarSolicitudesFirebase = function (contenedorId) {
+    const contenedor = document.getElementById(contenedorId);
+    if (!contenedor) return;
+
+    onSnapshot(collection(db, "solicitudes"), (snapshot) => {
+      contenedor.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        contenedor.innerHTML += `
+          <div class="request-card pending">
+            <div class="request-header">
+              <div class="request-number">📝 Solicitud ID: ${doc.id}</div>
+            </div>
+            <div class="request-details">
+              <div><strong>Servicio:</strong> ${data.servicio || "No especificado"}</div>
+              <div><strong>Descripción:</strong> ${data.descripcion || "Sin descripción"}</div>
+              <div><strong>Fecha:</strong> ${data.fecha || "Desconocida"}</div>
+            </div>
+          </div>`;
+      });
+    });
+  };
+</script>
+</script>
+
+<!-- Firebase Config -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+ const firebaseConfig = {
+  apiKey: "AIzaSyAtj36T7EiECJosYP_5127tQnm_kRnwPMs",
+  authDomain: "gestion-de-solicitudes-25a93.firebaseapp.com",
+  projectId: "gestion-de-solicitudes-25a93",
+  storageBucket: "gestion-de-solicitudes-25a93.firebasestorage.app",
+  messagingSenderId: "399184380837",
+  appId: "1:399184380837:web:df0b081cd81938c0a11e4c"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.firebaseDB = db;
+</script>
+
+
+<div class="form-section">
+  <form id="form-solicitud">
+    <div class="form-group">
+      <label for="tipo-servicio" class="form-label">Tipo de Servicio</label>
+      <select id="tipo-servicio" class="form-select" required>
+        <option value="">Seleccione</option>
+        <option value="Ingeniería Biomédica">Ingeniería Biomédica</option>
+        <option value="Infraestructura">Infraestructura</option>
+        <option value="Mecánicos">Mecánicos</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <textarea id="descripcion" class="form-textarea" placeholder="Describa la solicitud..." required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">📤 Enviar Solicitud</button>
+  </form>
+</div>
+
+<script type="module">
+  document.getElementById("form-solicitud").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const servicio = document.getElementById("tipo-servicio").value;
+    const descripcion = document.getElementById("descripcion").value;
+    const fecha = new Date().toISOString();
+
+    guardarSolicitudFirebase({ servicio, descripcion, fecha });
+    e.target.reset();
+  });
+</script>
+
 </body>
 </html>
