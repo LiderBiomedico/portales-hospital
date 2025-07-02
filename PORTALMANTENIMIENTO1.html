@@ -3498,6 +3498,12 @@ ${approvedUsers.filter(u => u.codigoAcceso).map((u, i) => `${i+1}. ${u.nombreCom
   import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
+  apiKey: "AIzaSyC4H7KsQW-TU6v_lphHhJ_R1xkR-mOCKYo",
+  authDomain: "hslv-test.firebaseapp.com",
+  projectId: "hslv-test",
+  storageBucket: "hslv-test.appspot.com",
+  messagingSenderId: "1234567890",
+  appId: "1:1234567890:web:testconfig"
   apiKey: "AIzaSyAtj36T7EiECJosYP_5127tQnm_kRnwPMs",
   authDomain: "gestion-de-solicitudes-25a93.firebaseapp.com",
   projectId: "gestion-de-solicitudes-25a93",
@@ -3506,7 +3512,8 @@ ${approvedUsers.filter(u => u.codigoAcceso).map((u, i) => `${i+1}. ${u.nombreCom
   appId: "1:399184380837:web:df0b081cd81938c0a11e4c"
 };
 
-  const app = initializeApp(firebaseConfig);
+  import { getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
   const db = getFirestore(app);
   window.firebaseDB = db;
 </script>
@@ -3534,6 +3541,12 @@ ${approvedUsers.filter(u => u.codigoAcceso).map((u, i) => `${i+1}. ${u.nombreCom
   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
+  apiKey: "AIzaSyC4H7KsQW-TU6v_lphHhJ_R1xkR-mOCKYo",
+  authDomain: "hslv-test.firebaseapp.com",
+  projectId: "hslv-test",
+  storageBucket: "hslv-test.appspot.com",
+  messagingSenderId: "1234567890",
+  appId: "1:1234567890:web:testconfig"
     apiKey: "TU_API_KEY",
     authDomain: "TU_PROYECTO.firebaseapp.com",
     projectId: "TU_PROYECTO",
@@ -3542,7 +3555,8 @@ ${approvedUsers.filter(u => u.codigoAcceso).map((u, i) => `${i+1}. ${u.nombreCom
     appId: "1:1234567890:web:abcde12345"
   };
 
-  const app = initializeApp(firebaseConfig);
+  import { getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
   const db = getFirestore(app);
   window.firebaseDB = db;
   console.log("✅ Firebase inicializado correctamente");
