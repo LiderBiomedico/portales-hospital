@@ -39,36 +39,6 @@
             font-weight: 600;
         }
 
-        /* Firebase Status */
-        .firebase-status {
-            position: fixed;
-            top: 60px;
-            right: 1rem;
-            background: white;
-            padding: 0.75rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border: 2px solid #10b981;
-            font-size: 0.875rem;
-            z-index: 1000;
-            min-width: 200px;
-        }
-
-        .status-connected {
-            color: #10b981;
-            font-weight: 600;
-        }
-
-        .status-disconnected {
-            color: #ef4444;
-            font-weight: 600;
-        }
-
-        .status-connecting {
-            color: #f59e0b;
-            font-weight: 600;
-        }
-
         /* Login Screen */
         .login-container {
             display: flex;
@@ -204,7 +174,6 @@
             text-decoration: none;
             justify-content: center;
             width: 100%;
-            position: relative;
         }
 
         .btn-primary {
@@ -262,24 +231,6 @@
             width: auto;
         }
 
-        /* Loading state for buttons */
-        .btn.loading::after {
-            content: '';
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            margin: auto;
-            border: 2px solid transparent;
-            border-top-color: #ffffff;
-            border-radius: 50%;
-            animation: button-loading-spinner 1s ease infinite;
-        }
-
-        @keyframes button-loading-spinner {
-            from { transform: rotate(0turn); }
-            to { transform: rotate(1turn); }
-        }
-
         .alert {
             padding: 1rem;
             border-radius: 0.5rem;
@@ -309,32 +260,6 @@
         .alert-warning {
             background: #fffbeb;
             border-color: #f59e0b;
-            color: #d97706;
-        }
-
-        /* Firebase indicator */
-        .firebase-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .firebase-connected {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .firebase-disconnected {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .firebase-connecting {
-            background: #fef3c7;
             color: #d97706;
         }
 
@@ -657,41 +582,6 @@
             font-weight: 600;
         }
 
-        /* Loading indicator */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Debug Panel */
-        .debug-panel {
-            position: fixed;
-            top: 60px;
-            left: 1rem;
-            background: rgba(0,0,0,0.9);
-            color: white;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            max-width: 300px;
-            z-index: 999;
-            display: none;
-        }
-
-        .debug-panel.visible {
-            display: block;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .login-card {
@@ -722,45 +612,32 @@
             .hospital-info {
                 text-align: center;
             }
-
-            .firebase-status {
-                position: static;
-                margin: 1rem;
-                width: calc(100% - 2rem);
-            }
-
-            .debug-panel {
-                position: static;
-                margin: 1rem;
-                width: calc(100% - 2rem);
-            }
         }
     </style>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+      import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+      
+      // Tu configuración aquí
+      const firebaseConfig = {
+        // Pegar tu configuración real aquí
+      };
+      
+      // Inicializar Firebase
+      window.firebaseApp = initializeApp(firebaseConfig);
+      window.firebaseDB = getFirestore(window.firebaseApp);
+    </script>
+    <!-- Scripts del proyecto -->
+    <script type="module" src="./firebase-config.js"></script>
+    <script type="module" src="./firebase-data.js"></script>
+    <script type="module" src="./firebase-integration.js"></script>
 </head>
 <body>
     <!-- Developer Credit Bar -->
     <div class="developer-bar">
-        💻 Desarrollado por <span>Ing. Paul Eduardo Muñoz R.</span> - Sistema Integrado con Firebase en Tiempo Real - <strong>VERSIÓN CORREGIDA</strong>
-    </div>
-
-    <!-- Firebase Status Indicator -->
-    <div class="firebase-status">
-        <div id="firebase-status-content">
-            <span class="loading"></span> Conectando a Firebase...
-        </div>
-    </div>
-
-    <!-- Debug Panel (F12 para mostrar/ocultar) -->
-    <div class="debug-panel" id="debug-panel">
-        <div><strong>🔥 DEBUG FIREBASE</strong></div>
-        <div id="debug-connection">Conexión: Verificando...</div>
-        <div id="debug-auth">Auth: No configurado</div>
-        <div id="debug-requests">Solicitudes: 0</div>
-        <div id="debug-errors">Errores: Ninguno</div>
-        <div style="margin-top: 0.5rem;">
-            <button onclick="toggleDebugDetails()" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">Toggle Detalles</button>
-        </div>
-        <div id="debug-details" style="display: none; margin-top: 0.5rem; font-size: 0.65rem;"></div>
+        💻 Desarrollado por <span>Ing. Paul Eduardo Muñoz R.</span> - Sistema Integrado de Gestión con Autenticación
     </div>
 
     <!-- Login Screen -->
@@ -770,22 +647,6 @@
                 <div class="hospital-logo">🏥</div>
                 <h1>Portal de Solicitudes</h1>
                 <p>Hospital Susana López de Valencia S.A.S.</p>
-            </div>
-
-            <!-- Firebase Status in Login -->
-            <div id="firebase-login-alert" class="alert alert-info">
-                <strong>🔥 Estado Firebase:</strong> <span id="firebase-login-status">Conectando...</span><br>
-                <span class="firebase-indicator firebase-disconnected" id="firebase-login-indicator">
-                    ❌ Verificando conexión
-                </span>
-                <div style="margin-top: 0.5rem;">
-                    <button class="btn btn-secondary btn-sm" onclick="testFirebaseFromLogin()" style="width: auto;">
-                        🧪 Probar Firebase
-                    </button>
-                    <button class="btn btn-warning btn-sm" onclick="showFirebaseHelp()" style="width: auto;">
-                        🆘 Ayuda
-                    </button>
-                </div>
             </div>
 
             <!-- Auth Tabs -->
@@ -827,8 +688,8 @@
                 <div id="request-alert"></div>
 
                 <div class="alert alert-info">
-                    <strong>📋 Solicitud de Acceso con Firebase</strong><br>
-                    Complete los campos básicos. Su solicitud se enviará a Firebase y será sincronizada automáticamente con el Portal de Gestión.
+                    <strong>📋 Solicitud de Acceso Simplificada</strong><br>
+                    Complete los campos básicos para solicitar acceso al portal. Su solicitud será procesada automáticamente con sincronización en tiempo real.
                 </div>
 
                 <div class="form-group">
@@ -847,11 +708,29 @@
                         <option value="">Seleccione su servicio</option>
                         <option value="URGENCIAS_ADULTO">Urgencias Adulto</option>
                         <option value="URGENCIAS_PEDIATRICAS">Urgencias Pediátricas</option>
+                        <option value="URGENCIAS_GINECOLOGIA">Urgencias Ginecología</option>
                         <option value="UCI_ADULTO">UCI Adulto</option>
                         <option value="UCI_NEONATAL">UCI Neonatal</option>
+                        <option value="UCI_INTERMEDIOS">UCI Intermedios</option>
                         <option value="HOSPITALIZACION_ADULTO">Hospitalización Adulto</option>
+                        <option value="HOSPITALIZACION_PEDIATRIA">Hospitalización Pediatría</option>
                         <option value="CIRUGIA_ADULTO">Cirugía Adulto</option>
                         <option value="CIRUGIA_PEDIATRICA">Cirugía Pediátrica</option>
+                        <option value="SALA_PARTOS">Sala de Partos</option>
+                        <option value="CONSULTA_EXTERNA">Consulta Externa</option>
+                        <option value="ENDOSCOPIA">Endoscopia</option>
+                        <option value="IMAGENES_DIAGNOSTICAS">Imágenes Diagnósticas</option>
+                        <option value="LABORATORIO_CLINICO">Laboratorio Clínico</option>
+                        <option value="FARMACIA_CENTRAL">Farmacia Central</option>
+                        <option value="FISIOTERAPIA">Fisioterapia</option>
+                        <option value="VACUNACION">Vacunación</option>
+                        <option value="CENTRAL_ESTERILIZACION_ADULTOS">Central de Esterilización Adultos</option>
+                        <option value="CENTRAL_ESTERILIZACION_UMI">Central de Esterilización UMI</option>
+                        <option value="INGENIERIA_BIOMEDICA">Ingeniería Biomédica</option>
+                        <option value="INFRAESTRUCTURA">Infraestructura</option>
+                        <option value="MECANICOS">Mecánicos</option>
+                        <option value="TRAILER">Trailer</option>
+                        <option value="AMBULANCIAS">Ambulancias</option>
                     </select>
                 </div>
 
@@ -874,15 +753,15 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary" id="request-btn">
-                    📤 Enviar Solicitud a Firebase
+                    📤 Enviar Solicitud de Acceso
                 </button>
 
-                <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="debugFirebaseSystem()" style="width: auto;">
-                        🔍 Debug Firebase
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="debugAccessSystem()" style="width: auto;">
+                        🔍 Debug Sistema
                     </button>
                     <button type="button" class="btn btn-secondary btn-sm" onclick="clearAccessData()" style="width: auto;">
-                        🗑️ Limpiar Datos
+                        🗑️ Limpiar Datos de Prueba
                     </button>
                     <button type="button" class="btn btn-warning btn-sm" onclick="testQuickAccess()" style="width: auto;">
                         ⚡ Prueba Rápida
@@ -907,7 +786,7 @@
                     </svg>
                     <div class="hospital-info">
                         <h1>Hospital Susana López de Valencia S.A.S.</h1>
-                        <p>Portal de Solicitudes - Firebase Integrado (CORREGIDO)</p>
+                        <p>Portal de Solicitudes de Servicios - Versión Autenticada</p>
                     </div>
                 </div>
 
@@ -917,9 +796,6 @@
                         <h3 id="user-name">Usuario del Sistema</h3>
                         <p id="user-service">Seleccione servicio</p>
                         <span class="verification-badge">✓ Verificado</span>
-                        <span class="firebase-indicator firebase-connected" id="header-firebase-indicator">
-                            🔥 Firebase OK
-                        </span>
                     </div>
                     <button class="logout-btn" onclick="logout()">🚪 Salir</button>
                 </div>
@@ -930,22 +806,22 @@
         <main class="main-content container">
             <!-- Welcome Section -->
             <div class="welcome-section">
-                <h1>Portal Firebase de Servicios</h1>
-                <p>Acceso seguro con sincronización en tiempo real - Versión Corregida</p>
+                <h1>Portal Autenticado de Servicios</h1>
+                <p>Acceso seguro para personal autorizado del hospital</p>
             </div>
 
             <!-- Navigation Cards -->
             <div class="nav-grid">
                 <div class="nav-card active" onclick="showSection('nueva-solicitud')">
                     <span class="nav-card-icon">🛠️</span>
-                    <h3>Nueva Solicitud Firebase</h3>
-                    <p>Crear solicitud que se envía automáticamente a Firebase</p>
+                    <h3>Nueva Solicitud</h3>
+                    <p>Crear solicitud con discriminación automática por área técnica</p>
                 </div>
                 
                 <div class="nav-card" onclick="showSection('mis-solicitudes')">
                     <span class="nav-card-icon">📋</span>
                     <h3>Mis Solicitudes</h3>
-                    <p>Ver historial desde Firebase en tiempo real</p>
+                    <p>Ver historial personalizado de sus solicitudes</p>
                 </div>
                 
                 <div class="nav-card" onclick="showSection('servicios')">
@@ -953,26 +829,19 @@
                     <h3>Áreas de Ingeniería</h3>
                     <p>Información sobre áreas técnicas disponibles</p>
                 </div>
-
-                <div class="nav-card" onclick="showSection('diagnostico')">
-                    <span class="nav-card-icon">🔧</span>
-                    <h3>Diagnóstico Firebase</h3>
-                    <p>Herramientas de diagnóstico y solución de problemas</p>
-                </div>
             </div>
 
             <!-- Content sections -->
             <div id="nueva-solicitud" class="content-card">
                 <div class="form-section">
                     <div class="form-header">
-                        <h2>🛠️ Nueva Solicitud Firebase</h2>
-                        <p>Sistema autenticado con envío directo a Firebase - Versión Corregida</p>
+                        <h2>🛠️ Nueva Solicitud de Servicio</h2>
+                        <p>Sistema autenticado de solicitudes con asignación automática</p>
                     </div>
                     
                     <div class="alert alert-success">
                         <strong>✅ Usuario Autenticado:</strong> <span id="auth-user-display"></span><br>
                         <strong>🏥 Servicio Autorizado:</strong> <span id="auth-service-display"></span><br>
-                        <strong>🔥 Firebase:</strong> <span class="firebase-indicator firebase-connected" id="form-firebase-indicator">Conectado</span><br>
                         <strong>⏰ Sesión Válida:</strong> <span id="session-timer"></span>
                     </div>
 
@@ -981,14 +850,29 @@
                         <div id="form-alert"></div>
 
                         <div class="form-group">
-                            <label class="form-label">🔧 Tipo de Servicio *</label>
+                            <label class="form-label">🔧 Área de Ingeniería *</label>
+                            <select id="area-ingenieria" class="form-select" required>
+                                <option value="">Seleccione el área técnica</option>
+                                <option value="INGENIERIA_BIOMEDICA">🏥 Ingeniería Biomédica</option>
+                                <option value="MECANICA">⚙️ Mecánica</option>
+                                <option value="INFRAESTRUCTURA">🏗️ Infraestructura</option>
+                            </select>
+                            <small style="color: #6b7280; font-size: 0.75rem;">La solicitud será asignada automáticamente al área seleccionada</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">🔨 Tipo de Servicio *</label>
                             <select id="tipo-servicio" class="form-select" required>
                                 <option value="">Seleccione el tipo de servicio</option>
-                                <option value="Ingeniería Biomédica">🏥 Ingeniería Biomédica</option>
-                                <option value="Mecánicos">⚙️ Mecánicos</option>
-                                <option value="Infraestructura">🏗️ Infraestructura</option>
+                                <option value="MANTENIMIENTO_PREVENTIVO">🔧 Mantenimiento Preventivo</option>
+                                <option value="MANTENIMIENTO_CORRECTIVO">🛠️ Mantenimiento Correctivo</option>
+                                <option value="REPARACION">🔨 Reparación</option>
+                                <option value="INSTALACION">📦 Instalación</option>
+                                <option value="CALIBRACION">⚖️ Calibración</option>
+                                <option value="INSPECCION">👁️ Inspección</option>
+                                <option value="ACTUALIZACION">🔄 Actualización</option>
+                                <option value="EMERGENCIA">🚨 Emergencia</option>
                             </select>
-                            <small style="color: #6b7280; font-size: 0.75rem;">La solicitud será enviada automáticamente a Firebase</small>
                         </div>
 
                         <div class="form-group">
@@ -1023,18 +907,17 @@
                         </div>
 
                         <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; margin: 1.5rem 0; border-left: 3px solid #2563eb;">
-                            <h4 style="color: #1e40af; margin-bottom: 0.5rem;">🔥 Información Firebase (Versión Corregida)</h4>
+                            <h4 style="color: #1e40af; margin-bottom: 0.5rem;">💡 Información del Sistema</h4>
                             <ul style="color: #1e40af; margin: 0; padding-left: 1rem; font-size: 0.875rem;">
-                                <li>Su solicitud será enviada directamente a Firebase</li>
-                                <li>Sincronización automática con el Portal de Gestión</li>
-                                <li>Puede seguir el progreso en "Mis Solicitudes"</li>
-                                <li>Notificaciones en tiempo real cuando sea asignada</li>
-                                <li><strong>Manejo de errores mejorado y diagnóstico automático</strong></li>
+                                <li>Su solicitud será enviada automáticamente al área de ingeniería correspondiente</li>
+                                <li>Recibirá notificación cuando sea asignada a un técnico</li>
+                                <li>Puede seguir el progreso en la sección "Mis Solicitudes"</li>
+                                <li>Para emergencias críticas, contacte también por teléfono</li>
                             </ul>
                         </div>
 
                         <button type="submit" class="btn btn-primary" id="submit-request-btn">
-                            🔥 Enviar Solicitud a Firebase
+                            📤 Enviar Solicitud de Mantenimiento
                         </button>
                     </form>
                 </div>
@@ -1042,19 +925,17 @@
 
             <div id="mis-solicitudes" class="content-card hidden">
                 <div class="form-header">
-                    <h2>📋 Mis Solicitudes Firebase</h2>
-                    <p>Historial sincronizado desde Firebase en tiempo real</p>
+                    <h2>📋 Mis Solicitudes</h2>
+                    <p>Historial personalizado de solicitudes de su servicio</p>
                 </div>
                 
                 <div class="alert alert-info">
-                    <strong>🔥 Sincronización Firebase:</strong> Sus solicitudes se cargan automáticamente desde la base de datos<br>
-                    <strong>🔍 Filtrado:</strong> Solo se muestran sus solicitudes personales<br>
-                    <strong>✅ Versión Corregida:</strong> Manejo de errores mejorado y reconexión automática
+                    <strong>🔍 Filtrado Automático:</strong> Solo se muestran las solicitudes de su servicio: <span id="filter-service-display"></span>
                 </div>
 
                 <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-                    <button class="btn btn-primary btn-sm" onclick="refreshMyRequestsFirebase()">
-                        🔄 Actualizar Firebase
+                    <button class="btn btn-primary btn-sm" onclick="refreshMyRequests()">
+                        🔄 Actualizar
                     </button>
                     <button class="btn btn-secondary btn-sm" onclick="filterMyRequests('all')">
                         📋 Todas
@@ -1067,12 +948,14 @@
                     </button>
                 </div>
 
-                <div id="my-requests-firebase-list">
+                <div id="my-requests-list">
                     <div style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">🔥</div>
-                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">Conectando con Firebase...</h3>
-                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí automáticamente</p>
-                        <div class="loading"></div>
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes registradas</h3>
+                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí una vez que las envíe</p>
+                        <button class="btn btn-primary" onclick="showSection('nueva-solicitud')">
+                            🛠️ Crear Primera Solicitud
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1100,7 +983,7 @@
 
                     <div style="background: linear-gradient(135deg, #fefbeb 0%, #fef3c7 100%); padding: 2rem; border-radius: 1rem; border: 2px solid #f59e0b;">
                         <div style="font-size: 3rem; margin-bottom: 1rem;">⚙️</div>
-                        <h3 style="color: #d97706; margin-bottom: 1rem;">Mecánicos</h3>
+                        <h3 style="color: #d97706; margin-bottom: 1rem;">Mecánica</h3>
                         <p style="color: #b45309; margin-bottom: 1rem;">Mantenimiento de sistemas mecánicos y equipos industriales</p>
                         <ul style="color: #b45309; font-size: 0.875rem; line-height: 1.6;">
                             <li>Sistemas de climatización</li>
@@ -1128,792 +1011,81 @@
                 </div>
 
                 <div style="margin-top: 2rem; padding: 1.5rem; background: #f8fafc; border-radius: 1rem; border-left: 4px solid #2563eb;">
-                    <h4 style="color: #1f2937; margin-bottom: 1rem;">🔥 Cómo funciona con Firebase (Versión Corregida)</h4>
+                    <h4 style="color: #1f2937; margin-bottom: 1rem;">💡 Cómo funciona el sistema</h4>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
                         <div>
                             <h5 style="color: #2563eb; margin-bottom: 0.5rem;">1. 📝 Envía tu solicitud</h5>
-                            <p style="color: #6b7280; font-size: 0.875rem;">Se guarda directamente en Firebase con validación mejorada</p>
+                            <p style="color: #6b7280; font-size: 0.875rem;">Describe el problema y selecciona el área correspondiente</p>
                         </div>
                         <div>
-                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">2. 🔄 Sincronización automática</h5>
-                            <p style="color: #6b7280; font-size: 0.875rem;">El Portal de Gestión la recibe al instante</p>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">2. 🤖 Asignación automática</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">El sistema asigna la solicitud al técnico disponible</p>
                         </div>
                         <div>
-                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">3. 🔧 Asignación técnica</h5>
-                            <p style="color: #6b7280; font-size: 0.875rem;">El técnico especializado la atiende</p>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">3. 🔧 Atención técnica</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">El técnico especializado atiende tu solicitud</p>
                         </div>
                         <div>
-                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">4. ⚡ Seguimiento en tiempo real</h5>
-                            <p style="color: #6b7280; font-size: 0.875rem;">Actualizaciones automáticas desde Firebase</p>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">4. ✅ Seguimiento</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">Puedes seguir el progreso en "Mis Solicitudes"</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Nueva sección de diagnóstico -->
-            <div id="diagnostico" class="content-card hidden">
-                <div class="form-header">
-                    <h2>🔧 Diagnóstico Firebase</h2>
-                    <p>Herramientas de diagnóstico y solución de problemas</p>
-                </div>
-                
-                <div class="alert alert-info">
-                    <strong>🛠️ Panel de Diagnóstico:</strong> Use estas herramientas para identificar y solucionar problemas de conectividad
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                    <button class="btn btn-primary" onclick="runConnectivityTest()">
-                        🧪 Probar Conectividad Firebase
-                    </button>
-                    <button class="btn btn-warning" onclick="testWritePermissions()">
-                        ✍️ Probar Permisos de Escritura
-                    </button>
-                    <button class="btn btn-success" onclick="validateDataStructure()">
-                        📊 Validar Estructura de Datos
-                    </button>
-                    <button class="btn btn-secondary" onclick="viewFirebaseRules()">
-                        📋 Ver Diagnóstico de Reglas
-                    </button>
-                </div>
-
-                <div id="diagnostic-results-section">
-                    <h3 style="color: #1f2937; margin-bottom: 1rem;">📊 Resultados del Diagnóstico</h3>
-                    <div id="diagnostic-output">
-                        <p style="color: #6b7280; text-align: center; padding: 2rem;">
-                            Haga clic en cualquier botón de diagnóstico para comenzar las pruebas
-                        </p>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Firebase Configuration and Functions -->
-    <script type="module">
-        // Firebase Configuration
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import {
-            getFirestore, 
-            collection, 
-            addDoc, 
-            onSnapshot, 
-            getDocs,
-            query,
-            orderBy,
-            where,
-            serverTimestamp,
-            connectFirestoreEmulator
-        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-        // Tu configuración de Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAtj36T7EiECJosYP_5127tQnm_kRnwPMs",
-            authDomain: "gestion-de-solicitudes-25a93.firebaseapp.com",
-            projectId: "gestion-de-solicitudes-25a93",
-            storageBucket: "gestion-de-solicitudes-25a93.firebasestorage.app",
-            messagingSenderId: "399184380837",
-            appId: "1:399184380837:web:df0b081cd81938c0a11e4c"
-        };
-
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // Variables globales mejoradas
-        let isFirebaseConnected = false;
-        let currentUser = null;
-        let myRequestsFirebase = [];
-        let unsubscribeMyRequests = null;
-        let connectionAttempts = 0;
-        let lastError = null;
-        let debugMode = false;
-
-        // Funciones Firebase globales
-        window.db = db;
-        window.addDoc = addDoc;
-        window.collection = collection;
-        window.onSnapshot = onSnapshot;
-        window.serverTimestamp = serverTimestamp;
-
-        // Función para actualizar debug
-        function updateDebugPanel() {
-            if (!debugMode) return;
-
-            document.getElementById('debug-connection').textContent = `Conexión: ${isFirebaseConnected ? 'Conectado' : 'Desconectado'}`;
-            document.getElementById('debug-auth').textContent = `Auth: ${currentUser ? currentUser.email : 'No autenticado'}`;
-            document.getElementById('debug-requests').textContent = `Solicitudes: ${myRequestsFirebase.length}`;
-            document.getElementById('debug-errors').textContent = `Errores: ${lastError || 'Ninguno'}`;
-            
-            const details = document.getElementById('debug-details');
-            if (details.style.display !== 'none') {
-                details.innerHTML = `
-                    <div>Intentos conexión: ${connectionAttempts}</div>
-                    <div>Firebase Config: ${firebaseConfig.projectId}</div>
-                    <div>User Agent: ${navigator.userAgent.substring(0, 50)}...</div>
-                    <div>Timestamp: ${new Date().toLocaleTimeString()}</div>
-                `;
-            }
-        }
-
-        // Función para probar conexión Firebase MEJORADA
-        async function testFirebaseConnection() {
-            console.log('🔥 Probando conexión Firebase (Versión Corregida)...');
-            connectionAttempts++;
-            updateFirebaseStatus('Probando conexión...', 'connecting');
-            
-            try {
-                // Paso 1: Probar lectura básica
-                console.log('📖 Paso 1: Probando lectura básica...');
-                const testQuery = query(collection(db, "solicitudes"));
-                const snapshot = await getDocs(testQuery);
-                console.log(`✅ Lectura básica exitosa: ${snapshot.size} documentos`);
-
-                // Paso 2: Probar escritura
-                console.log('✍️ Paso 2: Probando escritura...');
-                const testDoc = {
-                    test: true,
-                    timestamp: new Date().toISOString(),
-                    fechaCreacion: serverTimestamp(),
-                    message: 'Documento de prueba del sistema corregido',
-                    version: 'CORREGIDA',
-                    connectionAttempt: connectionAttempts
-                };
-                
-                const docRef = await addDoc(collection(db, "solicitudes"), testDoc);
-                console.log(`✅ Escritura exitosa: ${docRef.id}`);
-
-                // Conexión exitosa
-                updateFirebaseStatus(`Conectado - ${snapshot.size + 1} solicitudes`, 'connected');
-                lastError = null;
-                
-                // Cargar datos automáticamente
-                cargarMisSolicitudesFirebase();
-                
-                return true;
-                
-            } catch (error) {
-                console.error('❌ Error conectando Firebase:', error);
-                lastError = error.message;
-                connectionAttempts++;
-                
-                if (error.code === 'permission-denied') {
-                    updateFirebaseStatus('Error: Reglas de Firebase bloqueando acceso', 'disconnected');
-                    
-                    // Mostrar alerta específica para reglas
-                    setTimeout(() => {
-                        alert(`❌ PROBLEMA IDENTIFICADO: REGLAS DE FIREBASE
-
-🔥 Las reglas de seguridad de Firestore están bloqueando el acceso.
-
-📋 SOLUCIÓN INMEDIATA:
-1. Ir a Firebase Console: https://console.firebase.google.com/
-2. Proyecto: gestion-de-solicitudes-25a93  
-3. Firestore Database → Reglas
-4. Reemplazar reglas existentes con:
-
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /solicitudes/{document} {
-      allow read, write: if true;
-    }
-    match /access_requests/{document} {
-      allow read, write: if true;
-    }
-  }
-}
-
-5. Publicar cambios
-6. Esperar 1-2 minutos
-
-⚠️ Este es el problema principal que impide que las solicitudes lleguen entre portales.`);
-                    }, 1000);
-                    
-                } else if (error.code === 'unavailable') {
-                    updateFirebaseStatus('Error: Firebase no disponible', 'disconnected');
-                    
-                    // Intentar reconexión automática
-                    setTimeout(() => {
-                        console.log('🔄 Intentando reconexión automática...');
-                        testFirebaseConnection();
-                    }, 5000);
-                    
-                } else {
-                    updateFirebaseStatus(`Error: ${error.message}`, 'disconnected');
-                }
-                
-                updateDebugPanel();
-                return false;
-            }
-        }
-
-        // Función para actualizar estado de Firebase MEJORADA
-        function updateFirebaseStatus(message, status) {
-            isFirebaseConnected = (status === 'connected');
-            
-            const statusContent = document.getElementById('firebase-status-content');
-            const loginStatus = document.getElementById('firebase-login-status');
-            const loginIndicator = document.getElementById('firebase-login-indicator');
-            const headerIndicator = document.getElementById('header-firebase-indicator');
-            const formIndicator = document.getElementById('form-firebase-indicator');
-            const loginAlert = document.getElementById('firebase-login-alert');
-            
-            // Determinar clase y texto basado en estado
-            let statusClass, statusText, indicatorClass, indicatorText, alertClass;
-            
-            switch(status) {
-                case 'connected':
-                    statusClass = 'status-connected';
-                    statusText = `🔥 ${message}`;
-                    indicatorClass = 'firebase-indicator firebase-connected';
-                    indicatorText = '✅ Firebase Conectado';
-                    alertClass = 'alert alert-success';
-                    break;
-                case 'connecting':
-                    statusClass = 'status-connecting';
-                    statusText = `⏳ ${message}`;
-                    indicatorClass = 'firebase-indicator firebase-connecting';
-                    indicatorText = '⏳ Conectando...';
-                    alertClass = 'alert alert-warning';
-                    break;
-                default:
-                    statusClass = 'status-disconnected';
-                    statusText = `❌ ${message}`;
-                    indicatorClass = 'firebase-indicator firebase-disconnected';
-                    indicatorText = '❌ Firebase Desconectado';
-                    alertClass = 'alert alert-error';
-            }
-            
-            // Actualizar todos los elementos
-            if (statusContent) statusContent.innerHTML = `<span class="${statusClass}">${statusText}</span>`;
-            if (loginStatus) loginStatus.textContent = message;
-            
-            if (loginIndicator) {
-                loginIndicator.className = indicatorClass;
-                loginIndicator.textContent = indicatorText;
-            }
-            
-            if (headerIndicator) {
-                headerIndicator.className = indicatorClass;
-                headerIndicator.textContent = isFirebaseConnected ? '🔥 Firebase OK' : '❌ Firebase Error';
-            }
-            
-            if (formIndicator) {
-                formIndicator.className = indicatorClass;
-                formIndicator.textContent = isFirebaseConnected ? 'Conectado' : 'Desconectado';
-            }
-            
-            if (loginAlert) {
-                loginAlert.className = alertClass;
-            }
-
-            // Actualizar variables globales
-            window.isFirebaseConnected = isFirebaseConnected;
-            updateDebugPanel();
-        }
-
-        // Función para enviar solicitud a Firebase CORREGIDA Y MEJORADA
-        window.enviarSolicitudFirebase = async function(solicitudData) {
-            if (!isFirebaseConnected) {
-                // Intentar reconectar automáticamente
-                console.log('🔄 Firebase desconectado, intentando reconectar...');
-                const reconnected = await testFirebaseConnection();
-                if (!reconnected) {
-                    throw new Error('Firebase no está conectado y no se pudo reconectar automáticamente');
-                }
-            }
-            
-            console.log('📤 Enviando solicitud a Firebase (Versión Corregida)...', solicitudData);
-            
-            try {
-                // Validar datos antes de enviar
-                if (!solicitudData.tipoServicio || !solicitudData.descripcion) {
-                    throw new Error('Datos de solicitud incompletos');
-                }
-
-                // Preparar datos con estructura mejorada y consistente
-                const firebaseData = {
-                    // Campos principales - estructura consistente con Portal de Mantenimiento
-                    servicio: solicitudData.tipoServicio,
-                    descripcion: solicitudData.descripcion,
-                    prioridad: solicitudData.prioridad,
-                    equipo: solicitudData.equipo,
-                    ubicacion: solicitudData.ubicacion,
-                    observaciones: solicitudData.observaciones || '',
-                    
-                    // Datos del solicitante
-                    solicitante: solicitudData.solicitante,
-                    emailSolicitante: solicitudData.emailSolicitante,
-                    servicioHospitalario: solicitudData.servicioHospitalario,
-                    
-                    // Timestamps y estado
-                    fecha: new Date().toISOString(),
-                    fechaCreacion: serverTimestamp(),
-                    estado: 'PENDIENTE',
-                    numero: `SOL-${Date.now()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`,
-                    
-                    // Campos adicionales para el Portal de Mantenimiento
-                    tecnicoAsignado: null,
-                    fechaAsignacion: null,
-                    fechaCompletado: null,
-                    comentariosTecnico: '',
-                    
-                    // Metadatos mejorados
-                    origen: 'PORTAL_SOLICITUDES_CORREGIDO',
-                    version: '2.0',
-                    userAgent: navigator.userAgent,
-                    timestamp: Date.now(),
-                    
-                    // Campos para compatibilidad
-                    servicioSolicitante: solicitudData.servicioHospitalario,
-                    nombreSolicitante: solicitudData.solicitante
-                };
-                
-                // CRÍTICO: Usar exactamente el mismo nombre de colección que el Portal de Mantenimiento
-                console.log('🔥 Enviando a colección "solicitudes"...');
-                const docRef = await addDoc(collection(db, "solicitudes"), firebaseData);
-                
-                console.log(`✅ Solicitud enviada a Firebase con ID: ${docRef.id}`);
-                
-                // Guardar también en localStorage para compatibilidad y backup
-                try {
-                    const existingRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]');
-                    existingRequests.push({
-                        ...firebaseData,
-                        firebaseId: docRef.id,
-                        id: docRef.id,
-                        localTimestamp: new Date().toISOString()
-                    });
-                    localStorage.setItem('hospital_solicitudes', JSON.stringify(existingRequests));
-                    console.log('💾 Solicitud guardada también en localStorage');
-                } catch (localError) {
-                    console.warn('⚠️ Error guardando en localStorage:', localError);
-                    // No detener el proceso por error de localStorage
-                }
-                
-                return docRef.id;
-                
-            } catch (error) {
-                console.error('❌ Error enviando a Firebase:', error);
-                lastError = error.message;
-                updateDebugPanel();
-                
-                // Diagnóstico específico del error con mensajes mejorados
-                if (error.code === 'permission-denied') {
-                    throw new Error('REGLAS DE FIREBASE BLOQUEANDO ESCRITURA - Las reglas de seguridad están rechazando la solicitud. Actualizar reglas de Firebase.');
-                } else if (error.code === 'unavailable') {
-                    throw new Error('FIREBASE NO DISPONIBLE - Servicio temporalmente no disponible. Intentar nuevamente en unos minutos.');
-                } else if (error.code === 'invalid-argument') {
-                    throw new Error('DATOS INVÁLIDOS - Verificar que todos los campos estén completos y en formato correcto.');
-                } else if (error.message.includes('Failed to fetch')) {
-                    throw new Error('PROBLEMA DE RED - Verificar conexión a internet y configuración de firewall.');
-                } else {
-                    throw new Error(`Error Firebase: ${error.message} (Código: ${error.code || 'desconocido'})`);
-                }
-            }
-        };
-
-        // Función para cargar mis solicitudes desde Firebase MEJORADA
-        window.cargarMisSolicitudesFirebase = function() {
-            if (!currentUser) {
-                console.log('⚠️ Usuario no autenticado');
-                return;
-            }
-            
-            if (!isFirebaseConnected) {
-                console.log('⚠️ Firebase desconectado, intentando reconectar...');
-                testFirebaseConnection().then(connected => {
-                    if (connected && currentUser) {
-                        cargarMisSolicitudesFirebase();
-                    }
-                });
-                return;
-            }
-            
-            console.log(`📥 Cargando solicitudes de ${currentUser.email} desde Firebase (Versión Corregida)...`);
-            
-            try {
-                // Limpiar listener anterior
-                if (unsubscribeMyRequests) {
-                    unsubscribeMyRequests();
-                }
-                
-                // Configurar listener para solicitudes del usuario con manejo de errores mejorado
-                const q = query(
-                    collection(db, "solicitudes"),
-                    where("emailSolicitante", "==", currentUser.email),
-                    orderBy("fecha", "desc")
-                );
-                
-                unsubscribeMyRequests = onSnapshot(q, 
-                    (querySnapshot) => {
-                        myRequestsFirebase = [];
-                        
-                        querySnapshot.forEach((doc) => {
-                            const data = doc.data();
-                            myRequestsFirebase.push({
-                                id: doc.id,
-                                ...data,
-                                // Asegurar campos requeridos con valores por defecto
-                                fecha: data.fecha || new Date().toISOString(),
-                                estado: data.estado || 'PENDIENTE',
-                                servicio: data.servicio || 'No especificado',
-                                prioridad: data.prioridad || 'MEDIA'
-                            });
-                        });
-                        
-                        console.log(`📊 ${myRequestsFirebase.length} solicitudes del usuario cargadas desde Firebase`);
-                        updateMyRequestsDisplay();
-                        updateDebugPanel();
-                        
-                    }, 
-                    (error) => {
-                        console.error('❌ Error al cargar mis solicitudes:', error);
-                        lastError = error.message;
-                        updateDebugPanel();
-                        
-                        if (error.code === 'permission-denied') {
-                            console.error('🚨 Error de permisos Firebase');
-                            updateFirebaseStatus('Error: Reglas bloqueando lectura', 'disconnected');
-                        } else {
-                            console.error('🚨 Error técnico Firebase:', error);
-                            updateFirebaseStatus(`Error: ${error.message}`, 'disconnected');
-                        }
-                    }
-                );
-                
-            } catch (error) {
-                console.error('❌ Error configurando listener de mis solicitudes:', error);
-                lastError = error.message;
-                updateDebugPanel();
-            }
-        };
-
-        // Función para actualizar la lista de mis solicitudes MEJORADA
-        function updateMyRequestsDisplay() {
-            const container = document.getElementById('my-requests-firebase-list');
-            
-            if (myRequestsFirebase.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">🔥</div>
-                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes en Firebase</h3>
-                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí cuando las envíe</p>
-                        <button class="btn btn-primary" onclick="showSection('nueva-solicitud')">
-                            🛠️ Crear Primera Solicitud
-                        </button>
-                        <button class="btn btn-secondary btn-sm" onclick="testFirebaseFromRequests()" style="margin-left: 0.5rem;">
-                            🧪 Probar Firebase
-                        </button>
-                    </div>
-                `;
-            } else {
-                const requestsHTML = myRequestsFirebase
-                    .map(request => createMyRequestFirebaseCard(request))
-                    .join('');
-                
-                container.innerHTML = `
-                    <div style="margin-bottom: 1rem; padding: 1rem; background: #f0fdf4; border-radius: 0.5rem; border-left: 3px solid #10b981;">
-                        <strong style="color: #065f46;">✅ ${myRequestsFirebase.length} solicitudes encontradas en Firebase</strong>
-                        <span style="color: #047857; font-size: 0.875rem; margin-left: 0.5rem;">Última actualización: ${new Date().toLocaleTimeString()}</span>
-                    </div>
-                    ${requestsHTML}
-                `;
-            }
-        }
-
-        // Función para crear tarjeta de solicitud Firebase MEJORADA
-        function createMyRequestFirebaseCard(request) {
-            return `
-                <div class="request-card pending">
-                    <div class="request-header">
-                        <div class="request-number">🔥 Firebase ID: ${request.id}</div>
-                        <div style="display: flex; gap: 0.5rem; align-items: center;">
-                            <span class="status-pendiente">${request.estado || 'PENDIENTE'}</span>
-                            <span style="background: #3b82f6; color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;">
-                                ${request.prioridad || 'MEDIA'}
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="request-details">
-                        <div class="request-detail">
-                            <div class="request-detail-label">🔧 Servicio</div>
-                            <div class="request-detail-value">${request.servicio || 'No especificado'}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">🖥️ Equipo</div>
-                            <div class="request-detail-value">${request.equipo || 'No especificado'}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">📍 Ubicación</div>
-                            <div class="request-detail-value">${request.ubicacion || 'No especificada'}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">📅 Fecha</div>
-                            <div class="request-detail-value">${request.fecha ? new Date(request.fecha).toLocaleString('es-CO') : 'No especificada'}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">👨‍🔧 Técnico</div>
-                            <div class="request-detail-value">${request.tecnicoAsignado || '<span style="color: #f59e0b;">Pendiente asignación</span>'}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">📊 Número</div>
-                            <div class="request-detail-value">${request.numero || 'Generado automáticamente'}</div>
-                        </div>
-                    </div>
-
-                    <div style="margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 3px solid #10b981;">
-                        <div class="request-detail-label">📝 Descripción del Problema</div>
-                        <div style="margin-top: 0.5rem; color: #1f2937;">${request.descripcion || 'Sin descripción'}</div>
-                        ${request.observaciones ? `<div style="margin-top: 0.5rem; font-style: italic; color: #6b7280;"><strong>Observaciones:</strong> ${request.observaciones}</div>` : ''}
-                    </div>
-
-                    <div style="background: #eff6ff; padding: 0.75rem; border-radius: 0.5rem; border-left: 3px solid #3b82f6;">
-                        <strong style="color: #1e40af;">🔥 Sincronizado con Firebase</strong>
-                        <span style="color: #1e40af; font-size: 0.875rem; margin-left: 0.5rem;">Actualizaciones en tiempo real - Versión Corregida</span>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Funciones de diagnóstico nuevas
-        window.runConnectivityTest = async function() {
-            const output = document.getElementById('diagnostic-output');
-            output.innerHTML = '<div class="loading"></div> Ejecutando pruebas de conectividad...';
-            
-            let results = '<h4>🧪 Resultados de Conectividad</h4>';
-            
-            try {
-                // Prueba 1: Conexión básica
-                results += '<div style="margin: 0.5rem 0; padding: 0.5rem; background: #fffbeb; border-left: 3px solid #f59e0b;"><strong>Prueba 1:</strong> Conexión básica...</div>';
-                await testFirebaseConnection();
-                results += '<div style="margin: 0.5rem 0; padding: 0.5rem; background: #f0fdf4; border-left: 3px solid #10b981;"><strong>✅ Conexión básica:</strong> Exitosa</div>';
-                
-                // Prueba 2: Lectura de datos
-                results += '<div style="margin: 0.5rem 0; padding: 0.5rem; background: #fffbeb; border-left: 3px solid #f59e0b;"><strong>Prueba 2:</strong> Lectura de datos...</div>';
-                const snapshot = await getDocs(collection(db, "solicitudes"));
-                results += `<div style="margin: 0.5rem 0; padding: 0.5rem; background: #f0fdf4; border-left: 3px solid #10b981;"><strong>✅ Lectura:</strong> ${snapshot.size} documentos encontrados</div>`;
-                
-                // Prueba 3: Escritura
-                results += '<div style="margin: 0.5rem 0; padding: 0.5rem; background: #fffbeb; border-left: 3px solid #f59e0b;"><strong>Prueba 3:</strong> Escritura de datos...</div>';
-                const testDoc = await addDoc(collection(db, "solicitudes"), {
-                    test: true,
-                    diagnostico: true,
-                    timestamp: new Date().toISOString()
-                });
-                results += `<div style="margin: 0.5rem 0; padding: 0.5rem; background: #f0fdf4; border-left: 3px solid #10b981;"><strong>✅ Escritura:</strong> Documento creado ${testDoc.id}</div>`;
-                
-                results += '<div style="margin: 1rem 0; padding: 1rem; background: #f0fdf4; border-left: 3px solid #10b981;"><strong>🎉 Todas las pruebas exitosas</strong><br>Firebase está funcionando correctamente</div>';
-                
-            } catch (error) {
-                results += `<div style="margin: 0.5rem 0; padding: 0.5rem; background: #fef2f2; border-left: 3px solid #ef4444;"><strong>❌ Error:</strong> ${error.message}</div>`;
-            }
-            
-            output.innerHTML = results;
-        };
-
-        window.testWritePermissions = async function() {
-            const output = document.getElementById('diagnostic-output');
-            output.innerHTML = '<div class="loading"></div> Probando permisos de escritura...';
-            
-            try {
-                const testSolicitud = {
-                    servicio: 'Diagnóstico',
-                    descripcion: 'Prueba de permisos de escritura',
-                    fecha: new Date().toISOString(),
-                    fechaCreacion: serverTimestamp(),
-                    estado: 'PRUEBA',
-                    test: true
-                };
-                
-                const docRef = await addDoc(collection(db, "solicitudes"), testSolicitud);
-                
-                output.innerHTML = `
-                    <h4>✍️ Prueba de Permisos de Escritura</h4>
-                    <div style="margin: 1rem 0; padding: 1rem; background: #f0fdf4; border-left: 3px solid #10b981;">
-                        <strong>🎉 ¡Escritura exitosa!</strong><br>
-                        📄 ID del documento: <code>${docRef.id}</code><br>
-                        ✅ Los permisos están funcionando correctamente
-                    </div>
-                `;
-            } catch (error) {
-                output.innerHTML = `
-                    <h4>✍️ Prueba de Permisos de Escritura</h4>
-                    <div style="margin: 1rem 0; padding: 1rem; background: #fef2f2; border-left: 3px solid #ef4444;">
-                        <strong>❌ Error de permisos detectado</strong><br>
-                        🚨 Error: <code>${error.message}</code><br><br>
-                        <strong>💡 Solución:</strong> Actualizar las reglas de Firebase
-                    </div>
-                `;
-            }
-        };
-
-        window.validateDataStructure = async function() {
-            const output = document.getElementById('diagnostic-output');
-            output.innerHTML = '<div class="loading"></div> Validando estructura de datos...';
-            
-            try {
-                const snapshot = await getDocs(query(collection(db, "solicitudes"), orderBy("fecha", "desc")));
-                let structureAnalysis = '<h4>📊 Análisis de Estructura de Datos</h4>';
-                
-                if (snapshot.empty) {
-                    structureAnalysis += '<div style="background: #fffbeb; padding: 1rem; border-left: 3px solid #f59e0b;">No hay documentos para analizar</div>';
-                } else {
-                    const fields = new Set();
-                    let sampleDoc = null;
-                    
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        Object.keys(data).forEach(key => fields.add(key));
-                        if (!sampleDoc) sampleDoc = data;
-                    });
-                    
-                    structureAnalysis += `
-                        <div style="background: #f0fdf4; padding: 1rem; border-left: 3px solid #10b981;">
-                            <strong>✅ ${snapshot.size} documentos analizados</strong><br>
-                            <strong>Campos encontrados:</strong> ${Array.from(fields).join(', ')}<br>
-                        </div>
-                        <div style="background: #f8fafc; padding: 1rem; margin-top: 1rem;">
-                            <strong>Ejemplo de documento:</strong><br>
-                            <pre style="font-size: 0.75rem; margin-top: 0.5rem;">${JSON.stringify(sampleDoc, null, 2)}</pre>
-                        </div>
-                    `;
-                }
-                
-                output.innerHTML = structureAnalysis;
-            } catch (error) {
-                output.innerHTML = `
-                    <h4>📊 Análisis de Estructura de Datos</h4>
-                    <div style="background: #fef2f2; padding: 1rem; border-left: 3px solid #ef4444;">
-                        <strong>❌ Error:</strong> ${error.message}
-                    </div>
-                `;
-            }
-        };
-
-        window.viewFirebaseRules = function() {
-            const output = document.getElementById('diagnostic-output');
-            output.innerHTML = `
-                <h4>📋 Diagnóstico de Reglas Firebase</h4>
-                <div style="background: #eff6ff; padding: 1rem; border-left: 3px solid #3b82f6;">
-                    <strong>🔍 Estado actual:</strong> ${isFirebaseConnected ? 'Conectado' : 'Desconectado'}<br>
-                    <strong>📊 Último error:</strong> ${lastError || 'Ninguno'}<br>
-                    <strong>🔄 Intentos de conexión:</strong> ${connectionAttempts}
-                </div>
-                
-                <div style="background: #f0fdf4; padding: 1rem; margin-top: 1rem; border-left: 3px solid #10b981;">
-                    <strong>✅ Reglas recomendadas:</strong><br>
-                    <pre style="font-size: 0.75rem; margin-top: 0.5rem;">rules_version = '2';
-
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /solicitudes/{document} {
-      allow read, write: if true;
-    }
-    match /access_requests/{document} {
-      allow read, write: if true;
-    }
-  }
-}</pre>
-                </div>
-                
-                <div style="background: #fffbeb; padding: 1rem; margin-top: 1rem; border-left: 3px solid #f59e0b;">
-                    <strong>⚠️ Para aplicar:</strong><br>
-                    1. Firebase Console → Proyecto → Firestore Database → Reglas<br>
-                    2. Copiar reglas de arriba<br>
-                    3. Publicar cambios<br>
-                    4. Esperar 1-2 minutos
-                </div>
-            `;
-        };
-
-        // Exponer funciones necesarias globalmente
-        window.testFirebaseConnection = testFirebaseConnection;
-        window.updateFirebaseStatus = updateFirebaseStatus;
-        window.cargarMisSolicitudesFirebase = cargarMisSolicitudesFirebase;
-
-        // Función para probar Firebase desde login
-        window.testFirebaseFromLogin = async function() {
-            await testFirebaseConnection();
-        };
-
-        // Función para probar Firebase desde solicitudes
-        window.testFirebaseFromRequests = async function() {
-            await testFirebaseConnection();
-            if (currentUser) {
-                cargarMisSolicitudesFirebase();
-            }
-        };
-
-        // Inicialización automática
-        console.log('🚀 Portal de Solicitudes Firebase (VERSIÓN CORREGIDA) iniciando...');
-        updateFirebaseStatus('Inicializando...', 'connecting');
-        
-        // Probar conexión automáticamente al cargar
-        setTimeout(async () => {
-            await testFirebaseConnection();
-        }, 1000);
-
-        // Exponer variables para uso global
-        window.isFirebaseConnected = isFirebaseConnected;
-        window.currentUser = currentUser;
-        window.debugMode = debugMode;
-    </script>
-
     <script>
-        // Funciones adicionales del portal (sin Firebase) - MEJORADAS
-        
         // Mapas de servicios y areas
         const serviciosHospitalarios = {
             'URGENCIAS_ADULTO': 'Urgencias Adulto',
             'URGENCIAS_PEDIATRICAS': 'Urgencias Pediátricas',
+            'URGENCIAS_GINECOLOGIA': 'Urgencias Ginecología',
             'UCI_ADULTO': 'UCI Adulto',
             'UCI_NEONATAL': 'UCI Neonatal',
+            'UCI_INTERMEDIOS': 'UCI Intermedios',
             'HOSPITALIZACION_ADULTO': 'Hospitalización Adulto',
+            'HOSPITALIZACION_PEDIATRIA': 'Hospitalización Pediatría',
             'CIRUGIA_ADULTO': 'Cirugía Adulto',
-            'CIRUGIA_PEDIATRICA': 'Cirugía Pediátrica'
+            'CIRUGIA_PEDIATRICA': 'Cirugía Pediátrica',
+            'SALA_PARTOS': 'Sala de Partos',
+            'CONSULTA_EXTERNA': 'Consulta Externa',
+            'ENDOSCOPIA': 'Endoscopia',
+            'IMAGENES_DIAGNOSTICAS': 'Imágenes Diagnósticas',
+            'LABORATORIO_CLINICO': 'Laboratorio Clínico',
+            'FARMACIA_CENTRAL': 'Farmacia Central',
+            'FISIOTERAPIA': 'Fisioterapia',
+            'VACUNACION': 'Vacunación',
+            'CENTRAL_ESTERILIZACION_ADULTOS': 'Central de Esterilización Adultos',
+            'CENTRAL_ESTERILIZACION_UMI': 'Central de Esterilización UMI',
+            'INGENIERIA_BIOMEDICA': 'Ingeniería Biomédica',
+            'INFRAESTRUCTURA': 'Infraestructura',
+            'MECANICOS': 'Mecánicos',
+            'TRAILER': 'Trailer',
+            'AMBULANCIAS': 'Ambulancias'
         };
 
+        const areasIngenieria = {
+            'INGENIERIA_BIOMEDICA': 'Ingeniería Biomédica',
+            'MECANICA': 'Mecánica',
+            'INFRAESTRUCTURA': 'Infraestructura'
+        };
+
+        let currentUser = null;
         let sessionTimeout = null;
         let myRequests = [];
 
-        // Inicialización MEJORADA
+        // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Portal de Solicitudes Firebase CORREGIDO Iniciado');
+            console.log('🚀 Portal de Solicitudes con Funcionalidad Completa Iniciado');
             
             // Cargar usuarios aprobados y verificar sesión existente
             loadApprovedUsers();
             checkExistingSession();
             initializeEventListeners();
             
-            // Configurar debug panel
-            setupDebugPanel();
-            
-            console.log('✅ Sistema iniciado completamente - Versión Corregida');
+            console.log('✅ Sistema iniciado completamente');
         });
-
-        function setupDebugPanel() {
-            // Toggle debug panel con F12
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'F12') {
-                    e.preventDefault();
-                    toggleDebugPanel();
-                }
-            });
-        }
-
-        function toggleDebugPanel() {
-            window.debugMode = !window.debugMode;
-            const panel = document.getElementById('debug-panel');
-            panel.classList.toggle('visible');
-            console.log(`🔧 Modo debug: ${window.debugMode ? 'ACTIVADO' : 'DESACTIVADO'}`);
-        }
-
-        function toggleDebugDetails() {
-            const details = document.getElementById('debug-details');
-            details.style.display = details.style.display === 'none' ? 'block' : 'none';
-        }
 
         function initializeEventListeners() {
             // Login form
@@ -1923,7 +1095,7 @@ service cloud.firestore {
             document.getElementById('request-form').addEventListener('submit', handleAccessRequest);
             
             // New request form
-            document.getElementById('new-request-form').addEventListener('submit', handleNewRequestFirebase);
+            document.getElementById('new-request-form').addEventListener('submit', handleNewRequest);
         }
 
         function loadApprovedUsers() {
@@ -1972,14 +1144,9 @@ service cloud.firestore {
             
             console.log('🔐 Intentando login con:', { email, accessCode });
             
-            // Validaciones básicas mejoradas
+            // Validaciones básicas
             if (!email || !accessCode) {
                 showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos');
-                return;
-            }
-            
-            if (!email.includes('@')) {
-                showAlert(alertDiv, 'error', '❌ Por favor ingrese un email válido');
                 return;
             }
             
@@ -2027,23 +1194,17 @@ service cloud.firestore {
             
             // Login exitoso
             loginBtn.disabled = true;
-            loginBtn.classList.add('loading');
-            loginBtn.innerHTML = '';
+            loginBtn.innerHTML = '⏳ Verificando...';
             
             setTimeout(() => {
                 authenticateUser(user);
             }, 1500);
         }
 
-        async function handleAccessRequest(e) {
+        function handleAccessRequest(e) {
             e.preventDefault();
             
-            console.log('📝 Iniciando proceso de solicitud de acceso con Firebase (Versión Corregida)...');
-            
-            if (!window.isFirebaseConnected) {
-                showAlert(document.getElementById('request-alert'), 'error', '❌ Firebase no está conectado. Espere a que se establezca la conexión o use el botón "Probar Firebase".');
-                return;
-            }
+            console.log('📝 Iniciando proceso de solicitud de acceso...');
             
             const formData = {
                 id: `ACC${Date.now()}${Math.random().toString(36).substring(2, 5).toUpperCase()}`,
@@ -2052,96 +1213,66 @@ service cloud.firestore {
                 telefono: document.getElementById('req-phone').value.trim(),
                 servicioHospitalario: document.getElementById('req-service').value,
                 cargo: document.getElementById('req-position').value,
-                justificacion: 'Solicitud de acceso al Portal de Solicitudes de Mantenimiento - Sistema Corregido',
+                justificacion: 'Solicitud de acceso al Portal de Solicitudes de Mantenimiento',
                 fechaSolicitud: new Date().toISOString(),
                 estado: 'PENDIENTE',
                 esUrgente: false,
                 numeroDocumento: '',
-                jefeSupervisor: '',
-                // Campos adicionales para mejor tracking
-                userAgent: navigator.userAgent,
-                version: 'CORREGIDA_2.0',
-                origen: 'PORTAL_SOLICITUDES_CORREGIDO'
+                jefeSupervisor: ''
             };
             
             const alertDiv = document.getElementById('request-alert');
             
-            // Validaciones mejoradas
+            // Validaciones
             if (!formData.nombreCompleto || !formData.email || !formData.servicioHospitalario || 
                 !formData.cargo) {
-                showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos obligatorios (marcados con *)');
-                return;
-            }
-
-            if (!formData.email.includes('@')) {
-                showAlert(alertDiv, 'error', '❌ Por favor ingrese un email válido');
+                showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos obligatorios');
                 return;
             }
             
+            // Simular envío de solicitud
             const requestBtn = document.getElementById('request-btn');
             requestBtn.disabled = true;
-            requestBtn.classList.add('loading');
-            requestBtn.innerHTML = '';
+            requestBtn.innerHTML = '⏳ Enviando solicitud...';
             
-            try {
-                // Enviar a Firebase con manejo de errores mejorado
-                const docRef = await window.addDoc(window.collection(window.db, "access_requests"), {
-                    ...formData,
-                    fechaCreacion: window.serverTimestamp()
-                });
-                
-                console.log(`✅ Solicitud de acceso enviada a Firebase con ID: ${docRef.id}`);
-                
-                // También guardar en localStorage para compatibilidad
+            setTimeout(() => {
                 try {
+                    // Cargar solicitudes existentes del localStorage
                     const existingRequests = JSON.parse(localStorage.getItem('hospital_access_requests') || '[]');
-                    existingRequests.push({
-                        ...formData,
-                        firebaseId: docRef.id,
-                        localTimestamp: new Date().toISOString()
-                    });
+                    
+                    // Agregar la nueva solicitud
+                    existingRequests.push(formData);
+                    
+                    // Guardar en localStorage
                     localStorage.setItem('hospital_access_requests', JSON.stringify(existingRequests));
-                    console.log('💾 Solicitud guardada también en localStorage');
-                } catch (localError) {
-                    console.warn('⚠️ Error guardando en localStorage:', localError);
+                    
+                    showAlert(alertDiv, 'success', 
+                        `✅ Solicitud de acceso enviada correctamente.\n\n` +
+                        `📊 DATOS ENVIADOS:\n` +
+                        `• ID: ${formData.id}\n` +
+                        `• Nombre: ${formData.nombreCompleto}\n` +
+                        `• Email: ${formData.email}\n` +
+                        `• Servicio: ${serviciosHospitalarios[formData.servicioHospitalario] || formData.servicioHospitalario}\n` +
+                        `• Cargo: ${formData.cargo}\n\n` +
+                        `📧 Recibirá una notificación por correo cuando sea aprobada.\n` +
+                        `⏱️ El proceso de aprobación puede tomar 24-48 horas.`
+                    );
+                    
+                    // Limpiar formulario
+                    document.getElementById('request-form').reset();
+                    requestBtn.disabled = false;
+                    requestBtn.innerHTML = '📤 Enviar Solicitud de Acceso';
+                    
+                } catch (error) {
+                    console.error('❌ Error al procesar solicitud de acceso:', error);
+                    showAlert(alertDiv, 'error', '❌ Error al enviar la solicitud. Por favor intente nuevamente.');
+                    requestBtn.disabled = false;
+                    requestBtn.innerHTML = '📤 Enviar Solicitud de Acceso';
                 }
-                
-                showAlert(alertDiv, 'success', 
-                    `✅ Solicitud enviada a Firebase correctamente\n\n` +
-                    `🔥 Firebase ID: ${docRef.id}\n` +
-                    `📊 DATOS ENVIADOS:\n` +
-                    `• Nombre: ${formData.nombreCompleto}\n` +
-                    `• Email: ${formData.email}\n` +
-                    `• Servicio: ${formData.servicioHospitalario}\n` +
-                    `• Cargo: ${formData.cargo}\n\n` +
-                    `📧 Recibirá una notificación cuando sea aprobada.\n` +
-                    `🔄 Sincronización automática con Portal de Gestión activada.\n` +
-                    `✅ Sistema corregido funcionando correctamente.`
-                );
-                
-                // Limpiar formulario
-                document.getElementById('request-form').reset();
-                
-            } catch (error) {
-                console.error('❌ Error al enviar a Firebase:', error);
-                
-                let errorMessage = `❌ Error enviando a Firebase: ${error.message}`;
-                
-                if (error.message.includes('REGLAS DE FIREBASE')) {
-                    errorMessage += '\n\n🔧 SOLUCIÓN: Actualizar las reglas de Firebase según las instrucciones del diagnóstico.';
-                } else if (error.message.includes('FIREBASE NO DISPONIBLE')) {
-                    errorMessage += '\n\n🔄 SOLUCIÓN: Verificar conexión a internet e intentar nuevamente.';
-                }
-                
-                showAlert(alertDiv, 'error', errorMessage);
-            } finally {
-                requestBtn.disabled = false;
-                requestBtn.classList.remove('loading');
-                requestBtn.innerHTML = '📤 Enviar Solicitud a Firebase';
-            }
+            }, 2000);
         }
 
-        async function handleNewRequestFirebase(e) {
+        function handleNewRequest(e) {
             e.preventDefault();
             
             if (!currentUser) {
@@ -2149,14 +1280,11 @@ service cloud.firestore {
                 return;
             }
             
-            if (!window.isFirebaseConnected) {
-                showAlert(document.getElementById('form-alert'), 'error', '❌ Firebase no está conectado. Use las herramientas de diagnóstico para resolver el problema.');
-                return;
-            }
-            
-            console.log('🔥 Creando nueva solicitud para Firebase (Versión Corregida)...');
+            console.log('📝 Creando nueva solicitud de mantenimiento...');
             
             const formData = {
+                numero: `SOL${Date.now()}${Math.random().toString(36).substring(2, 3).toUpperCase()}`,
+                servicioIngenieria: document.getElementById('area-ingenieria').value,
                 tipoServicio: document.getElementById('tipo-servicio').value,
                 prioridad: document.getElementById('prioridad').value,
                 equipo: document.getElementById('equipo').value.trim(),
@@ -2168,75 +1296,80 @@ service cloud.firestore {
                 solicitante: currentUser.name,
                 servicioHospitalario: currentUser.service,
                 servicioSolicitante: currentUser.serviceName,
-                emailSolicitante: currentUser.email
+                emailSolicitante: currentUser.email,
+                
+                // Datos de gestión
+                fechaCreacion: new Date().toLocaleString('es-CO'),
+                fechaCreacionISO: new Date().toISOString(),
+                estado: 'PENDIENTE',
+                estadoGestion: 'PENDIENTE',
+                tecnicoAsignado: null,
+                fechaAsignacion: null
             };
             
             const alertDiv = document.getElementById('form-alert');
             
-            // Validaciones mejoradas
-            if (!formData.tipoServicio || !formData.prioridad || !formData.equipo || 
-                !formData.ubicacion || !formData.descripcion) {
-                showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos obligatorios (marcados con *)');
-                return;
-            }
-
-            if (formData.descripcion.length < 10) {
-                showAlert(alertDiv, 'error', '❌ La descripción debe tener al menos 10 caracteres');
+            // Validaciones
+            if (!formData.servicioIngenieria || !formData.tipoServicio || !formData.prioridad || 
+                !formData.equipo || !formData.ubicacion || !formData.descripcion) {
+                showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos obligatorios (*)');
                 return;
             }
             
             const submitBtn = document.getElementById('submit-request-btn');
             submitBtn.disabled = true;
-            submitBtn.classList.add('loading');
-            submitBtn.innerHTML = '';
+            submitBtn.innerHTML = '⏳ Enviando solicitud...';
             
-            try {
-                // Enviar a Firebase usando la función específica corregida
-                const firebaseId = await window.enviarSolicitudFirebase(formData);
-                
-                console.log(`✅ Solicitud enviada a Firebase con ID: ${firebaseId}`);
-                
-                showAlert(alertDiv, 'success', 
-                    `✅ Solicitud enviada a Firebase exitosamente\n\n` +
-                    `🔥 Firebase ID: ${firebaseId}\n` +
-                    `📋 DETALLES:\n` +
-                    `• Servicio: ${formData.tipoServicio}\n` +
-                    `• Prioridad: ${formData.prioridad}\n` +
-                    `• Equipo: ${formData.equipo}\n` +
-                    `• Ubicación: ${formData.ubicacion}\n\n` +
-                    `🔄 Sincronización automática con Portal de Gestión activada.\n` +
-                    `📱 Puede seguir el progreso en "Mis Solicitudes".\n` +
-                    `✅ Sistema corregido funcionando perfectamente.`
-                );
-                
-                // Limpiar formulario
-                document.getElementById('new-request-form').reset();
-                
-                // Actualizar mis solicitudes desde Firebase
-                window.cargarMisSolicitudesFirebase();
-                
-                // Auto-navegar a "Mis Solicitudes" después de 3 segundos
-                setTimeout(() => {
-                    showSection('mis-solicitudes');
-                }, 3000);
-                
-            } catch (error) {
-                console.error('❌ Error enviando solicitud a Firebase:', error);
-                
-                let errorMessage = `❌ Error enviando a Firebase: ${error.message}`;
-                
-                if (error.message.includes('REGLAS DE FIREBASE')) {
-                    errorMessage += '\n\n🔧 SOLUCIÓN: Ir a la sección "Diagnóstico Firebase" para obtener ayuda específica.';
-                } else if (error.message.includes('FIREBASE NO DISPONIBLE')) {
-                    errorMessage += '\n\n🔄 SOLUCIÓN: Verificar conexión a internet e intentar nuevamente en unos minutos.';
+            setTimeout(() => {
+                try {
+                    // Cargar solicitudes existentes
+                    const existingRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]');
+                    
+                    // Agregar nueva solicitud
+                    existingRequests.push(formData);
+                    
+                    // Guardar en localStorage para sincronización con Portal de Gestión
+                    localStorage.setItem('hospital_solicitudes', JSON.stringify(existingRequests));
+                    
+                    // Agregar a solicitudes del usuario
+                    myRequests.push(formData);
+                    
+                    console.log('✅ Solicitud creada:', formData);
+                    
+                    showAlert(alertDiv, 'success', 
+                        `✅ Solicitud enviada exitosamente\n\n` +
+                        `📋 DETALLES DE LA SOLICITUD:\n` +
+                        `• Número: ${formData.numero}\n` +
+                        `• Área: ${areasIngenieria[formData.servicioIngenieria]}\n` +
+                        `• Tipo: ${formData.tipoServicio.replace('_', ' ')}\n` +
+                        `• Prioridad: ${formData.prioridad}\n` +
+                        `• Equipo: ${formData.equipo}\n\n` +
+                        `🔄 Su solicitud será asignada automáticamente al área de ${areasIngenieria[formData.servicioIngenieria]}.\n` +
+                        `📱 Puede seguir el progreso en la sección "Mis Solicitudes".`
+                    );
+                    
+                    // Limpiar formulario
+                    document.getElementById('new-request-form').reset();
+                    
+                    // Actualizar contador de mis solicitudes
+                    updateMyRequestsDisplay();
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '📤 Enviar Solicitud de Mantenimiento';
+                    
+                    // Auto-navegar a "Mis Solicitudes" después de 3 segundos
+                    setTimeout(() => {
+                        showSection('mis-solicitudes');
+                    }, 3000);
+                    
+                } catch (error) {
+                    console.error('❌ Error al crear solicitud:', error);
+                    showAlert(alertDiv, 'error', '❌ Error al enviar la solicitud. Por favor intente nuevamente.');
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '📤 Enviar Solicitud de Mantenimiento';
                 }
-                
-                showAlert(alertDiv, 'error', errorMessage);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('loading');
-                submitBtn.innerHTML = '🔥 Enviar Solicitud a Firebase';
-            }
+            }, 2000);
         }
 
         function authenticateUser(user) {
@@ -2261,16 +1394,13 @@ service cloud.firestore {
             // Guardar sesión
             sessionStorage.setItem('hospitalSession', JSON.stringify(currentUser));
             
-            // Cargar solicitudes del usuario desde Firebase
-            window.cargarMisSolicitudesFirebase();
+            // Cargar solicitudes del usuario
+            loadMyRequests();
             
             // Mostrar portal principal
             showMainPortal();
             
-            console.log('Usuario autenticado (Sistema Corregido):', currentUser.name);
-            
-            // Exponer currentUser globalmente
-            window.currentUser = currentUser;
+            console.log('Usuario autenticado:', currentUser.name);
         }
 
         function showMainPortal() {
@@ -2283,9 +1413,9 @@ service cloud.firestore {
             // Iniciar temporizador de sesión
             startSessionTimer();
             
-            // Mensaje de bienvenida mejorado
+            // Mensaje de bienvenida
             setTimeout(() => {
-                alert(`✅ ¡Bienvenido al Portal Firebase CORREGIDO, ${currentUser.name}!\n\n🏥 Servicio: ${currentUser.serviceName}\n🔥 Firebase: ${window.isFirebaseConnected ? 'Conectado' : 'Verificando...'}\n⏰ Sesión válida por 4 horas\n🔐 Acceso seguro activado\n\n🛠️ Sus solicitudes se enviarán directamente a Firebase\n✅ Sistema corregido con manejo de errores mejorado\n🔧 Use F12 para activar modo debug si necesita diagnóstico`);
+                alert(`✅ ¡Bienvenido al Portal, ${currentUser.name}!\n\n🏥 Servicio autorizado: ${currentUser.serviceName}\n⏰ Sesión válida por 4 horas\n🔐 Acceso seguro activado\n\n🛠️ Ya puede crear y gestionar solicitudes de mantenimiento`);
             }, 500);
         }
 
@@ -2307,6 +1437,7 @@ service cloud.firestore {
             // Actualizar información de autenticación
             document.getElementById('auth-user-display').textContent = currentUser.name;
             document.getElementById('auth-service-display').textContent = currentUser.serviceName;
+            document.getElementById('filter-service-display').textContent = currentUser.serviceName;
         }
 
         function startSessionTimer() {
@@ -2346,8 +1477,7 @@ service cloud.firestore {
                     if (elapsed < session.sessionDuration) {
                         currentUser = session;
                         currentUser.loginTime = new Date(session.loginTime);
-                        window.currentUser = currentUser;
-                        window.cargarMisSolicitudesFirebase();
+                        loadMyRequests();
                         showMainPortal();
                         return;
                     }
@@ -2360,18 +1490,159 @@ service cloud.firestore {
             sessionStorage.removeItem('hospitalSession');
         }
 
-        function refreshMyRequestsFirebase() {
-            if (window.cargarMisSolicitudesFirebase) {
-                window.cargarMisSolicitudesFirebase();
-                alert('🔄 Solicitudes actualizadas desde Firebase (Sistema Corregido)');
-            } else {
-                alert('❌ Firebase no está disponible. Use las herramientas de diagnóstico.');
+        function loadMyRequests() {
+            if (!currentUser) return;
+            
+            try {
+                // Cargar todas las solicitudes
+                const allRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]');
+                
+                // Filtrar solicitudes del usuario por email y servicio
+                myRequests = allRequests.filter(request => 
+                    request.emailSolicitante === currentUser.email || 
+                    request.servicioHospitalario === currentUser.service ||
+                    request.servicioSolicitante === currentUser.serviceName
+                );
+                
+                console.log(`📋 Cargadas ${myRequests.length} solicitudes del usuario`);
+                updateMyRequestsDisplay();
+                
+            } catch (error) {
+                console.error('❌ Error al cargar solicitudes del usuario:', error);
+                myRequests = [];
             }
         }
 
+        function updateMyRequestsDisplay() {
+            const container = document.getElementById('my-requests-list');
+            
+            if (myRequests.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes registradas</h3>
+                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí una vez que las envíe</p>
+                        <button class="btn btn-primary" onclick="showSection('nueva-solicitud')">
+                            🛠️ Crear Primera Solicitud
+                        </button>
+                    </div>
+                `;
+            } else {
+                const requestsHTML = myRequests
+                    .sort((a, b) => new Date(b.fechaCreacionISO || b.fechaCreacion) - new Date(a.fechaCreacionISO || a.fechaCreacion))
+                    .map(request => createMyRequestCard(request))
+                    .join('');
+                
+                container.innerHTML = requestsHTML;
+            }
+        }
+
+        function createMyRequestCard(request) {
+            const getStatusClass = (status) => {
+                const statusMap = {
+                    'PENDIENTE': 'pendiente',
+                    'ASIGNADA': 'asignada',
+                    'EN_PROCESO': 'proceso',
+                    'COMPLETADA': 'completada'
+                };
+                return statusMap[status] || 'pendiente';
+            };
+
+            const getRequestCardClass = (status) => {
+                const classMap = {
+                    'PENDIENTE': 'pending',
+                    'ASIGNADA': 'assigned',
+                    'EN_PROCESO': 'assigned',
+                    'COMPLETADA': 'completed'
+                };
+                return classMap[status] || 'pending';
+            };
+
+            const getPriorityColor = (priority) => {
+                const colorMap = {
+                    'CRITICA': '#ef4444',
+                    'ALTA': '#f59e0b',
+                    'MEDIA': '#3b82f6',
+                    'BAJA': '#059669'
+                };
+                return colorMap[priority] || '#6b7280';
+            };
+
+            const estado = request.estadoGestion || request.estado || 'PENDIENTE';
+            const areaInfo = request.servicioIngenieria ? areasIngenieria[request.servicioIngenieria] : 'Sin especificar';
+            
+            return `
+                <div class="request-card ${getRequestCardClass(estado)}">
+                    <div class="request-header">
+                        <div class="request-number">📋 ${request.numero}</div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <span class="status-${getStatusClass(estado)}">${estado.replace('_', ' ')}</span>
+                            <span style="background: ${getPriorityColor(request.prioridad)}; color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;">
+                                ${request.prioridad}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="request-details">
+                        <div class="request-detail">
+                            <div class="request-detail-label">🔧 Área Técnica</div>
+                            <div class="request-detail-value">${areaInfo}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🔨 Tipo de Servicio</div>
+                            <div class="request-detail-value">${request.tipoServicio?.replace('_', ' ') || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🖥️ Equipo</div>
+                            <div class="request-detail-value">${request.equipo || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📍 Ubicación</div>
+                            <div class="request-detail-value">${request.ubicacion || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📅 Fecha de Solicitud</div>
+                            <div class="request-detail-value">${request.fechaCreacion || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">👨‍🔧 Técnico Asignado</div>
+                            <div class="request-detail-value">${request.tecnicoAsignado || '<span style="color: #f59e0b;">Pendiente de asignación</span>'}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 3px solid #2563eb;">
+                        <div class="request-detail-label">📝 Descripción del Problema</div>
+                        <div style="margin-top: 0.5rem; color: #1f2937;">${request.descripcion || 'No especificada'}</div>
+                        ${request.observaciones ? `<div style="margin-top: 0.5rem; font-style: italic; color: #6b7280;"><strong>Observaciones:</strong> ${request.observaciones}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function refreshMyRequests() {
+            loadMyRequests();
+            alert('🔄 Solicitudes actualizadas');
+        }
+
         function filterMyRequests(filter) {
-            // Esta función se implementará cuando sea necesario
-            alert(`🔍 Filtro ${filter} - Función en desarrollo para sistema corregido`);
+            const allMyRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]')
+                .filter(request => 
+                    request.emailSolicitante === currentUser.email || 
+                    request.servicioHospitalario === currentUser.service ||
+                    request.servicioSolicitante === currentUser.serviceName
+                );
+            
+            let filteredRequests;
+            if (filter === 'all') {
+                filteredRequests = allMyRequests;
+            } else {
+                filteredRequests = allMyRequests.filter(request => 
+                    (request.estadoGestion || request.estado) === filter
+                );
+            }
+            
+            myRequests = filteredRequests;
+            updateMyRequestsDisplay();
         }
 
         function showAlert(container, type, message) {
@@ -2397,9 +1668,9 @@ service cloud.firestore {
             });
             event.currentTarget.classList.add('active');
 
-            // Si se cambia a "mis-solicitudes", cargar desde Firebase
+            // Si se cambia a "mis-solicitudes", actualizar la lista
             if (sectionName === 'mis-solicitudes') {
-                window.cargarMisSolicitudesFirebase();
+                loadMyRequests();
             }
         }
 
@@ -2411,14 +1682,8 @@ service cloud.firestore {
                 clearInterval(sessionTimeout);
             }
             
-            // Limpiar listener de Firebase
-            if (window.unsubscribeMyRequests) {
-                window.unsubscribeMyRequests();
-            }
-            
             sessionStorage.removeItem('hospitalSession');
             currentUser = null;
-            window.currentUser = null;
             myRequests = [];
             
             document.getElementById('main-portal').classList.remove('active');
@@ -2434,124 +1699,1825 @@ service cloud.firestore {
                 }, 500);
             }
             
-            console.log('Sesión cerrada (Sistema Corregido)');
+            console.log('Sesión cerrada');
         }
 
-        // Funciones de utilidad para compatibilidad MEJORADAS
-        function debugFirebaseSystem() {
-            console.log('🔍 Iniciando debug del sistema Firebase corregido...');
+        // Funciones de utilidad para compatibilidad
+        function debugAccessSystem() {
+            console.log('🔍 Iniciando debug del sistema de solicitudes de acceso...');
             
-            const debugInfo = `🔍 DEBUG - Sistema Firebase Portal de Solicitudes CORREGIDO
+            const rawData = localStorage.getItem('hospital_access_requests');
+            const parsedData = rawData ? JSON.parse(rawData) : null;
+            const approvedUsersData = localStorage.getItem('hospital_approved_users');
+            const approvedUsers = approvedUsersData ? JSON.parse(approvedUsersData) : [];
+            
+            const debugInfo = `🔍 DEBUG - Sistema de Solicitudes de Acceso
 
-🔥 ESTADO FIREBASE:
-• Conectado: ${window.isFirebaseConnected ? 'SÍ' : 'NO'}
-• Base de datos: gestion-de-solicitudes-25a93
-• Colecciones: solicitudes, access_requests
-• Intentos de conexión: ${window.connectionAttempts || 0}
-• Último error: ${window.lastError || 'Ninguno'}
+📋 ESTADO DEL LOCALSTORAGE:
+• Solicitudes de acceso: ${parsedData ? parsedData.length : 0}
+• Usuarios aprobados: ${approvedUsers.length}
 
-👥 USUARIO ACTUAL:
-• Email: ${currentUser ? currentUser.email : 'No autenticado'}
-• Nombre: ${currentUser ? currentUser.name : 'No disponible'}
-• Servicio: ${currentUser ? currentUser.serviceName : 'No asignado'}
+👥 USUARIOS DISPONIBLES PARA LOGIN:
+${approvedUsers.length > 0 ? 
+    approvedUsers.map((user, i) => `${i+1}. ${user.nombreCompleto}\n   📧 ${user.email}\n   🔢 Código: ${user.codigoAcceso || 'Sin código'}`).join('\n\n') :
+    'No hay usuarios aprobados disponibles'
+}
 
-📊 SOLICITUDES:
-• En Firebase: ${window.myRequestsFirebase ? window.myRequestsFirebase.length : 0}
-• En localStorage: ${JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]').length}
-
-🔧 FUNCIONES DISPONIBLES:
-• enviarSolicitudFirebase() - MEJORADA
-• cargarMisSolicitudesFirebase() - MEJORADA  
-• testFirebaseConnection() - MEJORADA
-• Diagnóstico automático integrado
-
-🆕 MEJORAS EN ESTA VERSIÓN:
-• Manejo de errores mejorado
-• Reconexión automática
-• Diagnóstico integrado
-• Validaciones adicionales
-• Debug panel (F12)
-
-💡 PARA PROBAR:
-1. Inicie sesión con credenciales válidas
-2. Cree una solicitud nueva
-3. Verifique en "Mis Solicitudes"
-4. Use herramientas de diagnóstico si hay problemas
-5. Revise el Portal de Gestión`;
+💡 INSTRUCCIONES:
+1. Use el Portal de Gestión para aprobar solicitudes
+2. Los códigos se generan automáticamente al aprobar
+3. Use email + código de 4 dígitos para hacer login aquí`;
 
             alert(debugInfo);
         }
 
         function clearAccessData() {
-            const confirmation = confirm('¿Limpiar todos los datos de solicitudes y accesos?\n\n⚠️ Esta acción no se puede deshacer.');
+            const confirmation = confirm('¿Limpiar todos los datos de solicitudes?');
             if (confirmation) {
                 localStorage.removeItem('hospital_access_requests');
                 localStorage.removeItem('hospital_approved_users');
                 localStorage.removeItem('hospital_solicitudes');
-                sessionStorage.removeItem('hospitalSession');
-                alert('🗑️ Datos limpiados completamente\n\n✅ Sistema reiniciado');
-                location.reload();
+                alert('🗑️ Datos limpiados completamente');
             }
         }
 
         function testQuickAccess() {
             const timestamp = new Date().toLocaleTimeString('es-CO');
-            document.getElementById('req-name').value = `Usuario Prueba Corregido ${timestamp}`;
-            document.getElementById('req-email').value = `prueba.corregido.${Date.now()}@hospital.com`;
+            document.getElementById('req-name').value = `Usuario Prueba ${timestamp}`;
+            document.getElementById('req-email').value = `prueba.${Date.now()}@hospital.com`;
             document.getElementById('req-phone').value = '+57 300 123 4567';
             document.getElementById('req-service').value = 'URGENCIAS_ADULTO';
             document.getElementById('req-position').value = 'MEDICO_ESPECIALISTA';
             
-            alert('⚡ Formulario llenado para prueba del sistema corregido.\n\nHaz clic en "Enviar" para enviar a Firebase con las mejoras implementadas.');
-        }
-
-        function showFirebaseHelp() {
-            const helpText = `🆘 AYUDA FIREBASE - SISTEMA CORREGIDO
-
-🔥 PROBLEMAS COMUNES Y SOLUCIONES:
-
-1. 🚨 "Firebase no está conectado"
-   → SOLUCIÓN: Usar botón "Probar Firebase" 
-   → Verificar reglas de Firebase
-   → Comprobar conexión a internet
-
-2. 🚨 "Permission denied" 
-   → SOLUCIÓN: Actualizar reglas de Firebase
-   → Ir a Firebase Console → Reglas
-   → Usar reglas recomendadas en diagnóstico
-
-3. 🚨 "Las solicitudes no llegan al Portal de Gestión"
-   → SOLUCIÓN: Problema de reglas Firebase
-   → Verificar sincronización en tiempo real
-   → Comprobar colecciones en Firebase
-
-🛠️ HERRAMIENTAS DISPONIBLES:
-• Diagnóstico Firebase (en el portal principal)
-• Panel de debug (presionar F12)
-• Botón "Probar Firebase" 
-• Herramientas de conectividad
-
-📞 SOPORTE:
-• Desarrollador: Ing. Paul Eduardo Muñoz R.
-• Sistema: Versión Corregida 2.0
-• Fecha: ${new Date().toLocaleDateString('es-CO')}
-
-💡 TIPS:
-• Usar navegador actualizado (Chrome/Firefox)
-• Desactivar bloqueadores de anuncios temporalmente
-• Verificar que no hay firewall bloqueando Firebase`;
-
-            alert(helpText);
+            alert('⚡ Formulario llenado para prueba. Haz clic en "Enviar Solicitud" para completar.');
         }
 
         // Log de inicialización
-        console.log('🔥 Portal de Solicitudes Firebase CORREGIDO Iniciado');
+        console.log('Portal de Solicitudes con Funcionalidad Completa Iniciado');
         console.log('🔐 Sistema de autenticación: Email + Código de 4 dígitos');
-        console.log('🛠️ Funcionalidades: Crear solicitudes Firebase, ver mis solicitudes, áreas, diagnóstico');
-        console.log('💾 Sincronización: Firebase + localStorage para compatibilidad');
-        console.log('⚡ Tiempo real: Actualizaciones automáticas desde Firebase');
-        console.log('🆕 Mejoras: Manejo de errores, reconexión automática, diagnóstico integrado');
-        console.log('🔧 Debug: Presionar F12 para activar panel de debug');
+        console.log('🛠️ Funcionalidades: Crear solicitudes, ver mis solicitudes, información de áreas');
+        console.log('💾 Sincronización: localStorage con Portal de Gestión');
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Solicitudes - Hospital Susana López de Valencia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Developer credit bar */
+        .developer-bar {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            border-bottom: 2px solid #2563eb;
+        }
+
+        .developer-bar span {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 60px);
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+
+        .login-header .hospital-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .login-header h1 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: 0.75rem;
+            padding: 0.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 0.75rem;
+            background: transparent;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active {
+            background: white;
+            color: #2563eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .auth-form {
+            text-align: left;
+        }
+
+        .auth-form.hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-input.error {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+            transform: translateY(-1px);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #047857, #065f46);
+            transform: translateY(-1px);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            width: auto;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border-color: #22c55e;
+            color: #15803d;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            color: #d97706;
+        }
+
+        /* Main Portal Styles */
+        .main-portal {
+            display: none;
+        }
+
+        .main-portal.active {
+            display: block;
+        }
+
+        .header {
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4.5rem;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo svg {
+            width: 3rem;
+            height: 3rem;
+            color: #2563eb;
+            margin-right: 1rem;
+        }
+
+        .hospital-info h1 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+            line-height: 1.2;
+        }
+
+        .hospital-info p {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #f8fafc;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #e2e8f0;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .user-details h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .verification-badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 1rem;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .welcome-section p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .nav-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-color: #2563eb;
+        }
+
+        .nav-card.active {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .nav-card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .nav-card h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-card p {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            margin-bottom: 2rem;
+        }
+
+        .content-card.hidden {
+            display: none;
+        }
+
+        .form-section {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h2 {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        /* Request Cards */
+        .request-card {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .request-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .request-card.pending {
+            border-left: 4px solid #f59e0b;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        }
+
+        .request-card.assigned {
+            border-left: 4px solid #2563eb;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+
+        .request-card.completed {
+            border-left: 4px solid #059669;
+            background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .request-number {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 1.125rem;
+        }
+
+        .request-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .request-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .request-detail-label {
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .request-detail-value {
+            color: #1f2937;
+        }
+
+        .status-pendiente {
+            background: #fef3c7;
+            color: #d97706;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-asignada {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-proceso {
+            background: #fed7aa;
+            color: #ea580c;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-completada {
+            background: #dcfce7;
+            color: #166534;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .welcome-section h1 {
+                font-size: 2rem;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-info {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hospital-info {
+                text-align: center;
+            }
+        }
+    </style>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+      import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+      
+      // Tu configuración aquí
+      const firebaseConfig = {
+        // Pegar tu configuración real aquí
+      };
+      
+      // Inicializar Firebase
+      window.firebaseApp = initializeApp(firebaseConfig);
+      window.firebaseDB = getFirestore(window.firebaseApp);
+    </script>
+    <!-- Scripts del proyecto -->
+    <script type="module" src="./firebase-config.js"></script>
+    <script type="module" src="./firebase-data.js"></script>
+    <script type="module" src="./firebase-integration.js"></script>
+</head>
+<body>
+    <!-- Developer Credit Bar -->
+    <div class="developer-bar">
+        💻 Desarrollado por <span>Ing. Paul Eduardo Muñoz R.</span> - Sistema Integrado de Gestión con Autenticación
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="hospital-logo">🏥</div>
+                <h1>Portal de Solicitudes</h1>
+                <p>Hospital Susana López de Valencia S.A.S.</p>
+            </div>
+
+            <!-- Auth Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="showAuthTab('login')">🔐 Iniciar Sesión</button>
+                <button class="auth-tab" onclick="showAuthTab('request')">📝 Solicitar Acceso</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <div id="login-alert"></div>
+                
+                <div class="alert alert-info">
+                    <strong>🔐 Autenticación con Código de Acceso</strong><br>
+                    Use su email y el código de 4 dígitos generado automáticamente por el Portal de Gestión tras la aprobación de su solicitud.
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">📧 Correo Electrónico</label>
+                    <input type="email" class="form-input" id="email" required placeholder="Ingrese su correo electrónico">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🔢 Código de Acceso (4 dígitos)</label>
+                    <input type="text" class="form-input" id="access-code" required placeholder="Código de 4 dígitos generado por el Portal de Gestión" maxlength="4" pattern="[0-9]{4}" style="text-align: center; font-size: 1.25rem; letter-spacing: 0.5rem;">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="login-btn">
+                    🚀 Acceder al Portal
+                </button>
+
+                <div style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: #6b7280;">
+                    ¿No tienes acceso? Haz clic en "Solicitar Acceso" y espera la aprobación
+                </div>
+            </form>
+
+            <!-- Request Access Form -->
+            <form id="request-form" class="auth-form hidden">
+                <div id="request-alert"></div>
+
+                <div class="alert alert-info">
+                    <strong>📋 Solicitud de Acceso Simplificada</strong><br>
+                    Complete los campos básicos para solicitar acceso al portal. Su solicitud será procesada automáticamente con sincronización en tiempo real.
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">👤 Nombre Completo *</label>
+                    <input type="text" class="form-input" id="req-name" required placeholder="Nombres y apellidos">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📧 Correo Electrónico *</label>
+                    <input type="email" class="form-input" id="req-email" required placeholder="correo@hospital.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🏥 Servicio/Área *</label>
+                    <select class="form-select" id="req-service" required>
+                        <option value="">Seleccione su servicio</option>
+                        <option value="URGENCIAS_ADULTO">Urgencias Adulto</option>
+                        <option value="URGENCIAS_PEDIATRICAS">Urgencias Pediátricas</option>
+                        <option value="URGENCIAS_GINECOLOGIA">Urgencias Ginecología</option>
+                        <option value="UCI_ADULTO">UCI Adulto</option>
+                        <option value="UCI_NEONATAL">UCI Neonatal</option>
+                        <option value="UCI_INTERMEDIOS">UCI Intermedios</option>
+                        <option value="HOSPITALIZACION_ADULTO">Hospitalización Adulto</option>
+                        <option value="HOSPITALIZACION_PEDIATRIA">Hospitalización Pediatría</option>
+                        <option value="CIRUGIA_ADULTO">Cirugía Adulto</option>
+                        <option value="CIRUGIA_PEDIATRICA">Cirugía Pediátrica</option>
+                        <option value="SALA_PARTOS">Sala de Partos</option>
+                        <option value="CONSULTA_EXTERNA">Consulta Externa</option>
+                        <option value="ENDOSCOPIA">Endoscopia</option>
+                        <option value="IMAGENES_DIAGNOSTICAS">Imágenes Diagnósticas</option>
+                        <option value="LABORATORIO_CLINICO">Laboratorio Clínico</option>
+                        <option value="FARMACIA_CENTRAL">Farmacia Central</option>
+                        <option value="FISIOTERAPIA">Fisioterapia</option>
+                        <option value="VACUNACION">Vacunación</option>
+                        <option value="CENTRAL_ESTERILIZACION_ADULTOS">Central de Esterilización Adultos</option>
+                        <option value="CENTRAL_ESTERILIZACION_UMI">Central de Esterilización UMI</option>
+                        <option value="INGENIERIA_BIOMEDICA">Ingeniería Biomédica</option>
+                        <option value="INFRAESTRUCTURA">Infraestructura</option>
+                        <option value="MECANICOS">Mecánicos</option>
+                        <option value="TRAILER">Trailer</option>
+                        <option value="AMBULANCIAS">Ambulancias</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">💼 Cargo/Posición *</label>
+                    <select class="form-select" id="req-position" required>
+                        <option value="">Seleccione su cargo</option>
+                        <option value="JEFE_SERVICIO">Jefe de Servicio</option>
+                        <option value="COORDINADOR">Coordinador</option>
+                        <option value="ENFERMERA_JEFE">Enfermera Jefe</option>
+                        <option value="MEDICO_ESPECIALISTA">Médico Especialista</option>
+                        <option value="AUXILIAR_ENFERMERIA">Auxiliar de Enfermería</option>
+                        <option value="ADMINISTRATIVO">Personal Administrativo</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📱 Teléfono/WhatsApp</label>
+                    <input type="tel" class="form-input" id="req-phone" placeholder="+57 300 123 4567">
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="request-btn">
+                    📤 Enviar Solicitud de Acceso
+                </button>
+
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="debugAccessSystem()" style="width: auto;">
+                        🔍 Debug Sistema
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="clearAccessData()" style="width: auto;">
+                        🗑️ Limpiar Datos de Prueba
+                    </button>
+                    <button type="button" class="btn btn-warning btn-sm" onclick="testQuickAccess()" style="width: auto;">
+                        ⚡ Prueba Rápida
+                    </button>
+                </div>
+
+                <div style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: #6b7280;">
+                    ¿Ya tienes acceso? Haz clic en "Iniciar Sesión"
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Portal (hidden initially) -->
+    <div id="main-portal" class="main-portal">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content container">
+                <div class="logo">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                    <div class="hospital-info">
+                        <h1>Hospital Susana López de Valencia S.A.S.</h1>
+                        <p>Portal de Solicitudes de Servicios - Versión Autenticada</p>
+                    </div>
+                </div>
+
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">👤</div>
+                    <div class="user-details">
+                        <h3 id="user-name">Usuario del Sistema</h3>
+                        <p id="user-service">Seleccione servicio</p>
+                        <span class="verification-badge">✓ Verificado</span>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">🚪 Salir</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content container">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1>Portal Autenticado de Servicios</h1>
+                <p>Acceso seguro para personal autorizado del hospital</p>
+            </div>
+
+            <!-- Navigation Cards -->
+            <div class="nav-grid">
+                <div class="nav-card active" onclick="showSection('nueva-solicitud')">
+                    <span class="nav-card-icon">🛠️</span>
+                    <h3>Nueva Solicitud</h3>
+                    <p>Crear solicitud con discriminación automática por área técnica</p>
+                </div>
+                
+                <div class="nav-card" onclick="showSection('mis-solicitudes')">
+                    <span class="nav-card-icon">📋</span>
+                    <h3>Mis Solicitudes</h3>
+                    <p>Ver historial personalizado de sus solicitudes</p>
+                </div>
+                
+                <div class="nav-card" onclick="showSection('servicios')">
+                    <span class="nav-card-icon">🏥</span>
+                    <h3>Áreas de Ingeniería</h3>
+                    <p>Información sobre áreas técnicas disponibles</p>
+                </div>
+            </div>
+
+            <!-- Content sections -->
+            <div id="nueva-solicitud" class="content-card">
+                <div class="form-section">
+                    <div class="form-header">
+                        <h2>🛠️ Nueva Solicitud de Servicio</h2>
+                        <p>Sistema autenticado de solicitudes con asignación automática</p>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <strong>✅ Usuario Autenticado:</strong> <span id="auth-user-display"></span><br>
+                        <strong>🏥 Servicio Autorizado:</strong> <span id="auth-service-display"></span><br>
+                        <strong>⏰ Sesión Válida:</strong> <span id="session-timer"></span>
+                    </div>
+
+                    <!-- Formulario de Nueva Solicitud -->
+                    <form id="new-request-form">
+                        <div id="form-alert"></div>
+
+                        <div class="form-group">
+                            <label class="form-label">🔧 Área de Ingeniería *</label>
+                            <select id="area-ingenieria" class="form-select" required>
+                                <option value="">Seleccione el área técnica</option>
+                                <option value="INGENIERIA_BIOMEDICA">🏥 Ingeniería Biomédica</option>
+                                <option value="MECANICA">⚙️ Mecánica</option>
+                                <option value="INFRAESTRUCTURA">🏗️ Infraestructura</option>
+                            </select>
+                            <small style="color: #6b7280; font-size: 0.75rem;">La solicitud será asignada automáticamente al área seleccionada</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">🔨 Tipo de Servicio *</label>
+                            <select id="tipo-servicio" class="form-select" required>
+                                <option value="">Seleccione el tipo de servicio</option>
+                                <option value="MANTENIMIENTO_PREVENTIVO">🔧 Mantenimiento Preventivo</option>
+                                <option value="MANTENIMIENTO_CORRECTIVO">🛠️ Mantenimiento Correctivo</option>
+                                <option value="REPARACION">🔨 Reparación</option>
+                                <option value="INSTALACION">📦 Instalación</option>
+                                <option value="CALIBRACION">⚖️ Calibración</option>
+                                <option value="INSPECCION">👁️ Inspección</option>
+                                <option value="ACTUALIZACION">🔄 Actualización</option>
+                                <option value="EMERGENCIA">🚨 Emergencia</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">⚡ Prioridad *</label>
+                            <select id="prioridad" class="form-select" required>
+                                <option value="">Seleccione la prioridad</option>
+                                <option value="CRITICA">🚨 Crítica (Equipos vitales, falla total)</option>
+                                <option value="ALTA">🔴 Alta (Equipos importantes, funcionamiento limitado)</option>
+                                <option value="MEDIA">🟡 Media (Equipos secundarios, funcionamiento normal)</option>
+                                <option value="BAJA">🟢 Baja (Mantenimiento rutinario)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">🖥️ Equipo/Sistema Afectado *</label>
+                            <input type="text" id="equipo" class="form-input" required placeholder="Ej: Ventilador mecánico Marca X Modelo Y - Habitación 201">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📍 Ubicación Específica *</label>
+                            <input type="text" id="ubicacion" class="form-input" required placeholder="Ej: UCI Adulto - Habitación 201 - Cama 3">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📝 Descripción del Problema *</label>
+                            <textarea id="descripcion" class="form-textarea" required placeholder="Describa detalladamente el problema, síntomas observados, cuándo ocurrió, etc."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📋 Observaciones Adicionales</label>
+                            <textarea id="observaciones" class="form-textarea" placeholder="Información adicional que considere relevante"></textarea>
+                        </div>
+
+                        <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; margin: 1.5rem 0; border-left: 3px solid #2563eb;">
+                            <h4 style="color: #1e40af; margin-bottom: 0.5rem;">💡 Información del Sistema</h4>
+                            <ul style="color: #1e40af; margin: 0; padding-left: 1rem; font-size: 0.875rem;">
+                                <li>Su solicitud será enviada automáticamente al área de ingeniería correspondiente</li>
+                                <li>Recibirá notificación cuando sea asignada a un técnico</li>
+                                <li>Puede seguir el progreso en la sección "Mis Solicitudes"</li>
+                                <li>Para emergencias críticas, contacte también por teléfono</li>
+                            </ul>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="submit-request-btn">
+                            📤 Enviar Solicitud de Mantenimiento
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="mis-solicitudes" class="content-card hidden">
+                <div class="form-header">
+                    <h2>📋 Mis Solicitudes</h2>
+                    <p>Historial personalizado de solicitudes de su servicio</p>
+                </div>
+                
+                <div class="alert alert-info">
+                    <strong>🔍 Filtrado Automático:</strong> Solo se muestran las solicitudes de su servicio: <span id="filter-service-display"></span>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary btn-sm" onclick="refreshMyRequests()">
+                        🔄 Actualizar
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="filterMyRequests('all')">
+                        📋 Todas
+                    </button>
+                    <button class="btn btn-warning btn-sm" onclick="filterMyRequests('PENDIENTE')">
+                        ⏳ Pendientes
+                    </button>
+                    <button class="btn btn-success btn-sm" onclick="filterMyRequests('COMPLETADA')">
+                        ✅ Completadas
+                    </button>
+                </div>
+
+                <div id="my-requests-list">
+                    <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes registradas</h3>
+                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí una vez que las envíe</p>
+                        <button class="btn btn-primary" onclick="showSection('nueva-solicitud')">
+                            🛠️ Crear Primera Solicitud
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="servicios" class="content-card hidden">
+                <div class="form-header">
+                    <h2>🏥 Áreas de Ingeniería Disponibles</h2>
+                    <p>Información sobre las áreas técnicas del hospital</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 2rem; border-radius: 1rem; border: 2px solid #059669;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏥</div>
+                        <h3 style="color: #065f46; margin-bottom: 1rem;">Ingeniería Biomédica</h3>
+                        <p style="color: #047857; margin-bottom: 1rem;">Especializada en equipos médicos y tecnología hospitalaria</p>
+                        <ul style="color: #047857; font-size: 0.875rem; line-height: 1.6;">
+                            <li>Equipos de UCI y monitoreo</li>
+                            <li>Ventiladores mecánicos</li>
+                            <li>Bombas de infusión</li>
+                            <li>Equipos de imagenología</li>
+                            <li>Sistemas de gases medicinales</li>
+                            <li>Equipos de laboratorio</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #fefbeb 0%, #fef3c7 100%); padding: 2rem; border-radius: 1rem; border: 2px solid #f59e0b;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚙️</div>
+                        <h3 style="color: #d97706; margin-bottom: 1rem;">Mecánica</h3>
+                        <p style="color: #b45309; margin-bottom: 1rem;">Mantenimiento de sistemas mecánicos y equipos industriales</p>
+                        <ul style="color: #b45309; font-size: 0.875rem; line-height: 1.6;">
+                            <li>Sistemas de climatización</li>
+                            <li>Calderas y sistemas de vapor</li>
+                            <li>Compresores y sistemas neumáticos</li>
+                            <li>Equipos de lavandería</li>
+                            <li>Ascensores y montacargas</li>
+                            <li>Sistemas de bombeo</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #f3f4f6 0%, #ede9fe 100%); padding: 2rem; border-radius: 1rem; border: 2px solid #8b5cf6;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🏗️</div>
+                        <h3 style="color: #7c3aed; margin-bottom: 1rem;">Infraestructura</h3>
+                        <p style="color: #6d28d9; margin-bottom: 1rem;">Mantenimiento de instalaciones y servicios generales</p>
+                        <ul style="color: #6d28d9; font-size: 0.875rem; line-height: 1.6;">
+                            <li>Sistemas eléctricos</li>
+                            <li>Redes hidráulicas y sanitarias</li>
+                            <li>Estructuras y acabados</li>
+                            <li>Sistemas de seguridad</li>
+                            <li>Jardines y áreas exteriores</li>
+                            <li>Señalización y demarcación</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #f8fafc; border-radius: 1rem; border-left: 4px solid #2563eb;">
+                    <h4 style="color: #1f2937; margin-bottom: 1rem;">💡 Cómo funciona el sistema</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">1. 📝 Envía tu solicitud</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">Describe el problema y selecciona el área correspondiente</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">2. 🤖 Asignación automática</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">El sistema asigna la solicitud al técnico disponible</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">3. 🔧 Atención técnica</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">El técnico especializado atiende tu solicitud</p>
+                        </div>
+                        <div>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">4. ✅ Seguimiento</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">Puedes seguir el progreso en "Mis Solicitudes"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mapas de servicios y areas
+        const serviciosHospitalarios = {
+            'URGENCIAS_ADULTO': 'Urgencias Adulto',
+            'URGENCIAS_PEDIATRICAS': 'Urgencias Pediátricas',
+            'URGENCIAS_GINECOLOGIA': 'Urgencias Ginecología',
+            'UCI_ADULTO': 'UCI Adulto',
+            'UCI_NEONATAL': 'UCI Neonatal',
+            'UCI_INTERMEDIOS': 'UCI Intermedios',
+            'HOSPITALIZACION_ADULTO': 'Hospitalización Adulto',
+            'HOSPITALIZACION_PEDIATRIA': 'Hospitalización Pediatría',
+            'CIRUGIA_ADULTO': 'Cirugía Adulto',
+            'CIRUGIA_PEDIATRICA': 'Cirugía Pediátrica',
+            'SALA_PARTOS': 'Sala de Partos',
+            'CONSULTA_EXTERNA': 'Consulta Externa',
+            'ENDOSCOPIA': 'Endoscopia',
+            'IMAGENES_DIAGNOSTICAS': 'Imágenes Diagnósticas',
+            'LABORATORIO_CLINICO': 'Laboratorio Clínico',
+            'FARMACIA_CENTRAL': 'Farmacia Central',
+            'FISIOTERAPIA': 'Fisioterapia',
+            'VACUNACION': 'Vacunación',
+            'CENTRAL_ESTERILIZACION_ADULTOS': 'Central de Esterilización Adultos',
+            'CENTRAL_ESTERILIZACION_UMI': 'Central de Esterilización UMI',
+            'INGENIERIA_BIOMEDICA': 'Ingeniería Biomédica',
+            'INFRAESTRUCTURA': 'Infraestructura',
+            'MECANICOS': 'Mecánicos',
+            'TRAILER': 'Trailer',
+            'AMBULANCIAS': 'Ambulancias'
+        };
+
+        const areasIngenieria = {
+            'INGENIERIA_BIOMEDICA': 'Ingeniería Biomédica',
+            'MECANICA': 'Mecánica',
+            'INFRAESTRUCTURA': 'Infraestructura'
+        };
+
+        let currentUser = null;
+        let sessionTimeout = null;
+        let myRequests = [];
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Portal de Solicitudes con Funcionalidad Completa Iniciado');
+            
+            // Cargar usuarios aprobados y verificar sesión existente
+            loadApprovedUsers();
+            checkExistingSession();
+            initializeEventListeners();
+            
+            console.log('✅ Sistema iniciado completamente');
+        });
+
+        function initializeEventListeners() {
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            
+            // Request access form
+            document.getElementById('request-form').addEventListener('submit', handleAccessRequest);
+            
+            // New request form
+            document.getElementById('new-request-form').addEventListener('submit', handleNewRequest);
+        }
+
+        function loadApprovedUsers() {
+            console.log('🔐 Cargando usuarios aprobados desde Portal de Gestión...');
+            
+            try {
+                const approvedUsersData = localStorage.getItem('hospital_approved_users');
+                const approvedUsers = approvedUsersData ? JSON.parse(approvedUsersData) : [];
+                
+                console.log(`✅ ${approvedUsers.length} usuarios aprobados encontrados:`, approvedUsers);
+                
+                return approvedUsers;
+            } catch (error) {
+                console.error('❌ Error al cargar usuarios aprobados:', error);
+                return [];
+            }
+        }
+
+        function showAuthTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide forms
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.add('hidden'));
+            
+            if (tab === 'login') {
+                document.getElementById('login-form').classList.remove('hidden');
+            } else {
+                document.getElementById('request-form').classList.remove('hidden');
+            }
+            
+            // Clear alerts
+            document.getElementById('login-alert').innerHTML = '';
+            document.getElementById('request-alert').innerHTML = '';
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const accessCode = document.getElementById('access-code').value.trim();
+            
+            const alertDiv = document.getElementById('login-alert');
+            const loginBtn = document.getElementById('login-btn');
+            
+            console.log('🔐 Intentando login con:', { email, accessCode });
+            
+            // Validaciones básicas
+            if (!email || !accessCode) {
+                showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos');
+                return;
+            }
+            
+            // Validar formato del código de acceso
+            if (accessCode.length !== 4 || !/^[0-9]{4}$/.test(accessCode)) {
+                showAlert(alertDiv, 'error', '❌ El código de acceso debe contener exactamente 4 dígitos');
+                return;
+            }
+            
+            // Cargar usuarios aprobados desde localStorage
+            const approvedUsers = loadApprovedUsers();
+            
+            if (approvedUsers.length === 0) {
+                showAlert(alertDiv, 'error', '⚠️ No hay usuarios aprobados en el sistema. Contacte al administrador o use el Portal de Gestión para aprobar solicitudes.');
+                return;
+            }
+            
+            // Buscar usuario por email
+            const user = approvedUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+            
+            if (!user) {
+                showAlert(alertDiv, 'error', '❌ Usuario no encontrado. Verifique su email o solicite acceso.');
+                return;
+            }
+            
+            // Verificar estado del usuario
+            if (user.estado !== 'ACTIVO') {
+                showAlert(alertDiv, 'error', `⏳ Su cuenta está en estado: ${user.estado}. Contacte al administrador.`);
+                return;
+            }
+            
+            // Verificar código de acceso
+            if (!user.codigoAcceso) {
+                showAlert(alertDiv, 'error', '❌ Su cuenta no tiene código de acceso asignado. Contacte al administrador del Portal de Gestión.');
+                return;
+            }
+            
+            const userCode = String(user.codigoAcceso);
+            const inputCode = String(accessCode);
+            
+            if (userCode !== inputCode) {
+                showAlert(alertDiv, 'error', '❌ Código de acceso incorrecto. Use el código de 4 dígitos proporcionado por el Portal de Gestión.');
+                return;
+            }
+            
+            // Login exitoso
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '⏳ Verificando...';
+            
+            setTimeout(() => {
+                authenticateUser(user);
+            }, 1500);
+        }
+
+        function handleAccessRequest(e) {
+            e.preventDefault();
+            
+            console.log('📝 Iniciando proceso de solicitud de acceso...');
+            
+            const formData = {
+                id: `ACC${Date.now()}${Math.random().toString(36).substring(2, 5).toUpperCase()}`,
+                nombreCompleto: document.getElementById('req-name').value.trim(),
+                email: document.getElementById('req-email').value.trim(),
+                telefono: document.getElementById('req-phone').value.trim(),
+                servicioHospitalario: document.getElementById('req-service').value,
+                cargo: document.getElementById('req-position').value,
+                justificacion: 'Solicitud de acceso al Portal de Solicitudes de Mantenimiento',
+                fechaSolicitud: new Date().toISOString(),
+                estado: 'PENDIENTE',
+                esUrgente: false,
+                numeroDocumento: '',
+                jefeSupervisor: ''
+            };
+            
+            const alertDiv = document.getElementById('request-alert');
+            
+            // Validaciones
+            if (!formData.nombreCompleto || !formData.email || !formData.servicioHospitalario || 
+                !formData.cargo) {
+                showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos obligatorios');
+                return;
+            }
+            
+            // Simular envío de solicitud
+            const requestBtn = document.getElementById('request-btn');
+            requestBtn.disabled = true;
+            requestBtn.innerHTML = '⏳ Enviando solicitud...';
+            
+            setTimeout(() => {
+                try {
+                    // Cargar solicitudes existentes del localStorage
+                    const existingRequests = JSON.parse(localStorage.getItem('hospital_access_requests') || '[]');
+                    
+                    // Agregar la nueva solicitud
+                    existingRequests.push(formData);
+                    
+                    // Guardar en localStorage
+                    localStorage.setItem('hospital_access_requests', JSON.stringify(existingRequests));
+                    
+                    showAlert(alertDiv, 'success', 
+                        `✅ Solicitud de acceso enviada correctamente.\n\n` +
+                        `📊 DATOS ENVIADOS:\n` +
+                        `• ID: ${formData.id}\n` +
+                        `• Nombre: ${formData.nombreCompleto}\n` +
+                        `• Email: ${formData.email}\n` +
+                        `• Servicio: ${serviciosHospitalarios[formData.servicioHospitalario] || formData.servicioHospitalario}\n` +
+                        `• Cargo: ${formData.cargo}\n\n` +
+                        `📧 Recibirá una notificación por correo cuando sea aprobada.\n` +
+                        `⏱️ El proceso de aprobación puede tomar 24-48 horas.`
+                    );
+                    
+                    // Limpiar formulario
+                    document.getElementById('request-form').reset();
+                    requestBtn.disabled = false;
+                    requestBtn.innerHTML = '📤 Enviar Solicitud de Acceso';
+                    
+                } catch (error) {
+                    console.error('❌ Error al procesar solicitud de acceso:', error);
+                    showAlert(alertDiv, 'error', '❌ Error al enviar la solicitud. Por favor intente nuevamente.');
+                    requestBtn.disabled = false;
+                    requestBtn.innerHTML = '📤 Enviar Solicitud de Acceso';
+                }
+            }, 2000);
+        }
+
+        function handleNewRequest(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                alert('❌ Error de sesión. Por favor inicie sesión nuevamente.');
+                return;
+            }
+            
+            console.log('📝 Creando nueva solicitud de mantenimiento...');
+            
+            const formData = {
+                numero: `SOL${Date.now()}${Math.random().toString(36).substring(2, 3).toUpperCase()}`,
+                servicioIngenieria: document.getElementById('area-ingenieria').value,
+                tipoServicio: document.getElementById('tipo-servicio').value,
+                prioridad: document.getElementById('prioridad').value,
+                equipo: document.getElementById('equipo').value.trim(),
+                ubicacion: document.getElementById('ubicacion').value.trim(),
+                descripcion: document.getElementById('descripcion').value.trim(),
+                observaciones: document.getElementById('observaciones').value.trim(),
+                
+                // Datos del usuario autenticado
+                solicitante: currentUser.name,
+                servicioHospitalario: currentUser.service,
+                servicioSolicitante: currentUser.serviceName,
+                emailSolicitante: currentUser.email,
+                
+                // Datos de gestión
+                fechaCreacion: new Date().toLocaleString('es-CO'),
+                fechaCreacionISO: new Date().toISOString(),
+                estado: 'PENDIENTE',
+                estadoGestion: 'PENDIENTE',
+                tecnicoAsignado: null,
+                fechaAsignacion: null
+            };
+            
+            const alertDiv = document.getElementById('form-alert');
+            
+            // Validaciones
+            if (!formData.servicioIngenieria || !formData.tipoServicio || !formData.prioridad || 
+                !formData.equipo || !formData.ubicacion || !formData.descripcion) {
+                showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos obligatorios (*)');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submit-request-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '⏳ Enviando solicitud...';
+            
+            setTimeout(() => {
+                try {
+                    // Cargar solicitudes existentes
+                    const existingRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]');
+                    
+                    // Agregar nueva solicitud
+                    existingRequests.push(formData);
+                    
+                    // Guardar en localStorage para sincronización con Portal de Gestión
+                    localStorage.setItem('hospital_solicitudes', JSON.stringify(existingRequests));
+                    
+                    // Agregar a solicitudes del usuario
+                    myRequests.push(formData);
+                    
+                    console.log('✅ Solicitud creada:', formData);
+                    
+                    showAlert(alertDiv, 'success', 
+                        `✅ Solicitud enviada exitosamente\n\n` +
+                        `📋 DETALLES DE LA SOLICITUD:\n` +
+                        `• Número: ${formData.numero}\n` +
+                        `• Área: ${areasIngenieria[formData.servicioIngenieria]}\n` +
+                        `• Tipo: ${formData.tipoServicio.replace('_', ' ')}\n` +
+                        `• Prioridad: ${formData.prioridad}\n` +
+                        `• Equipo: ${formData.equipo}\n\n` +
+                        `🔄 Su solicitud será asignada automáticamente al área de ${areasIngenieria[formData.servicioIngenieria]}.\n` +
+                        `📱 Puede seguir el progreso en la sección "Mis Solicitudes".`
+                    );
+                    
+                    // Limpiar formulario
+                    document.getElementById('new-request-form').reset();
+                    
+                    // Actualizar contador de mis solicitudes
+                    updateMyRequestsDisplay();
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '📤 Enviar Solicitud de Mantenimiento';
+                    
+                    // Auto-navegar a "Mis Solicitudes" después de 3 segundos
+                    setTimeout(() => {
+                        showSection('mis-solicitudes');
+                    }, 3000);
+                    
+                } catch (error) {
+                    console.error('❌ Error al crear solicitud:', error);
+                    showAlert(alertDiv, 'error', '❌ Error al enviar la solicitud. Por favor intente nuevamente.');
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '📤 Enviar Solicitud de Mantenimiento';
+                }
+            }, 2000);
+        }
+
+        function authenticateUser(user) {
+            currentUser = {
+                email: user.email,
+                name: user.nombreCompleto,
+                service: user.servicioHospitalario,
+                serviceName: serviciosHospitalarios[user.servicioHospitalario] || user.servicioHospitalario,
+                position: user.cargo,
+                loginTime: new Date(),
+                sessionDuration: 4 * 60 * 60 * 1000 // 4 horas
+            };
+            
+            // Actualizar último login en localStorage
+            const approvedUsers = JSON.parse(localStorage.getItem('hospital_approved_users') || '[]');
+            const userIndex = approvedUsers.findIndex(u => u.email === user.email);
+            if (userIndex !== -1) {
+                approvedUsers[userIndex].ultimoAcceso = new Date().toISOString();
+                localStorage.setItem('hospital_approved_users', JSON.stringify(approvedUsers));
+            }
+            
+            // Guardar sesión
+            sessionStorage.setItem('hospitalSession', JSON.stringify(currentUser));
+            
+            // Cargar solicitudes del usuario
+            loadMyRequests();
+            
+            // Mostrar portal principal
+            showMainPortal();
+            
+            console.log('Usuario autenticado:', currentUser.name);
+        }
+
+        function showMainPortal() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-portal').classList.add('active');
+            
+            // Actualizar información del usuario
+            updateUserInterface();
+            
+            // Iniciar temporizador de sesión
+            startSessionTimer();
+            
+            // Mensaje de bienvenida
+            setTimeout(() => {
+                alert(`✅ ¡Bienvenido al Portal, ${currentUser.name}!\n\n🏥 Servicio autorizado: ${currentUser.serviceName}\n⏰ Sesión válida por 4 horas\n🔐 Acceso seguro activado\n\n🛠️ Ya puede crear y gestionar solicitudes de mantenimiento`);
+            }, 500);
+        }
+
+        function updateUserInterface() {
+            // Actualizar header
+            document.getElementById('user-name').textContent = currentUser.name;
+            document.getElementById('user-service').textContent = currentUser.serviceName;
+            
+            // Crear iniciales para avatar
+            const initials = currentUser.name.split(' ')
+                .filter(word => word.length > 0)
+                .map(word => word[0])
+                .join('')
+                .substring(0, 2)
+                .toUpperCase();
+            
+            document.getElementById('user-avatar').textContent = initials;
+            
+            // Actualizar información de autenticación
+            document.getElementById('auth-user-display').textContent = currentUser.name;
+            document.getElementById('auth-service-display').textContent = currentUser.serviceName;
+            document.getElementById('filter-service-display').textContent = currentUser.serviceName;
+        }
+
+        function startSessionTimer() {
+            const updateTimer = () => {
+                if (!currentUser) return;
+                
+                const now = new Date();
+                const elapsed = now - currentUser.loginTime;
+                const remaining = currentUser.sessionDuration - elapsed;
+                
+                if (remaining <= 0) {
+                    logout('Su sesión ha expirado por seguridad.');
+                    return;
+                }
+                
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                
+                const timerElement = document.getElementById('session-timer');
+                if (timerElement) {
+                    timerElement.textContent = `${hours}h ${minutes}m restantes`;
+                }
+            };
+            
+            updateTimer();
+            sessionTimeout = setInterval(updateTimer, 60000); // Actualizar cada minuto
+        }
+
+        function checkExistingSession() {
+            const savedSession = sessionStorage.getItem('hospitalSession');
+            if (savedSession) {
+                try {
+                    const session = JSON.parse(savedSession);
+                    const now = new Date();
+                    const elapsed = now - new Date(session.loginTime);
+                    
+                    if (elapsed < session.sessionDuration) {
+                        currentUser = session;
+                        currentUser.loginTime = new Date(session.loginTime);
+                        loadMyRequests();
+                        showMainPortal();
+                        return;
+                    }
+                } catch (e) {
+                    console.log('Error recuperando sesión:', e);
+                }
+            }
+            
+            // Limpiar sesión inválida
+            sessionStorage.removeItem('hospitalSession');
+        }
+
+        function loadMyRequests() {
+            if (!currentUser) return;
+            
+            try {
+                // Cargar todas las solicitudes
+                const allRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]');
+                
+                // Filtrar solicitudes del usuario por email y servicio
+                myRequests = allRequests.filter(request => 
+                    request.emailSolicitante === currentUser.email || 
+                    request.servicioHospitalario === currentUser.service ||
+                    request.servicioSolicitante === currentUser.serviceName
+                );
+                
+                console.log(`📋 Cargadas ${myRequests.length} solicitudes del usuario`);
+                updateMyRequestsDisplay();
+                
+            } catch (error) {
+                console.error('❌ Error al cargar solicitudes del usuario:', error);
+                myRequests = [];
+            }
+        }
+
+        function updateMyRequestsDisplay() {
+            const container = document.getElementById('my-requests-list');
+            
+            if (myRequests.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes registradas</h3>
+                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí una vez que las envíe</p>
+                        <button class="btn btn-primary" onclick="showSection('nueva-solicitud')">
+                            🛠️ Crear Primera Solicitud
+                        </button>
+                    </div>
+                `;
+            } else {
+                const requestsHTML = myRequests
+                    .sort((a, b) => new Date(b.fechaCreacionISO || b.fechaCreacion) - new Date(a.fechaCreacionISO || a.fechaCreacion))
+                    .map(request => createMyRequestCard(request))
+                    .join('');
+                
+                container.innerHTML = requestsHTML;
+            }
+        }
+
+        function createMyRequestCard(request) {
+            const getStatusClass = (status) => {
+                const statusMap = {
+                    'PENDIENTE': 'pendiente',
+                    'ASIGNADA': 'asignada',
+                    'EN_PROCESO': 'proceso',
+                    'COMPLETADA': 'completada'
+                };
+                return statusMap[status] || 'pendiente';
+            };
+
+            const getRequestCardClass = (status) => {
+                const classMap = {
+                    'PENDIENTE': 'pending',
+                    'ASIGNADA': 'assigned',
+                    'EN_PROCESO': 'assigned',
+                    'COMPLETADA': 'completed'
+                };
+                return classMap[status] || 'pending';
+            };
+
+            const getPriorityColor = (priority) => {
+                const colorMap = {
+                    'CRITICA': '#ef4444',
+                    'ALTA': '#f59e0b',
+                    'MEDIA': '#3b82f6',
+                    'BAJA': '#059669'
+                };
+                return colorMap[priority] || '#6b7280';
+            };
+
+            const estado = request.estadoGestion || request.estado || 'PENDIENTE';
+            const areaInfo = request.servicioIngenieria ? areasIngenieria[request.servicioIngenieria] : 'Sin especificar';
+            
+            return `
+                <div class="request-card ${getRequestCardClass(estado)}">
+                    <div class="request-header">
+                        <div class="request-number">📋 ${request.numero}</div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <span class="status-${getStatusClass(estado)}">${estado.replace('_', ' ')}</span>
+                            <span style="background: ${getPriorityColor(request.prioridad)}; color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;">
+                                ${request.prioridad}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="request-details">
+                        <div class="request-detail">
+                            <div class="request-detail-label">🔧 Área Técnica</div>
+                            <div class="request-detail-value">${areaInfo}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🔨 Tipo de Servicio</div>
+                            <div class="request-detail-value">${request.tipoServicio?.replace('_', ' ') || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🖥️ Equipo</div>
+                            <div class="request-detail-value">${request.equipo || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📍 Ubicación</div>
+                            <div class="request-detail-value">${request.ubicacion || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📅 Fecha de Solicitud</div>
+                            <div class="request-detail-value">${request.fechaCreacion || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">👨‍🔧 Técnico Asignado</div>
+                            <div class="request-detail-value">${request.tecnicoAsignado || '<span style="color: #f59e0b;">Pendiente de asignación</span>'}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 3px solid #2563eb;">
+                        <div class="request-detail-label">📝 Descripción del Problema</div>
+                        <div style="margin-top: 0.5rem; color: #1f2937;">${request.descripcion || 'No especificada'}</div>
+                        ${request.observaciones ? `<div style="margin-top: 0.5rem; font-style: italic; color: #6b7280;"><strong>Observaciones:</strong> ${request.observaciones}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function refreshMyRequests() {
+            loadMyRequests();
+            alert('🔄 Solicitudes actualizadas');
+        }
+
+        function filterMyRequests(filter) {
+            const allMyRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]')
+                .filter(request => 
+                    request.emailSolicitante === currentUser.email || 
+                    request.servicioHospitalario === currentUser.service ||
+                    request.servicioSolicitante === currentUser.serviceName
+                );
+            
+            let filteredRequests;
+            if (filter === 'all') {
+                filteredRequests = allMyRequests;
+            } else {
+                filteredRequests = allMyRequests.filter(request => 
+                    (request.estadoGestion || request.estado) === filter
+                );
+            }
+            
+            myRequests = filteredRequests;
+            updateMyRequestsDisplay();
+        }
+
+        function showAlert(container, type, message) {
+            container.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message.replace(/\n/g, '<br>')}
+                </div>
+            `;
+        }
+
+        function showSection(sectionName) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.content-card').forEach(card => {
+                card.classList.add('hidden');
+            });
+
+            // Mostrar sección seleccionada
+            document.getElementById(sectionName).classList.remove('hidden');
+
+            // Actualizar navegación
+            document.querySelectorAll('.nav-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Si se cambia a "mis-solicitudes", actualizar la lista
+            if (sectionName === 'mis-solicitudes') {
+                loadMyRequests();
+            }
+        }
+
+        function logout(message = null) {
+            const confirmation = confirm('¿Está seguro que desea cerrar sesión?');
+            if (!confirmation && !message) return;
+
+            if (sessionTimeout) {
+                clearInterval(sessionTimeout);
+            }
+            
+            sessionStorage.removeItem('hospitalSession');
+            currentUser = null;
+            myRequests = [];
+            
+            document.getElementById('main-portal').classList.remove('active');
+            document.getElementById('login-screen').style.display = 'flex';
+            
+            // Limpiar formularios
+            document.getElementById('login-form').reset();
+            document.getElementById('login-alert').innerHTML = '';
+            
+            if (message) {
+                setTimeout(() => {
+                    showAlert(document.getElementById('login-alert'), 'info', message);
+                }, 500);
+            }
+            
+            console.log('Sesión cerrada');
+        }
+
+        // Funciones de utilidad para compatibilidad
+        function debugAccessSystem() {
+            console.log('🔍 Iniciando debug del sistema de solicitudes de acceso...');
+            
+            const rawData = localStorage.getItem('hospital_access_requests');
+            const parsedData = rawData ? JSON.parse(rawData) : null;
+            const approvedUsersData = localStorage.getItem('hospital_approved_users');
+            const approvedUsers = approvedUsersData ? JSON.parse(approvedUsersData) : [];
+            
+            const debugInfo = `🔍 DEBUG - Sistema de Solicitudes de Acceso
+
+📋 ESTADO DEL LOCALSTORAGE:
+• Solicitudes de acceso: ${parsedData ? parsedData.length : 0}
+• Usuarios aprobados: ${approvedUsers.length}
+
+👥 USUARIOS DISPONIBLES PARA LOGIN:
+${approvedUsers.length > 0 ? 
+    approvedUsers.map((user, i) => `${i+1}. ${user.nombreCompleto}\n   📧 ${user.email}\n   🔢 Código: ${user.codigoAcceso || 'Sin código'}`).join('\n\n') :
+    'No hay usuarios aprobados disponibles'
+}
+
+💡 INSTRUCCIONES:
+1. Use el Portal de Gestión para aprobar solicitudes
+2. Los códigos se generan automáticamente al aprobar
+3. Use email + código de 4 dígitos para hacer login aquí`;
+
+            alert(debugInfo);
+        }
+
+        function clearAccessData() {
+            const confirmation = confirm('¿Limpiar todos los datos de solicitudes?');
+            if (confirmation) {
+                localStorage.removeItem('hospital_access_requests');
+                localStorage.removeItem('hospital_approved_users');
+                localStorage.removeItem('hospital_solicitudes');
+                alert('🗑️ Datos limpiados completamente');
+            }
+        }
+
+        function testQuickAccess() {
+            const timestamp = new Date().toLocaleTimeString('es-CO');
+            document.getElementById('req-name').value = `Usuario Prueba ${timestamp}`;
+            document.getElementById('req-email').value = `prueba.${Date.now()}@hospital.com`;
+            document.getElementById('req-phone').value = '+57 300 123 4567';
+            document.getElementById('req-service').value = 'URGENCIAS_ADULTO';
+            document.getElementById('req-position').value = 'MEDICO_ESPECIALISTA';
+            
+            alert('⚡ Formulario llenado para prueba. Haz clic en "Enviar Solicitud" para completar.');
+        }
+
+        // Log de inicialización
+        console.log('Portal de Solicitudes con Funcionalidad Completa Iniciado');
+        console.log('🔐 Sistema de autenticación: Email + Código de 4 dígitos');
+        console.log('🛠️ Funcionalidades: Crear solicitudes, ver mis solicitudes, información de áreas');
+        console.log('💾 Sincronización: localStorage con Portal de Gestión');
     </script>
 </body>
 </html>
