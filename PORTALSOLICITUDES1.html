@@ -39,6 +39,30 @@
             font-weight: 600;
         }
 
+        /* Firebase Status */
+        .firebase-status {
+            position: fixed;
+            top: 60px;
+            right: 1rem;
+            background: white;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 2px solid #10b981;
+            font-size: 0.875rem;
+            z-index: 1000;
+        }
+
+        .status-connected {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .status-disconnected {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
         /* Login Screen */
         .login-container {
             display: flex;
@@ -174,6 +198,7 @@
             text-decoration: none;
             justify-content: center;
             width: 100%;
+            position: relative;
         }
 
         .btn-primary {
@@ -231,6 +256,24 @@
             width: auto;
         }
 
+        /* Loading state for buttons */
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            margin: auto;
+            border: 2px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+        }
+
+        @keyframes button-loading-spinner {
+            from { transform: rotate(0turn); }
+            to { transform: rotate(1turn); }
+        }
+
         .alert {
             padding: 1rem;
             border-radius: 0.5rem;
@@ -261,6 +304,27 @@
             background: #fffbeb;
             border-color: #f59e0b;
             color: #d97706;
+        }
+
+        /* Firebase indicator */
+        .firebase-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .firebase-connected {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .firebase-disconnected {
+            background: #fee2e2;
+            color: #dc2626;
         }
 
         /* Main Portal Styles */
@@ -582,6 +646,22 @@
             font-weight: 600;
         }
 
+        /* Loading indicator */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .login-card {
@@ -612,13 +692,26 @@
             .hospital-info {
                 text-align: center;
             }
+
+            .firebase-status {
+                position: static;
+                margin: 1rem;
+                width: calc(100% - 2rem);
+            }
         }
     </style>
 </head>
 <body>
     <!-- Developer Credit Bar -->
     <div class="developer-bar">
-        💻 Desarrollado por <span>Ing. Paul Eduardo Muñoz R.</span> - Sistema Integrado de Gestión con Autenticación
+        💻 Desarrollado por <span>Ing. Paul Eduardo Muñoz R.</span> - Sistema Integrado con Firebase en Tiempo Real
+    </div>
+
+    <!-- Firebase Status Indicator -->
+    <div class="firebase-status">
+        <div id="firebase-status-content">
+            <span class="loading"></span> Conectando a Firebase...
+        </div>
     </div>
 
     <!-- Login Screen -->
@@ -628,6 +721,14 @@
                 <div class="hospital-logo">🏥</div>
                 <h1>Portal de Solicitudes</h1>
                 <p>Hospital Susana López de Valencia S.A.S.</p>
+            </div>
+
+            <!-- Firebase Status in Login -->
+            <div id="firebase-login-alert" class="alert alert-info">
+                <strong>🔥 Estado Firebase:</strong> <span id="firebase-login-status">Conectando...</span><br>
+                <span class="firebase-indicator firebase-disconnected" id="firebase-login-indicator">
+                    ❌ Verificando conexión
+                </span>
             </div>
 
             <!-- Auth Tabs -->
@@ -669,8 +770,8 @@
                 <div id="request-alert"></div>
 
                 <div class="alert alert-info">
-                    <strong>📋 Solicitud de Acceso Simplificada</strong><br>
-                    Complete los campos básicos para solicitar acceso al portal. Su solicitud será procesada automáticamente con sincronización en tiempo real.
+                    <strong>📋 Solicitud de Acceso con Firebase</strong><br>
+                    Complete los campos básicos. Su solicitud se enviará a Firebase y será sincronizada automáticamente con el Portal de Gestión.
                 </div>
 
                 <div class="form-group">
@@ -716,15 +817,15 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary" id="request-btn">
-                    📤 Enviar Solicitud de Acceso
+                    📤 Enviar Solicitud a Firebase
                 </button>
 
                 <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="debugAccessSystem()" style="width: auto;">
-                        🔍 Debug Sistema
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="debugFirebaseSystem()" style="width: auto;">
+                        🔍 Debug Firebase
                     </button>
                     <button type="button" class="btn btn-secondary btn-sm" onclick="clearAccessData()" style="width: auto;">
-                        🗑️ Limpiar Datos de Prueba
+                        🗑️ Limpiar Datos
                     </button>
                     <button type="button" class="btn btn-warning btn-sm" onclick="testQuickAccess()" style="width: auto;">
                         ⚡ Prueba Rápida
@@ -749,7 +850,7 @@
                     </svg>
                     <div class="hospital-info">
                         <h1>Hospital Susana López de Valencia S.A.S.</h1>
-                        <p>Portal de Solicitudes de Servicios - Versión Autenticada</p>
+                        <p>Portal de Solicitudes - Firebase Integrado</p>
                     </div>
                 </div>
 
@@ -759,6 +860,9 @@
                         <h3 id="user-name">Usuario del Sistema</h3>
                         <p id="user-service">Seleccione servicio</p>
                         <span class="verification-badge">✓ Verificado</span>
+                        <span class="firebase-indicator firebase-connected" id="header-firebase-indicator">
+                            🔥 Firebase OK
+                        </span>
                     </div>
                     <button class="logout-btn" onclick="logout()">🚪 Salir</button>
                 </div>
@@ -769,22 +873,22 @@
         <main class="main-content container">
             <!-- Welcome Section -->
             <div class="welcome-section">
-                <h1>Portal Autenticado de Servicios</h1>
-                <p>Acceso seguro para personal autorizado del hospital</p>
+                <h1>Portal Firebase de Servicios</h1>
+                <p>Acceso seguro con sincronización en tiempo real</p>
             </div>
 
             <!-- Navigation Cards -->
             <div class="nav-grid">
                 <div class="nav-card active" onclick="showSection('nueva-solicitud')">
                     <span class="nav-card-icon">🛠️</span>
-                    <h3>Nueva Solicitud</h3>
-                    <p>Crear solicitud con discriminación automática por área técnica</p>
+                    <h3>Nueva Solicitud Firebase</h3>
+                    <p>Crear solicitud que se envía automáticamente a Firebase</p>
                 </div>
                 
                 <div class="nav-card" onclick="showSection('mis-solicitudes')">
                     <span class="nav-card-icon">📋</span>
                     <h3>Mis Solicitudes</h3>
-                    <p>Ver historial personalizado de sus solicitudes</p>
+                    <p>Ver historial desde Firebase en tiempo real</p>
                 </div>
                 
                 <div class="nav-card" onclick="showSection('servicios')">
@@ -798,13 +902,14 @@
             <div id="nueva-solicitud" class="content-card">
                 <div class="form-section">
                     <div class="form-header">
-                        <h2>🛠️ Nueva Solicitud de Servicio</h2>
-                        <p>Sistema autenticado de solicitudes con asignación automática</p>
+                        <h2>🛠️ Nueva Solicitud Firebase</h2>
+                        <p>Sistema autenticado con envío directo a Firebase</p>
                     </div>
                     
                     <div class="alert alert-success">
                         <strong>✅ Usuario Autenticado:</strong> <span id="auth-user-display"></span><br>
                         <strong>🏥 Servicio Autorizado:</strong> <span id="auth-service-display"></span><br>
+                        <strong>🔥 Firebase:</strong> <span class="firebase-indicator firebase-connected" id="form-firebase-indicator">Conectado</span><br>
                         <strong>⏰ Sesión Válida:</strong> <span id="session-timer"></span>
                     </div>
 
@@ -813,29 +918,14 @@
                         <div id="form-alert"></div>
 
                         <div class="form-group">
-                            <label class="form-label">🔧 Área de Ingeniería *</label>
-                            <select id="area-ingenieria" class="form-select" required>
-                                <option value="">Seleccione el área técnica</option>
-                                <option value="INGENIERIA_BIOMEDICA">🏥 Ingeniería Biomédica</option>
-                                <option value="MECANICA">⚙️ Mecánica</option>
-                                <option value="INFRAESTRUCTURA">🏗️ Infraestructura</option>
-                            </select>
-                            <small style="color: #6b7280; font-size: 0.75rem;">La solicitud será asignada automáticamente al área seleccionada</small>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">🔨 Tipo de Servicio *</label>
+                            <label class="form-label">🔧 Tipo de Servicio *</label>
                             <select id="tipo-servicio" class="form-select" required>
                                 <option value="">Seleccione el tipo de servicio</option>
-                                <option value="MANTENIMIENTO_PREVENTIVO">🔧 Mantenimiento Preventivo</option>
-                                <option value="MANTENIMIENTO_CORRECTIVO">🛠️ Mantenimiento Correctivo</option>
-                                <option value="REPARACION">🔨 Reparación</option>
-                                <option value="INSTALACION">📦 Instalación</option>
-                                <option value="CALIBRACION">⚖️ Calibración</option>
-                                <option value="INSPECCION">👁️ Inspección</option>
-                                <option value="ACTUALIZACION">🔄 Actualización</option>
-                                <option value="EMERGENCIA">🚨 Emergencia</option>
+                                <option value="Ingeniería Biomédica">🏥 Ingeniería Biomédica</option>
+                                <option value="Mecánicos">⚙️ Mecánicos</option>
+                                <option value="Infraestructura">🏗️ Infraestructura</option>
                             </select>
+                            <small style="color: #6b7280; font-size: 0.75rem;">La solicitud será enviada automáticamente a Firebase</small>
                         </div>
 
                         <div class="form-group">
@@ -869,20 +959,18 @@
                             <textarea id="observaciones" class="form-textarea" placeholder="Información adicional que considere relevante"></textarea>
                         </div>
 
-
-
                         <div style="background: #f0f9ff; padding: 1rem; border-radius: 0.5rem; margin: 1.5rem 0; border-left: 3px solid #2563eb;">
-                            <h4 style="color: #1e40af; margin-bottom: 0.5rem;">💡 Información del Sistema</h4>
+                            <h4 style="color: #1e40af; margin-bottom: 0.5rem;">🔥 Información Firebase</h4>
                             <ul style="color: #1e40af; margin: 0; padding-left: 1rem; font-size: 0.875rem;">
-                                <li>Su solicitud será enviada automáticamente al área de ingeniería correspondiente</li>
-                                <li>Recibirá notificación cuando sea asignada a un técnico</li>
-                                <li>Puede seguir el progreso en la sección "Mis Solicitudes"</li>
-                                <li>Para emergencias críticas, contacte también por teléfono</li>
+                                <li>Su solicitud será enviada directamente a Firebase</li>
+                                <li>Sincronización automática con el Portal de Gestión</li>
+                                <li>Puede seguir el progreso en "Mis Solicitudes"</li>
+                                <li>Notificaciones en tiempo real cuando sea asignada</li>
                             </ul>
                         </div>
 
                         <button type="submit" class="btn btn-primary" id="submit-request-btn">
-                            📤 Enviar Solicitud de Mantenimiento
+                            🔥 Enviar Solicitud a Firebase
                         </button>
                     </form>
                 </div>
@@ -890,17 +978,18 @@
 
             <div id="mis-solicitudes" class="content-card hidden">
                 <div class="form-header">
-                    <h2>📋 Mis Solicitudes</h2>
-                    <p>Historial personalizado de solicitudes de su servicio</p>
+                    <h2>📋 Mis Solicitudes Firebase</h2>
+                    <p>Historial sincronizado desde Firebase en tiempo real</p>
                 </div>
                 
                 <div class="alert alert-info">
-                    <strong>🔍 Filtrado Automático:</strong> Solo se muestran las solicitudes de su servicio: <span id="filter-service-display"></span>
+                    <strong>🔥 Sincronización Firebase:</strong> Sus solicitudes se cargan automáticamente desde la base de datos<br>
+                    <strong>🔍 Filtrado:</strong> Solo se muestran sus solicitudes personales
                 </div>
 
                 <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-                    <button class="btn btn-primary btn-sm" onclick="refreshMyRequests()">
-                        🔄 Actualizar
+                    <button class="btn btn-primary btn-sm" onclick="refreshMyRequestsFirebase()">
+                        🔄 Actualizar Firebase
                     </button>
                     <button class="btn btn-secondary btn-sm" onclick="filterMyRequests('all')">
                         📋 Todas
@@ -913,14 +1002,12 @@
                     </button>
                 </div>
 
-                <div id="my-requests-list">
+                <div id="my-requests-firebase-list">
                     <div style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
-                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes registradas</h3>
-                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí una vez que las envíe</p>
-                        <button class="btn btn-primary" onclick="showSection('nueva-solicitud')">
-                            🛠️ Crear Primera Solicitud
-                        </button>
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🔥</div>
+                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">Conectando con Firebase...</h3>
+                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí automáticamente</p>
+                        <div class="loading"></div>
                     </div>
                 </div>
             </div>
@@ -948,7 +1035,7 @@
 
                     <div style="background: linear-gradient(135deg, #fefbeb 0%, #fef3c7 100%); padding: 2rem; border-radius: 1rem; border: 2px solid #f59e0b;">
                         <div style="font-size: 3rem; margin-bottom: 1rem;">⚙️</div>
-                        <h3 style="color: #d97706; margin-bottom: 1rem;">Mecánica</h3>
+                        <h3 style="color: #d97706; margin-bottom: 1rem;">Mecánicos</h3>
                         <p style="color: #b45309; margin-bottom: 1rem;">Mantenimiento de sistemas mecánicos y equipos industriales</p>
                         <ul style="color: #b45309; font-size: 0.875rem; line-height: 1.6;">
                             <li>Sistemas de climatización</li>
@@ -976,29 +1063,325 @@
                 </div>
 
                 <div style="margin-top: 2rem; padding: 1.5rem; background: #f8fafc; border-radius: 1rem; border-left: 4px solid #2563eb;">
-                    <h4 style="color: #1f2937; margin-bottom: 1rem;">💡 Cómo funciona el sistema</h4>
+                    <h4 style="color: #1f2937; margin-bottom: 1rem;">🔥 Cómo funciona con Firebase</h4>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
                         <div>
                             <h5 style="color: #2563eb; margin-bottom: 0.5rem;">1. 📝 Envía tu solicitud</h5>
-                            <p style="color: #6b7280; font-size: 0.875rem;">Describe el problema y selecciona el área correspondiente</p>
+                            <p style="color: #6b7280; font-size: 0.875rem;">Se guarda directamente en Firebase</p>
                         </div>
                         <div>
-                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">2. 🤖 Asignación automática</h5>
-                            <p style="color: #6b7280; font-size: 0.875rem;">El sistema asigna la solicitud al técnico disponible</p>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">2. 🔄 Sincronización automática</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">El Portal de Gestión la recibe al instante</p>
                         </div>
                         <div>
-                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">3. 🔧 Atención técnica</h5>
-                            <p style="color: #6b7280; font-size: 0.875rem;">El técnico especializado atiende tu solicitud</p>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">3. 🔧 Asignación técnica</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">El técnico especializado la atiende</p>
                         </div>
                         <div>
-                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">4. ✅ Seguimiento</h5>
-                            <p style="color: #6b7280; font-size: 0.875rem;">Puedes seguir el progreso en "Mis Solicitudes"</p>
+                            <h5 style="color: #2563eb; margin-bottom: 0.5rem;">4. ⚡ Seguimiento en tiempo real</h5>
+                            <p style="color: #6b7280; font-size: 0.875rem;">Actualizaciones automáticas desde Firebase</p>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+
+    <!-- Firebase Configuration and Functions -->
+    <script type="module">
+        // Firebase Configuration
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import {
+            getFirestore, 
+            collection, 
+            addDoc, 
+            onSnapshot, 
+            getDocs,
+            query,
+            orderBy,
+            where,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        // Tu configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAtj36T7EiECJosYP_5127tQnm_kRnwPMs",
+            authDomain: "gestion-de-solicitudes-25a93.firebaseapp.com",
+            projectId: "gestion-de-solicitudes-25a93",
+            storageBucket: "gestion-de-solicitudes-25a93.firebasestorage.app",
+            messagingSenderId: "399184380837",
+            appId: "1:399184380837:web:df0b081cd81938c0a11e4c"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Variables globales
+        let isFirebaseConnected = false;
+        let currentUser = null;
+        let myRequestsFirebase = [];
+        let unsubscribeMyRequests = null;
+
+        // Funciones Firebase globales
+        window.db = db;
+        window.addDoc = addDoc;
+        window.collection = collection;
+        window.onSnapshot = onSnapshot;
+        window.serverTimestamp = serverTimestamp;
+
+        // Función para probar conexión Firebase
+        async function testFirebaseConnection() {
+            console.log('🔥 Probando conexión Firebase...');
+            updateFirebaseStatus('Probando conexión...', false);
+            
+            try {
+                const testQuery = query(collection(db, "solicitudes"), orderBy("fecha", "desc"));
+                const snapshot = await getDocs(testQuery);
+                
+                console.log(`✅ Firebase conectado! ${snapshot.size} documentos encontrados`);
+                updateFirebaseStatus(`Conectado - ${snapshot.size} solicitudes`, true);
+                
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Error conectando Firebase:', error);
+                updateFirebaseStatus(`Error: ${error.message}`, false);
+                return false;
+            }
+        }
+
+        // Función para actualizar estado de Firebase
+        function updateFirebaseStatus(message, connected) {
+            isFirebaseConnected = connected;
+            
+            const statusContent = document.getElementById('firebase-status-content');
+            const loginStatus = document.getElementById('firebase-login-status');
+            const loginIndicator = document.getElementById('firebase-login-indicator');
+            const headerIndicator = document.getElementById('header-firebase-indicator');
+            const formIndicator = document.getElementById('form-firebase-indicator');
+            const loginAlert = document.getElementById('firebase-login-alert');
+            
+            const statusText = connected ? 
+                `<span class="status-connected">🔥 ${message}</span>` : 
+                `<span class="status-disconnected">❌ ${message}</span>`;
+            
+            if (statusContent) statusContent.innerHTML = statusText;
+            if (loginStatus) loginStatus.textContent = message;
+            
+            const indicatorClass = `firebase-indicator ${connected ? 'firebase-connected' : 'firebase-disconnected'}`;
+            const indicatorText = connected ? '✅ Firebase Conectado' : '❌ Firebase Desconectado';
+            
+            if (loginIndicator) {
+                loginIndicator.className = indicatorClass;
+                loginIndicator.textContent = indicatorText;
+            }
+            
+            if (headerIndicator) {
+                headerIndicator.className = indicatorClass;
+                headerIndicator.textContent = connected ? '🔥 Firebase OK' : '❌ Firebase Error';
+            }
+            
+            if (formIndicator) {
+                formIndicator.className = indicatorClass;
+                formIndicator.textContent = connected ? 'Conectado' : 'Desconectado';
+            }
+            
+            if (loginAlert) {
+                loginAlert.className = `alert ${connected ? 'alert-success' : 'alert-warning'}`;
+            }
+        }
+
+        // Función para enviar solicitud a Firebase
+        window.enviarSolicitudFirebase = async function(solicitudData) {
+            if (!isFirebaseConnected) {
+                throw new Error('Firebase no está conectado');
+            }
+            
+            console.log('📤 Enviando solicitud a Firebase...', solicitudData);
+            
+            try {
+                // Preparar datos para Firebase
+                const firebaseData = {
+                    servicio: solicitudData.tipoServicio,
+                    descripcion: solicitudData.descripcion,
+                    fecha: new Date().toISOString(),
+                    fechaCreacion: serverTimestamp(),
+                    estado: 'PENDIENTE',
+                    prioridad: solicitudData.prioridad,
+                    equipo: solicitudData.equipo,
+                    ubicacion: solicitudData.ubicacion,
+                    observaciones: solicitudData.observaciones,
+                    solicitante: solicitudData.solicitante,
+                    emailSolicitante: solicitudData.emailSolicitante,
+                    servicioHospitalario: solicitudData.servicioHospitalario,
+                    numero: `SOL-${Date.now()}`,
+                    tecnicoAsignado: null,
+                    fechaAsignacion: null
+                };
+                
+                // Enviar a Firebase
+                const docRef = await addDoc(collection(db, "solicitudes"), firebaseData);
+                
+                console.log(`✅ Solicitud enviada a Firebase con ID: ${docRef.id}`);
+                
+                // También guardar en localStorage para compatibilidad
+                const existingRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]');
+                existingRequests.push({
+                    ...firebaseData,
+                    firebaseId: docRef.id
+                });
+                localStorage.setItem('hospital_solicitudes', JSON.stringify(existingRequests));
+                
+                return docRef.id;
+                
+            } catch (error) {
+                console.error('❌ Error enviando a Firebase:', error);
+                throw error;
+            }
+        };
+
+        // Función para cargar mis solicitudes desde Firebase
+        window.cargarMisSolicitudesFirebase = function() {
+            if (!currentUser || !isFirebaseConnected) {
+                console.log('⚠️ Usuario no autenticado o Firebase desconectado');
+                return;
+            }
+            
+            console.log(`📥 Cargando solicitudes de ${currentUser.email} desde Firebase...`);
+            
+            try {
+                // Configurar listener para solicitudes del usuario
+                if (unsubscribeMyRequests) {
+                    unsubscribeMyRequests();
+                }
+                
+                const q = query(
+                    collection(db, "solicitudes"),
+                    where("emailSolicitante", "==", currentUser.email),
+                    orderBy("fecha", "desc")
+                );
+                
+                unsubscribeMyRequests = onSnapshot(q, (querySnapshot) => {
+                    myRequestsFirebase = [];
+                    
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        myRequestsFirebase.push({
+                            id: doc.id,
+                            ...data
+                        });
+                    });
+                    
+                    console.log(`📊 ${myRequestsFirebase.length} solicitudes del usuario cargadas desde Firebase`);
+                    updateMyRequestsDisplay();
+                    
+                }, (error) => {
+                    console.error('❌ Error al cargar mis solicitudes:', error);
+                });
+                
+            } catch (error) {
+                console.error('❌ Error configurando listener de mis solicitudes:', error);
+            }
+        };
+
+        // Función para actualizar la lista de mis solicitudes
+        function updateMyRequestsDisplay() {
+            const container = document.getElementById('my-requests-firebase-list');
+            
+            if (myRequestsFirebase.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #6b7280;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🔥</div>
+                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes en Firebase</h3>
+                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí cuando las envíe</p>
+                        <button class="btn btn-primary" onclick="showSection('nueva-solicitud')">
+                            🛠️ Crear Primera Solicitud
+                        </button>
+                    </div>
+                `;
+            } else {
+                const requestsHTML = myRequestsFirebase
+                    .map(request => createMyRequestFirebaseCard(request))
+                    .join('');
+                
+                container.innerHTML = requestsHTML;
+            }
+        }
+
+        // Función para crear tarjeta de solicitud Firebase
+        function createMyRequestFirebaseCard(request) {
+            return `
+                <div class="request-card pending">
+                    <div class="request-header">
+                        <div class="request-number">🔥 Firebase ID: ${request.id}</div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <span class="status-pendiente">${request.estado || 'PENDIENTE'}</span>
+                            <span style="background: #3b82f6; color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;">
+                                ${request.prioridad || 'MEDIA'}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="request-details">
+                        <div class="request-detail">
+                            <div class="request-detail-label">🔧 Servicio</div>
+                            <div class="request-detail-value">${request.servicio || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">🖥️ Equipo</div>
+                            <div class="request-detail-value">${request.equipo || 'No especificado'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📍 Ubicación</div>
+                            <div class="request-detail-value">${request.ubicacion || 'No especificada'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📅 Fecha</div>
+                            <div class="request-detail-value">${request.fecha ? new Date(request.fecha).toLocaleString('es-CO') : 'No especificada'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">👨‍🔧 Técnico</div>
+                            <div class="request-detail-value">${request.tecnicoAsignado || '<span style="color: #f59e0b;">Pendiente asignación</span>'}</div>
+                        </div>
+                        <div class="request-detail">
+                            <div class="request-detail-label">📊 Número</div>
+                            <div class="request-detail-value">${request.numero || 'Generado automáticamente'}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 3px solid #10b981;">
+                        <div class="request-detail-label">📝 Descripción del Problema</div>
+                        <div style="margin-top: 0.5rem; color: #1f2937;">${request.descripcion || 'Sin descripción'}</div>
+                        ${request.observaciones ? `<div style="margin-top: 0.5rem; font-style: italic; color: #6b7280;"><strong>Observaciones:</strong> ${request.observaciones}</div>` : ''}
+                    </div>
+
+                    <div style="background: #eff6ff; padding: 0.75rem; border-radius: 0.5rem; border-left: 3px solid #3b82f6;">
+                        <strong style="color: #1e40af;">🔥 Sincronizado con Firebase</strong>
+                        <span style="color: #1e40af; font-size: 0.875rem; margin-left: 0.5rem;">Actualizaciones en tiempo real</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Exponer funciones necesarias
+        window.testFirebaseConnection = testFirebaseConnection;
+        window.updateFirebaseStatus = updateFirebaseStatus;
+        window.cargarMisSolicitudesFirebase = cargarMisSolicitudesFirebase;
+
+        // Inicialización automática
+        console.log('🚀 Portal de Solicitudes Firebase iniciando...');
+        updateFirebaseStatus('Inicializando...', false);
+        
+        // Probar conexión automáticamente al cargar
+        setTimeout(async () => {
+            await testFirebaseConnection();
+        }, 1000);
+
+        // Exponer variables para uso global
+        window.isFirebaseConnected = isFirebaseConnected;
+        window.currentUser = currentUser;
+    </script>
 
     <script>
         // Mapas de servicios y areas
@@ -1012,19 +1395,12 @@
             'CIRUGIA_PEDIATRICA': 'Cirugía Pediátrica'
         };
 
-        const areasIngenieria = {
-            'INGENIERIA_BIOMEDICA': 'Ingeniería Biomédica',
-            'MECANICA': 'Mecánica',
-            'INFRAESTRUCTURA': 'Infraestructura'
-        };
-
-        let currentUser = null;
         let sessionTimeout = null;
         let myRequests = [];
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Portal de Solicitudes con Funcionalidad Completa Iniciado');
+            console.log('🚀 Portal de Solicitudes Firebase Iniciado');
             
             // Cargar usuarios aprobados y verificar sesión existente
             loadApprovedUsers();
@@ -1042,7 +1418,7 @@
             document.getElementById('request-form').addEventListener('submit', handleAccessRequest);
             
             // New request form
-            document.getElementById('new-request-form').addEventListener('submit', handleNewRequest);
+            document.getElementById('new-request-form').addEventListener('submit', handleNewRequestFirebase);
         }
 
         function loadApprovedUsers() {
@@ -1141,17 +1517,23 @@
             
             // Login exitoso
             loginBtn.disabled = true;
-            loginBtn.innerHTML = '⏳ Verificando...';
+            loginBtn.classList.add('loading');
+            loginBtn.innerHTML = '';
             
             setTimeout(() => {
                 authenticateUser(user);
             }, 1500);
         }
 
-        function handleAccessRequest(e) {
+        async function handleAccessRequest(e) {
             e.preventDefault();
             
-            console.log('📝 Iniciando proceso de solicitud de acceso...');
+            console.log('📝 Iniciando proceso de solicitud de acceso con Firebase...');
+            
+            if (!window.isFirebaseConnected) {
+                showAlert(document.getElementById('request-alert'), 'error', '❌ Firebase no está conectado. Espere a que se establezca la conexión.');
+                return;
+            }
             
             const formData = {
                 id: `ACC${Date.now()}${Math.random().toString(36).substring(2, 5).toUpperCase()}`,
@@ -1177,49 +1559,54 @@
                 return;
             }
             
-            // Simular envío de solicitud
             const requestBtn = document.getElementById('request-btn');
             requestBtn.disabled = true;
-            requestBtn.innerHTML = '⏳ Enviando solicitud...';
+            requestBtn.classList.add('loading');
+            requestBtn.innerHTML = '';
             
-            setTimeout(() => {
-                try {
-                    // Cargar solicitudes existentes del localStorage
-                    const existingRequests = JSON.parse(localStorage.getItem('hospital_access_requests') || '[]');
-                    
-                    // Agregar la nueva solicitud
-                    existingRequests.push(formData);
-                    
-                    // Guardar en localStorage
-                    localStorage.setItem('hospital_access_requests', JSON.stringify(existingRequests));
-                    
-                    showAlert(alertDiv, 'success', 
-                        `✅ Solicitud de acceso enviada correctamente.\n\n` +
-                        `📊 DATOS ENVIADOS:\n` +
-                        `• ID: ${formData.id}\n` +
-                        `• Nombre: ${formData.nombreCompleto}\n` +
-                        `• Email: ${formData.email}\n` +
-                        `• Servicio: ${formData.servicioHospitalario}\n` +
-                        `• Cargo: ${formData.cargo}\n\n` +
-                        `📧 Recibirá una notificación por correo cuando sea aprobada.\n` +
-                        `⏱️ El proceso de aprobación puede tomar 24-48 horas.`
-                    );
-                    
-                    // Limpiar formulario
-                    document.getElementById('request-form').reset();
-                    requestBtn.disabled = false;
-                    requestBtn.innerHTML = '📤 Enviar Solicitud de Acceso';
-                    
-                } catch (error) {
-                    console.error('❌ Error al procesar solicitud de acceso:', error);
-                    showAlert(alertDiv, 'error', '❌ Error al enviar la solicitud. Por favor intente nuevamente.');
-                    requestBtn.disabled = false;
-                    requestBtn.innerHTML = '📤 Enviar Solicitud de Acceso';
-                }
-            }, 2000);
+            try {
+                // Enviar a Firebase
+                const docRef = await window.addDoc(window.collection(window.db, "access_requests"), {
+                    ...formData,
+                    fechaCreacion: window.serverTimestamp()
+                });
+                
+                console.log(`✅ Solicitud de acceso enviada a Firebase con ID: ${docRef.id}`);
+                
+                // También guardar en localStorage para compatibilidad
+                const existingRequests = JSON.parse(localStorage.getItem('hospital_access_requests') || '[]');
+                existingRequests.push({
+                    ...formData,
+                    firebaseId: docRef.id
+                });
+                localStorage.setItem('hospital_access_requests', JSON.stringify(existingRequests));
+                
+                showAlert(alertDiv, 'success', 
+                    `✅ Solicitud enviada a Firebase correctamente\n\n` +
+                    `🔥 Firebase ID: ${docRef.id}\n` +
+                    `📊 DATOS ENVIADOS:\n` +
+                    `• Nombre: ${formData.nombreCompleto}\n` +
+                    `• Email: ${formData.email}\n` +
+                    `• Servicio: ${formData.servicioHospitalario}\n` +
+                    `• Cargo: ${formData.cargo}\n\n` +
+                    `📧 Recibirá una notificación cuando sea aprobada.\n` +
+                    `🔄 Sincronización automática con Portal de Gestión activada.`
+                );
+                
+                // Limpiar formulario
+                document.getElementById('request-form').reset();
+                
+            } catch (error) {
+                console.error('❌ Error al enviar a Firebase:', error);
+                showAlert(alertDiv, 'error', `❌ Error enviando a Firebase: ${error.message}`);
+            } finally {
+                requestBtn.disabled = false;
+                requestBtn.classList.remove('loading');
+                requestBtn.innerHTML = '📤 Enviar Solicitud a Firebase';
+            }
         }
 
-        function handleNewRequest(e) {
+        async function handleNewRequestFirebase(e) {
             e.preventDefault();
             
             if (!currentUser) {
@@ -1227,97 +1614,79 @@
                 return;
             }
             
-            console.log('📝 Creando nueva solicitud de mantenimiento...');
+            if (!window.isFirebaseConnected) {
+                showAlert(document.getElementById('form-alert'), 'error', '❌ Firebase no está conectado. Espere a que se establezca la conexión.');
+                return;
+            }
+            
+            console.log('🔥 Creando nueva solicitud para Firebase...');
             
             const formData = {
-                numero: `SOL${Date.now()}${Math.random().toString(36).substring(2, 3).toUpperCase()}`,
-                servicioIngenieria: document.getElementById('area-ingenieria').value,
                 tipoServicio: document.getElementById('tipo-servicio').value,
                 prioridad: document.getElementById('prioridad').value,
                 equipo: document.getElementById('equipo').value.trim(),
                 ubicacion: document.getElementById('ubicacion').value.trim(),
                 descripcion: document.getElementById('descripcion').value.trim(),
                 observaciones: document.getElementById('observaciones').value.trim(),
-                tiempoEstimado: document.getElementById('tiempo-estimado').value,
                 
                 // Datos del usuario autenticado
                 solicitante: currentUser.name,
                 servicioHospitalario: currentUser.service,
                 servicioSolicitante: currentUser.serviceName,
-                emailSolicitante: currentUser.email,
-                
-                // Datos de gestión
-                fechaCreacion: new Date().toLocaleString('es-CO'),
-                fechaCreacionISO: new Date().toISOString(),
-                estado: 'PENDIENTE',
-                estadoGestion: 'PENDIENTE',
-                tecnicoAsignado: null,
-                fechaAsignacion: null
+                emailSolicitante: currentUser.email
             };
             
             const alertDiv = document.getElementById('form-alert');
             
             // Validaciones
-            if (!formData.servicioIngenieria || !formData.tipoServicio || !formData.prioridad || 
-                !formData.equipo || !formData.ubicacion || !formData.descripcion) {
+            if (!formData.tipoServicio || !formData.prioridad || !formData.equipo || 
+                !formData.ubicacion || !formData.descripcion) {
                 showAlert(alertDiv, 'error', '❌ Por favor complete todos los campos obligatorios (*)');
                 return;
             }
             
             const submitBtn = document.getElementById('submit-request-btn');
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '⏳ Enviando solicitud...';
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = '';
             
-            setTimeout(() => {
-                try {
-                    // Cargar solicitudes existentes
-                    const existingRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]');
-                    
-                    // Agregar nueva solicitud
-                    existingRequests.push(formData);
-                    
-                    // Guardar en localStorage para sincronización con Portal de Gestión
-                    localStorage.setItem('hospital_solicitudes', JSON.stringify(existingRequests));
-                    
-                    // Agregar a solicitudes del usuario
-                    myRequests.push(formData);
-                    
-                    console.log('✅ Solicitud creada:', formData);
-                    
-                    showAlert(alertDiv, 'success', 
-                        `✅ Solicitud enviada exitosamente\n\n` +
-                        `📋 DETALLES DE LA SOLICITUD:\n` +
-                        `• Número: ${formData.numero}\n` +
-                        `• Área: ${areasIngenieria[formData.servicioIngenieria]}\n` +
-                        `• Tipo: ${formData.tipoServicio.replace('_', ' ')}\n` +
-                        `• Prioridad: ${formData.prioridad}\n` +
-                        `• Equipo: ${formData.equipo}\n\n` +
-                        `🔄 Su solicitud será asignada automáticamente al área de ${areasIngenieria[formData.servicioIngenieria]}.\n` +
-                        `📱 Puede seguir el progreso en la sección "Mis Solicitudes".`
-                    );
-                    
-                    // Limpiar formulario
-                    document.getElementById('new-request-form').reset();
-                    
-                    // Actualizar contador de mis solicitudes
-                    updateMyRequestsDisplay();
-                    
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '📤 Enviar Solicitud de Mantenimiento';
-                    
-                    // Auto-navegar a "Mis Solicitudes" después de 3 segundos
-                    setTimeout(() => {
-                        showSection('mis-solicitudes');
-                    }, 3000);
-                    
-                } catch (error) {
-                    console.error('❌ Error al crear solicitud:', error);
-                    showAlert(alertDiv, 'error', '❌ Error al enviar la solicitud. Por favor intente nuevamente.');
-                    
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '📤 Enviar Solicitud de Mantenimiento';
-                }
-            }, 2000);
+            try {
+                // Enviar a Firebase usando la función específica
+                const firebaseId = await window.enviarSolicitudFirebase(formData);
+                
+                console.log(`✅ Solicitud enviada a Firebase con ID: ${firebaseId}`);
+                
+                showAlert(alertDiv, 'success', 
+                    `✅ Solicitud enviada a Firebase exitosamente\n\n` +
+                    `🔥 Firebase ID: ${firebaseId}\n` +
+                    `📋 DETALLES:\n` +
+                    `• Servicio: ${formData.tipoServicio}\n` +
+                    `• Prioridad: ${formData.prioridad}\n` +
+                    `• Equipo: ${formData.equipo}\n` +
+                    `• Ubicación: ${formData.ubicacion}\n\n` +
+                    `🔄 Sincronización automática con Portal de Gestión activada.\n` +
+                    `📱 Puede seguir el progreso en "Mis Solicitudes".`
+                );
+                
+                // Limpiar formulario
+                document.getElementById('new-request-form').reset();
+                
+                // Actualizar mis solicitudes desde Firebase
+                window.cargarMisSolicitudesFirebase();
+                
+                // Auto-navegar a "Mis Solicitudes" después de 3 segundos
+                setTimeout(() => {
+                    showSection('mis-solicitudes');
+                }, 3000);
+                
+            } catch (error) {
+                console.error('❌ Error enviando solicitud a Firebase:', error);
+                showAlert(alertDiv, 'error', `❌ Error enviando a Firebase: ${error.message}`);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                submitBtn.innerHTML = '🔥 Enviar Solicitud a Firebase';
+            }
         }
 
         function authenticateUser(user) {
@@ -1342,13 +1711,16 @@
             // Guardar sesión
             sessionStorage.setItem('hospitalSession', JSON.stringify(currentUser));
             
-            // Cargar solicitudes del usuario
-            loadMyRequests();
+            // Cargar solicitudes del usuario desde Firebase
+            window.cargarMisSolicitudesFirebase();
             
             // Mostrar portal principal
             showMainPortal();
             
             console.log('Usuario autenticado:', currentUser.name);
+            
+            // Exponer currentUser globalmente
+            window.currentUser = currentUser;
         }
 
         function showMainPortal() {
@@ -1363,7 +1735,7 @@
             
             // Mensaje de bienvenida
             setTimeout(() => {
-                alert(`✅ ¡Bienvenido al Portal, ${currentUser.name}!\n\n🏥 Servicio autorizado: ${currentUser.serviceName}\n⏰ Sesión válida por 4 horas\n🔐 Acceso seguro activado\n\n🛠️ Ya puede crear y gestionar solicitudes de mantenimiento`);
+                alert(`✅ ¡Bienvenido al Portal Firebase, ${currentUser.name}!\n\n🏥 Servicio: ${currentUser.serviceName}\n🔥 Firebase: ${window.isFirebaseConnected ? 'Conectado' : 'Verificando...'}\n⏰ Sesión válida por 4 horas\n🔐 Acceso seguro activado\n\n🛠️ Sus solicitudes se enviarán directamente a Firebase`);
             }, 500);
         }
 
@@ -1385,7 +1757,6 @@
             // Actualizar información de autenticación
             document.getElementById('auth-user-display').textContent = currentUser.name;
             document.getElementById('auth-service-display').textContent = currentUser.serviceName;
-            document.getElementById('filter-service-display').textContent = currentUser.serviceName;
         }
 
         function startSessionTimer() {
@@ -1425,7 +1796,8 @@
                     if (elapsed < session.sessionDuration) {
                         currentUser = session;
                         currentUser.loginTime = new Date(session.loginTime);
-                        loadMyRequests();
+                        window.currentUser = currentUser;
+                        window.cargarMisSolicitudesFirebase();
                         showMainPortal();
                         return;
                     }
@@ -1438,166 +1810,18 @@
             sessionStorage.removeItem('hospitalSession');
         }
 
-        function loadMyRequests() {
-            if (!currentUser) return;
-            
-            try {
-                // Cargar todas las solicitudes
-                const allRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]');
-                
-                // Filtrar solicitudes del usuario por email y servicio
-                myRequests = allRequests.filter(request => 
-                    request.emailSolicitante === currentUser.email || 
-                    request.servicioHospitalario === currentUser.service ||
-                    request.servicioSolicitante === currentUser.serviceName
-                );
-                
-                console.log(`📋 Cargadas ${myRequests.length} solicitudes del usuario`);
-                updateMyRequestsDisplay();
-                
-            } catch (error) {
-                console.error('❌ Error al cargar solicitudes del usuario:', error);
-                myRequests = [];
-            }
-        }
-
-        function updateMyRequestsDisplay() {
-            const container = document.getElementById('my-requests-list');
-            
-            if (myRequests.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 3rem; color: #6b7280;">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
-                        <h3 style="color: #1f2937; margin-bottom: 0.5rem;">No hay solicitudes registradas</h3>
-                        <p style="margin-bottom: 1.5rem;">Sus solicitudes aparecerán aquí una vez que las envíe</p>
-                        <button class="btn btn-primary" onclick="showSection('nueva-solicitud')">
-                            🛠️ Crear Primera Solicitud
-                        </button>
-                    </div>
-                `;
+        function refreshMyRequestsFirebase() {
+            if (window.cargarMisSolicitudesFirebase) {
+                window.cargarMisSolicitudesFirebase();
+                alert('🔄 Solicitudes actualizadas desde Firebase');
             } else {
-                const requestsHTML = myRequests
-                    .sort((a, b) => new Date(b.fechaCreacionISO || b.fechaCreacion) - new Date(a.fechaCreacionISO || a.fechaCreacion))
-                    .map(request => createMyRequestCard(request))
-                    .join('');
-                
-                container.innerHTML = requestsHTML;
+                alert('❌ Firebase no está disponible');
             }
-        }
-
-        function createMyRequestCard(request) {
-            const getStatusClass = (status) => {
-                const statusMap = {
-                    'PENDIENTE': 'pendiente',
-                    'ASIGNADA': 'asignada',
-                    'EN_PROCESO': 'proceso',
-                    'COMPLETADA': 'completada'
-                };
-                return statusMap[status] || 'pendiente';
-            };
-
-            const getRequestCardClass = (status) => {
-                const classMap = {
-                    'PENDIENTE': 'pending',
-                    'ASIGNADA': 'assigned',
-                    'EN_PROCESO': 'assigned',
-                    'COMPLETADA': 'completed'
-                };
-                return classMap[status] || 'pending';
-            };
-
-            const getPriorityColor = (priority) => {
-                const colorMap = {
-                    'CRITICA': '#ef4444',
-                    'ALTA': '#f59e0b',
-                    'MEDIA': '#3b82f6',
-                    'BAJA': '#059669'
-                };
-                return colorMap[priority] || '#6b7280';
-            };
-
-            const estado = request.estadoGestion || request.estado || 'PENDIENTE';
-            const areaInfo = request.servicioIngenieria ? areasIngenieria[request.servicioIngenieria] : 'Sin especificar';
-            
-            return `
-                <div class="request-card ${getRequestCardClass(estado)}">
-                    <div class="request-header">
-                        <div class="request-number">📋 ${request.numero}</div>
-                        <div style="display: flex; gap: 0.5rem; align-items: center;">
-                            <span class="status-${getStatusClass(estado)}">${estado.replace('_', ' ')}</span>
-                            <span style="background: ${getPriorityColor(request.prioridad)}; color: white; padding: 0.25rem 0.5rem; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;">
-                                ${request.prioridad}
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="request-details">
-                        <div class="request-detail">
-                            <div class="request-detail-label">🔧 Área Técnica</div>
-                            <div class="request-detail-value">${areaInfo}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">🔨 Tipo de Servicio</div>
-                            <div class="request-detail-value">${request.tipoServicio?.replace('_', ' ') || 'No especificado'}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">🖥️ Equipo</div>
-                            <div class="request-detail-value">${request.equipo || 'No especificado'}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">📍 Ubicación</div>
-                            <div class="request-detail-value">${request.ubicacion || 'No especificado'}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">📅 Fecha de Solicitud</div>
-                            <div class="request-detail-value">${request.fechaCreacion || 'No especificado'}</div>
-                        </div>
-                        <div class="request-detail">
-                            <div class="request-detail-label">👨‍🔧 Técnico Asignado</div>
-                            <div class="request-detail-value">${request.tecnicoAsignado || '<span style="color: #f59e0b;">Pendiente de asignación</span>'}</div>
-                        </div>
-                    </div>
-
-                    <div style="margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 0.5rem; border-left: 3px solid #2563eb;">
-                        <div class="request-detail-label">📝 Descripción del Problema</div>
-                        <div style="margin-top: 0.5rem; color: #1f2937;">${request.descripcion || 'No especificada'}</div>
-                        ${request.observaciones ? `<div style="margin-top: 0.5rem; font-style: italic; color: #6b7280;"><strong>Observaciones:</strong> ${request.observaciones}</div>` : ''}
-                    </div>
-
-                    ${request.tiempoEstimado ? `
-                        <div style="background: #eff6ff; padding: 0.75rem; border-radius: 0.5rem; border-left: 3px solid #3b82f6;">
-                            <strong style="color: #1e40af;">⏱️ Tiempo Estimado:</strong> 
-                            <span style="color: #1e40af;">${request.tiempoEstimado.replace('_', ' ')}</span>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }
-
-        function refreshMyRequests() {
-            loadMyRequests();
-            alert('🔄 Solicitudes actualizadas');
         }
 
         function filterMyRequests(filter) {
-            const allMyRequests = JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]')
-                .filter(request => 
-                    request.emailSolicitante === currentUser.email || 
-                    request.servicioHospitalario === currentUser.service ||
-                    request.servicioSolicitante === currentUser.serviceName
-                );
-            
-            let filteredRequests;
-            if (filter === 'all') {
-                filteredRequests = allMyRequests;
-            } else {
-                filteredRequests = allMyRequests.filter(request => 
-                    (request.estadoGestion || request.estado) === filter
-                );
-            }
-            
-            myRequests = filteredRequests;
-            updateMyRequestsDisplay();
+            // Esta función se implementará cuando sea necesario
+            alert(`🔍 Filtro ${filter} - Función en desarrollo`);
         }
 
         function showAlert(container, type, message) {
@@ -1623,9 +1847,9 @@
             });
             event.currentTarget.classList.add('active');
 
-            // Si se cambia a "mis-solicitudes", actualizar la lista
+            // Si se cambia a "mis-solicitudes", cargar desde Firebase
             if (sectionName === 'mis-solicitudes') {
-                loadMyRequests();
+                window.cargarMisSolicitudesFirebase();
             }
         }
 
@@ -1637,8 +1861,14 @@
                 clearInterval(sessionTimeout);
             }
             
+            // Limpiar listener de Firebase
+            if (window.unsubscribeMyRequests) {
+                window.unsubscribeMyRequests();
+            }
+            
             sessionStorage.removeItem('hospitalSession');
             currentUser = null;
+            window.currentUser = null;
             myRequests = [];
             
             document.getElementById('main-portal').classList.remove('active');
@@ -1658,41 +1888,48 @@
         }
 
         // Funciones de utilidad para compatibilidad
-        function debugAccessSystem() {
-            console.log('🔍 Iniciando debug del sistema de solicitudes de acceso...');
+        function debugFirebaseSystem() {
+            console.log('🔍 Iniciando debug del sistema Firebase...');
             
-            const rawData = localStorage.getItem('hospital_access_requests');
-            const parsedData = rawData ? JSON.parse(rawData) : null;
-            const approvedUsersData = localStorage.getItem('hospital_approved_users');
-            const approvedUsers = approvedUsersData ? JSON.parse(approvedUsersData) : [];
-            
-            const debugInfo = `🔍 DEBUG - Sistema de Solicitudes de Acceso
+            const debugInfo = `🔍 DEBUG - Sistema Firebase Portal de Solicitudes
 
-📋 ESTADO DEL LOCALSTORAGE:
-• Solicitudes de acceso: ${parsedData ? parsedData.length : 0}
-• Usuarios aprobados: ${approvedUsers.length}
+🔥 ESTADO FIREBASE:
+• Conectado: ${window.isFirebaseConnected ? 'SÍ' : 'NO'}
+• Base de datos: gestion-de-solicitudes-25a93
+• Colecciones: solicitudes, access_requests
 
-👥 USUARIOS DISPONIBLES PARA LOGIN:
-${approvedUsers.length > 0 ? 
-    approvedUsers.map((user, i) => `${i+1}. ${user.nombreCompleto}\n   📧 ${user.email}\n   🔢 Código: ${user.codigoAcceso || 'Sin código'}`).join('\n\n') :
-    'No hay usuarios aprobados disponibles'
-}
+👥 USUARIO ACTUAL:
+• Email: ${currentUser ? currentUser.email : 'No autenticado'}
+• Nombre: ${currentUser ? currentUser.name : 'No disponible'}
+• Servicio: ${currentUser ? currentUser.serviceName : 'No asignado'}
 
-💡 INSTRUCCIONES:
-1. Use el Portal de Gestión para aprobar solicitudes
-2. Los códigos se generan automáticamente al aprobar
-3. Use email + código de 4 dígitos para hacer login aquí`;
+📊 SOLICITUDES:
+• En Firebase: ${myRequestsFirebase ? myRequestsFirebase.length : 0}
+• En localStorage: ${JSON.parse(localStorage.getItem('hospital_solicitudes') || '[]').length}
+
+🔧 FUNCIONES DISPONIBLES:
+• enviarSolicitudFirebase()
+• cargarMisSolicitudesFirebase()
+• testFirebaseConnection()
+
+💡 PARA PROBAR:
+1. Inicie sesión con credenciales válidas
+2. Cree una solicitud nueva
+3. Verifique en "Mis Solicitudes"
+4. Revise el Portal de Gestión`;
 
             alert(debugInfo);
         }
 
         function clearAccessData() {
-            const confirmation = confirm('¿Limpiar todos los datos de solicitudes?');
+            const confirmation = confirm('¿Limpiar todos los datos de solicitudes y accesos?');
             if (confirmation) {
                 localStorage.removeItem('hospital_access_requests');
                 localStorage.removeItem('hospital_approved_users');
                 localStorage.removeItem('hospital_solicitudes');
+                sessionStorage.removeItem('hospitalSession');
                 alert('🗑️ Datos limpiados completamente');
+                location.reload();
             }
         }
 
@@ -1704,216 +1941,15 @@ ${approvedUsers.length > 0 ?
             document.getElementById('req-service').value = 'URGENCIAS_ADULTO';
             document.getElementById('req-position').value = 'MEDICO_ESPECIALISTA';
             
-            alert('⚡ Formulario llenado para prueba. Haz clic en "Enviar Solicitud" para completar.');
+            alert('⚡ Formulario llenado para prueba. Haz clic en "Enviar" para enviar a Firebase.');
         }
 
         // Log de inicialización
-        console.log('Portal de Solicitudes con Funcionalidad Completa Iniciado');
+        console.log('🔥 Portal de Solicitudes Firebase Iniciado');
         console.log('🔐 Sistema de autenticación: Email + Código de 4 dígitos');
-        console.log('🛠️ Funcionalidades: Crear solicitudes, ver mis solicitudes, información de áreas');
-        console.log('💾 Sincronización: localStorage con Portal de Gestión');
+        console.log('🛠️ Funcionalidades: Crear solicitudes Firebase, ver mis solicitudes, áreas');
+        console.log('💾 Sincronización: Firebase + localStorage para compatibilidad');
+        console.log('⚡ Tiempo real: Actualizaciones automáticas desde Firebase');
     </script>
-<!-- Firebase Funciones -->
-<script type="module">
-  import {
-    getFirestore, collection, addDoc, onSnapshot
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  const db = window.firebaseDB;
-
-  // Función para guardar solicitud
-  window.guardarSolicitudFirebase = async function (data) {
-    try {
-      await addDoc(collection(db, "solicitudes"), data);
-      alert("✅ Solicitud enviada correctamente a la base de datos.");
-    } catch (error) {
-      console.error("❌ Error al guardar la solicitud:", error);
-      alert("Error al guardar la solicitud.");
-    }
-  };
-
-  // Función para cargar solicitudes en tiempo real
-  window.cargarSolicitudesFirebase = function (contenedorId) {
-    const contenedor = document.getElementById(contenedorId);
-    if (!contenedor) return;
-
-    onSnapshot(collection(db, "solicitudes"), (snapshot) => {
-      contenedor.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        contenedor.innerHTML += `
-          <div class="request-card pending">
-            <div class="request-header">
-              <div class="request-number">📝 Solicitud ID: ${doc.id}</div>
-            </div>
-            <div class="request-details">
-              <div><strong>Servicio:</strong> ${data.servicio || "No especificado"}</div>
-              <div><strong>Descripción:</strong> ${data.descripcion || "Sin descripción"}</div>
-              <div><strong>Fecha:</strong> ${data.fecha || "Desconocida"}</div>
-            </div>
-          </div>`;
-      });
-    });
-  };
-</script>
-</script>
-
-<!-- Firebase Config -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
- const firebaseConfig = {
-  apiKey: "AIzaSyC4H7KsQW-TU6v_lphHhJ_R1xkR-mOCKYo",
-  authDomain: "hslv-test.firebaseapp.com",
-  projectId: "hslv-test",
-  storageBucket: "hslv-test.appspot.com",
-  messagingSenderId: "1234567890",
-  appId: "1:1234567890:web:testconfig"
-  apiKey: "AIzaSyAtj36T7EiECJosYP_5127tQnm_kRnwPMs",
-  authDomain: "gestion-de-solicitudes-25a93.firebaseapp.com",
-  projectId: "gestion-de-solicitudes-25a93",
-  storageBucket: "gestion-de-solicitudes-25a93.firebasestorage.app",
-  messagingSenderId: "399184380837",
-  appId: "1:399184380837:web:df0b081cd81938c0a11e4c"
-};
-
-  import { getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-  const db = getFirestore(app);
-  window.firebaseDB = db;
-</script>
-
-
-<div class="form-section">
-  <form id="form-solicitud">
-    <div class="form-group">
-      <label for="tipo-servicio" class="form-label">Tipo de Servicio</label>
-      <select id="tipo-servicio" class="form-select" required>
-        <option value="">Seleccione</option>
-        <option value="Ingeniería Biomédica">Ingeniería Biomédica</option>
-        <option value="Infraestructura">Infraestructura</option>
-        <option value="Mecánicos">Mecánicos</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="descripcion" class="form-label">Descripción</label>
-      <textarea id="descripcion" class="form-textarea" placeholder="Describa la solicitud..." required></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-success">📤 Enviar Solicitud</button>
-  </form>
-</div>
-
-<script type="module">
-  document.getElementById("form-solicitud").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const servicio = document.getElementById("tipo-servicio").value;
-    const descripcion = document.getElementById("descripcion").value;
-    const fecha = new Date().toISOString();
-
-    guardarSolicitudFirebase({ servicio, descripcion, fecha });
-    e.target.reset();
-  });
-</script>
-
-
-<!-- Firebase Configuración y Funciones -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import {
-    getFirestore, collection, addDoc, onSnapshot
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-  apiKey: "AIzaSyC4H7KsQW-TU6v_lphHhJ_R1xkR-mOCKYo",
-  authDomain: "hslv-test.firebaseapp.com",
-  projectId: "hslv-test",
-  storageBucket: "hslv-test.appspot.com",
-  messagingSenderId: "1234567890",
-  appId: "1:1234567890:web:testconfig"
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_PROYECTO.firebaseapp.com",
-    projectId: "TU_PROYECTO",
-    storageBucket: "TU_PROYECTO.appspot.com",
-    messagingSenderId: "1234567890",
-    appId: "1:1234567890:web:abcde12345"
-  };
-
-  import { getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-  const db = getFirestore(app);
-  window.firebaseDB = db;
-  console.log("✅ Firebase inicializado correctamente");
-
-  // Guardar solicitud
-  window.guardarSolicitudFirebase = async function (data) {
-    try {
-      const docRef = await addDoc(collection(db, "solicitudes"), data);
-      console.log("✅ Solicitud guardada con ID:", docRef.id);
-      alert("✅ Solicitud enviada correctamente");
-    } catch (error) {
-      console.error("❌ Error al guardar solicitud:", error);
-      alert("❌ Error al guardar la solicitud");
-    }
-  };
-
-  // Cargar solicitudes en tiempo real
-  window.cargarSolicitudesFirebase = function (contenedorId) {
-    const contenedor = document.getElementById(contenedorId);
-    if (!contenedor) {
-      console.warn("⚠️ No se encontró el contenedor:", contenedorId);
-      return;
-    }
-    onSnapshot(collection(db, "solicitudes"), (snapshot) => {
-      contenedor.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        contenedor.innerHTML += `
-          <div class="request-card pending">
-            <div class="request-header">
-              <div class="request-number">📝 Solicitud ID: ${doc.id}</div>
-            </div>
-            <div class="request-details">
-              <div><strong>Servicio:</strong> ${data.servicio || "No especificado"}</div>
-              <div><strong>Descripción:</strong> ${data.descripcion || "Sin descripción"}</div>
-              <div><strong>Fecha:</strong> ${data.fecha || "Desconocida"}</div>
-            </div>
-          </div>`;
-      });
-      console.log("📥 Solicitudes cargadas");
-    });
-  };
-</script>
-
-<div class="form-section">
-  <form id="form-solicitud">
-    <label for="tipo-servicio">Tipo de Servicio</label>
-    <select id="tipo-servicio" required>
-      <option value="">Seleccione</option>
-      <option value="Ingeniería Biomédica">Ingeniería Biomédica</option>
-      <option value="Infraestructura">Infraestructura</option>
-      <option value="Mecánicos">Mecánicos</option>
-    </select>
-    <br/>
-    <label for="descripcion">Descripción</label>
-    <textarea id="descripcion" placeholder="Describa la solicitud..." required></textarea>
-    <br/>
-    <button type="submit">📤 Enviar Solicitud</button>
-  </form>
-</div>
-
-<script type="module">
-  document.getElementById("form-solicitud").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const servicio = document.getElementById("tipo-servicio").value;
-    const descripcion = document.getElementById("descripcion").value;
-    const fecha = new Date().toISOString();
-    guardarSolicitudFirebase({ servicio, descripcion, fecha });
-    e.target.reset();
-  });
-</script>
-
 </body>
 </html>
